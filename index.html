@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="description" content="刷段子 - 随机搞笑段子信息流">
+  <title>笑料铺子 · 刷段子</title>
+  <style>
+    /* ===== 设计变量：纯白主题（默认，X 风格） ===== */
+    :root {
+      --bg: #ffffff;
+      --bg-elevated: #ffffff;
+      --card-bg: #ffffff;
+      --text: #0f1419;
+      --text-secondary: #536471;
+      --text-tertiary: #97a0ab;
+      --accent: #1d9bf0;
+      --accent-soft: rgba(29, 155, 240, 0.1);
+      --like-color: #f91880;
+      --like-soft: rgba(249, 24, 128, 0.1);
+      --copy-color: #1d9bf0;
+      --copy-soft: rgba(29, 155, 240, 0.1);
+      --border: #eff3f4;
+      --border-light: #f5f7f8;
+      --hairline: #eff3f4;
+      --header-bg: rgba(255, 255, 255, 0.85);
+      --tab-bg: rgba(255, 255, 255, 0.92);
+      --toast-bg: rgba(15, 20, 25, 0.92);
+      --toast-text: #ffffff;
+      --scroll-btn-bg: #ffffff;
+      --scroll-btn-shadow: rgba(15, 20, 25, 0.12);
+      --meta-bar-bg: #1d9bf0;
+      --joke-font-size: 16.5px;
+      --radius: 0;
+      --header-h: 52px;
+      --tab-h: 56px;
+      --max-width: 620px;
+      --card-px: 18px;
+    }
+
+    /* ===== 纯黑主题（Dark，X 的 Light Out） ===== */
+    :root[data-theme="dark"] {
+      --bg: #000000;
+      --bg-elevated: #000000;
+      --card-bg: #000000;
+      --text: #e7e9ea;
+      --text-secondary: #8b98a5;
+      --text-tertiary: #566a76;
+      --accent: #1d9bf0;
+      --accent-soft: rgba(29, 155, 240, 0.1);
+      --like-color: #f91880;
+      --like-soft: rgba(249, 24, 128, 0.1);
+      --copy-color: #1d9bf0;
+      --copy-soft: rgba(29, 155, 240, 0.1);
+      --border: #2f3336;
+      --border-light: #19202a;
+      --hairline: #16181c;
+      --header-bg: rgba(0, 0, 0, 0.85);
+      --tab-bg: rgba(0, 0, 0, 0.92);
+      --toast-bg: rgba(231, 233, 234, 0.92);
+      --toast-text: #000000;
+      --scroll-btn-bg: #000000;
+      --scroll-btn-shadow: rgba(0, 0, 0, 0.5);
+      --meta-bar-bg: #1d9bf0;
+      color-scheme: dark;
+    }
+
+    /* ===== 整活主题（幽默风：emoji 图标 + 浮动表情 + 段子梗文案） ===== */
+    :root[data-theme="fun"] {
+      --bg: #fff6e6;
+      --bg-elevated: #fffdf7;
+      --card-bg: #fffdf7;
+      --text: #2a2019;
+      --text-secondary: #8a7866;
+      --text-tertiary: #c0ad98;
+      --accent: #ff8a3d;
+      --accent-soft: rgba(255, 138, 61, 0.12);
+      --like-color: #ff5c8a;
+      --like-soft: rgba(255, 92, 138, 0.12);
+      --copy-color: #3fae8f;
+      --copy-soft: rgba(63, 174, 143, 0.12);
+      --border: #f0e2cc;
+      --border-light: #f7ecd8;
+      --hairline: #f2e6d2;
+      --header-bg: rgba(255, 246, 230, 0.85);
+      --tab-bg: rgba(255, 253, 247, 0.92);
+      --toast-bg: rgba(42, 32, 25, 0.92);
+      --toast-text: #fffdf7;
+      --scroll-btn-bg: #fffdf7;
+      --scroll-btn-shadow: rgba(150, 100, 40, 0.16);
+      --meta-bar-bg: #ff8a3d;
+    }
+
+    /* ===== Reset ===== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * { -webkit-tap-highlight-color: transparent; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Noto Sans SC", "Microsoft YaHei", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      letter-spacing: 0.01em;
+      padding-bottom: calc(var(--tab-h) + env(safe-area-inset-bottom));
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: inherit;
+    }
+
+    ::selection {
+      background: var(--accent-soft);
+    }
+
+    /* ===== 顶部导航栏（X 风格：简洁居中） ===== */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--header-bg);
+      backdrop-filter: saturate(180%) blur(16px);
+      -webkit-backdrop-filter: saturate(180%) blur(16px);
+      height: var(--header-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 14px;
+      padding-top: env(safe-area-inset-top);
+      border-bottom: 1px solid var(--hairline);
+    }
+
+    .header-title {
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: 0.02em;
+    }
+
+    .header-title .dot {
+      color: var(--accent);
+      margin-left: 1px;
+    }
+
+    .seen-badge {
+      font-size: 11.5px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      background: var(--accent-soft);
+      padding: 2px 9px;
+      border-radius: 10px;
+      margin-left: 8px;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .seen-badge .num {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .font-controls {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .font-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      font-weight: 600;
+      transition: background 0.15s, transform 0.1s;
+    }
+
+    .font-btn:hover {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .font-btn:active {
+      transform: scale(0.88);
+    }
+
+    .font-btn.small { font-size: 12px; }
+    .font-btn.large { font-size: 16px; }
+
+    /* 主题切换按钮 */
+    .theme-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      transition: background 0.15s, color 0.15s, transform 0.2s;
+      margin-left: 2px;
+    }
+
+    .theme-btn:hover {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .theme-btn:active {
+      transform: rotate(60deg) scale(0.9);
+    }
+
+    .theme-btn svg {
+      width: 18px;
+      height: 18px;
+      transition: transform 0.3s;
+    }
+
+    /* ===== 主内容区 ===== */
+    main {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      min-height: calc(100vh - var(--header-h) - var(--tab-h));
+      position: relative;
+      z-index: 1;
+      border-left: 1px solid var(--hairline);
+      border-right: 1px solid var(--hairline);
+    }
+
+    .view {
+      display: none;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    /* ===== 段子项（X 风格：无缝分隔线，非卡片） ===== */
+    .card {
+      padding: 16px var(--card-px);
+      border-bottom: 1px solid var(--hairline);
+      transition: background 0.15s;
+      animation: cardEnter 0.35s ease-out both;
+    }
+
+    .card:active {
+      background: var(--bg);
+    }
+
+    @keyframes cardEnter {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .card { animation: none; }
+    }
+
+    .joke-text {
+      font-size: var(--joke-font-size);
+      line-height: 1.65;
+      color: var(--text);
+      word-break: break-word;
+      white-space: pre-wrap;
+      margin-bottom: 10px;
+      letter-spacing: 0.005em;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .joke-meta {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      flex-shrink: 0;
+      letter-spacing: 0.02em;
+      margin-right: auto;
+    }
+
+    .actions {
+      display: flex;
+      gap: 2px;
+      margin-left: auto;
+    }
+
+    /* X 风格：圆形图标按钮，hover 带色彩背景 */
+    .action-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      color: var(--text-tertiary);
+      transition: color 0.15s, background 0.15s, transform 0.1s;
+      position: relative;
+    }
+
+    .action-btn:hover {
+      background: var(--copy-soft);
+      color: var(--copy-color);
+    }
+
+    .action-btn:active {
+      transform: scale(0.88);
+    }
+
+    .action-btn svg, .action-btn .emoji {
+      width: 18.5px;
+      height: 18.5px;
+      flex-shrink: 0;
+    }
+
+    /* 正经主题：SVG 心形图标 */
+    .action-btn.like-btn:hover {
+      background: var(--like-soft);
+      color: var(--like-color);
+    }
+    .action-btn.like-btn.active {
+      color: var(--like-color);
+    }
+    .action-btn.like-btn.active svg {
+      fill: var(--like-color);
+      stroke: var(--like-color);
+      animation: likeBounce 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* 整活主题：emoji 图标 */
+    .action-btn .emoji {
+      font-size: 16px;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .like-btn .emoji { filter: grayscale(1) opacity(0.5); transition: filter 0.2s, transform 0.2s; }
+    .like-btn.active .emoji { filter: grayscale(0); transform: scale(1.15); animation: likeBounce 0.45s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    .like-btn:active .emoji { transform: scale(0.8); }
+    .copy-btn .emoji { filter: grayscale(1) opacity(0.5); transition: filter 0.2s, transform 0.2s; }
+    .copy-btn:hover .emoji { filter: grayscale(0) opacity(0.8); }
+    .copy-btn:active .emoji { filter: grayscale(0); transform: scale(1.2); }
+
+    /* 主题切换时重建的卡片不重放入场动画 */
+    .card.no-anim { animation: none !important; }
+
+    @keyframes likeBounce {
+      0% { transform: scale(1); }
+      30% { transform: scale(0.5); }
+      55% { transform: scale(1.45); }
+      80% { transform: scale(0.92); }
+      100% { transform: scale(1); }
+    }
+
+    /* ===== X 风格粒子光晕特效 ===== */
+    .particle-ring {
+      position: fixed;
+      width: 40px;
+      height: 40px;
+      border: 2.5px solid var(--like-color);
+      border-radius: 50%;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 9999;
+      will-change: transform, opacity;
+      transform: translate(-50%, -50%) scale(0.2);
+    }
+
+    .particle-ring.expand {
+      animation: ringExpand 0.8s ease-out forwards;
+    }
+
+    @keyframes ringExpand {
+      0% {
+        opacity: 0.8;
+        transform: translate(-50%, -50%) scale(0.2);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(3);
+      }
+    }
+
+    .particle {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--like-color);
+      box-shadow: 0 0 8px rgba(249, 73, 107, 0.7);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 9999;
+      will-change: transform, opacity;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .particle.burst {
+      animation: particleFly 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes particleFly {
+      0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.3);
+      }
+      50% {
+        opacity: 0.9;
+      }
+      100% {
+        opacity: 0;
+        transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(0.2);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .particle, .particle-ring { display: none; }
+    }
+
+    /* ===== 加载与错误状态 ===== */
+    .state-card {
+      text-align: center;
+      padding: 36px 20px;
+      color: var(--text-tertiary);
+    }
+
+    .spinner {
+      width: 24px;
+      height: 24px;
+      border: 2.5px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin: 0 auto 10px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .state-card p {
+      font-size: 13px;
+    }
+
+    .error-state .retry-btn {
+      margin-top: 14px;
+      padding: 8px 24px;
+      border-radius: 18px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      transition: transform 0.1s;
+    }
+
+    .error-state .retry-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* ===== 空状态 ===== */
+    .empty-state {
+      text-align: center;
+      padding: 90px 24px 60px;
+      color: var(--text-tertiary);
+    }
+
+    .empty-state svg {
+      width: 52px;
+      height: 52px;
+      margin-bottom: 14px;
+      color: var(--text-tertiary);
+      opacity: 0.5;
+    }
+
+    .empty-state p {
+      font-size: 15px;
+      margin-bottom: 6px;
+      color: var(--text-secondary);
+    }
+
+    .empty-state .hint {
+      font-size: 13px;
+      color: var(--text-tertiary);
+    }
+
+    /* ===== 子头部（清空历史等） ===== */
+    .sub-header {
+      display: flex;
+      justify-content: flex-end;
+      padding: 10px var(--card-px) 8px;
+      border-bottom: 1px solid var(--hairline);
+    }
+
+    .clear-btn {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      padding: 6px 14px;
+      border-radius: 16px;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .clear-btn:hover {
+      background: var(--like-soft);
+      color: var(--like-color);
+    }
+
+    .clear-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* ===== 底部 Tab 栏 ===== */
+    #tab-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      height: var(--tab-h);
+      padding-bottom: env(safe-area-inset-bottom);
+      background: var(--tab-bg);
+      backdrop-filter: saturate(180%) blur(16px);
+      -webkit-backdrop-filter: saturate(180%) blur(16px);
+      border-top: 1px solid var(--hairline);
+      display: flex;
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    .tab {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      color: var(--text-tertiary);
+      font-size: 13px;
+      font-weight: 500;
+      transition: color 0.15s;
+      letter-spacing: 0.02em;
+    }
+
+    .tab .tab-icon {
+      width: 21px;
+      height: 21px;
+      font-size: 18px;
+      transition: transform 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .tab .tab-icon > svg { width: 21px; height: 21px; }
+    .tab .tab-label { white-space: nowrap; }
+    .tab.active .tab-icon { transform: scale(1.12); }
+
+    .tab:hover {
+      color: var(--accent);
+    }
+
+    .tab.active {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .tab.active .tab-icon svg {
+      stroke: var(--text);
+      fill: var(--text);
+    }
+
+    /* ===== 回到顶部浮动按钮 ===== */
+    .scroll-top-btn {
+      position: fixed;
+      bottom: calc(var(--tab-h) + 14px + env(safe-area-inset-bottom));
+      right: 16px;
+      z-index: 90;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--scroll-btn-bg);
+      box-shadow: 0 2px 12px var(--scroll-btn-shadow), 0 0 0 1px var(--hairline);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .scroll-top-btn.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .scroll-top-btn:hover {
+      background: var(--accent-soft);
+      transform: translateY(-2px);
+    }
+
+    .scroll-top-btn:active {
+      transform: scale(0.9);
+    }
+
+    .scroll-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+    }
+    .scroll-icon > svg {
+      width: 19px;
+      height: 19px;
+    }
+
+    /* ===== Toast 提示 ===== */
+    .toast {
+      position: fixed;
+      bottom: calc(var(--tab-h) + 20px + env(safe-area-inset-bottom));
+      left: 50%;
+      transform: translateX(-50%) translateY(16px);
+      z-index: 200;
+      background: var(--toast-bg);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      color: var(--toast-text);
+      padding: 9px 20px;
+      border-radius: 18px;
+      font-size: 13.5px;
+      font-weight: 500;
+      white-space: nowrap;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      pointer-events: none;
+      letter-spacing: 0.02em;
+    }
+
+    .toast.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ===== 响应式：桌面端优化 ===== */
+    @media (min-width: 641px) {
+      body {
+        background: var(--bg);
+      }
+      .scroll-top-btn {
+        right: calc(50% - var(--max-width) / 2 + 16px);
+      }
+    }
+
+    /* ===== 响应式：小屏手机 ===== */
+    @media (max-width: 380px) {
+      :root {
+        --card-px: 14px;
+        --joke-font-size: 16px;
+      }
+      .header-title {
+        font-size: 16px;
+      }
+      .seen-badge {
+        font-size: 10px;
+        padding: 2px 6px;
+        margin-left: 6px;
+      }
+      .tab {
+        font-size: 12px;
+        gap: 5px;
+      }
+      .tab .tab-icon {
+        font-size: 16px;
+      }
+      .tab .tab-icon > svg {
+        width: 19px;
+        height: 19px;
+      }
+    }
+
+    @media (max-width: 320px) {
+      .tab .tab-label {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 顶部导航 -->
+  <header>
+    <h1 class="header-title"><span id="app-title">段子手</span><span class="dot">.</span><span class="seen-badge"><span id="seen-label">已看</span> <span class="num" id="seen-count">0</span><span id="seen-suffix"></span></span></h1>
+    <div class="font-controls">
+      <button class="font-btn small" id="font-decrease" title="缩小字体">A</button>
+      <button class="font-btn large" id="font-increase" title="放大字体">A</button>
+      <button class="theme-btn" id="theme-toggle" title="切换主题" aria-label="切换主题"></button>
+    </div>
+  </header>
+
+  <!-- 主内容区 -->
+  <main>
+    <!-- 首页信息流 -->
+    <section id="feed-view" class="view active">
+      <div id="feed-list"></div>
+      <div id="feed-sentinel" style="height: 1px;"></div>
+    </section>
+
+    <!-- 喜欢列表 -->
+    <section id="likes-view" class="view">
+      <div class="sub-header" id="likes-sub-header" style="display:none;">
+        <button class="clear-btn" id="clear-likes">清空喜欢</button>
+      </div>
+      <div id="likes-list"></div>
+    </section>
+  </main>
+
+  <!-- 回到顶部 -->
+  <button class="scroll-top-btn" id="scroll-top-btn" aria-label="回到顶部">
+    <span class="scroll-icon"></span>
+  </button>
+
+  <!-- 底部 Tab 栏 -->
+  <nav id="tab-bar">
+    <button class="tab active" data-tab="feed">
+      <span class="tab-icon"></span>
+      <span class="tab-label" id="tab-label-feed">首页</span>
+    </button>
+    <button class="tab" data-tab="likes">
+      <span class="tab-icon"></span>
+      <span class="tab-label" id="tab-label-likes">喜欢</span>
+    </button>
+  </nav>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ===================== 存储管理 =====================
+    const Store = {
+      // 喜欢列表：完整段子快照 { index, duanzi, ts }，按喜欢时间倒序
+      getLikes() { return JSON.parse(localStorage.getItem('duanzi_liked') || '[]'); },
+      saveLikes(arr) { localStorage.setItem('duanzi_liked', JSON.stringify(arr)); },
+      // 已看编号（轻量，仅用于计数与会话去重）
+      getSeen() { return JSON.parse(localStorage.getItem('duanzi_seen') || '[]'); },
+      saveSeen(arr) { localStorage.setItem('duanzi_seen', JSON.stringify(arr.slice(-2000))); },
+      getFontSize() { return parseInt(localStorage.getItem('duanzi_fontsize')) || 17; },
+      saveFontSize(size) { localStorage.setItem('duanzi_fontsize', size); },
+      getTheme() {
+        // 暖色主题已下线，旧用户迁移到纯白
+        const theme = localStorage.getItem('duanzi_theme');
+        if (!theme || theme === 'warm') return 'light';
+        return theme;
+      },
+      saveTheme(theme) { localStorage.setItem('duanzi_theme', theme); },
+
+      isLiked(index) { return this.getLikes().some(item => item.index === index); },
+
+      // 喜欢：写入完整快照并置顶；取消：移除
+      addLike(joke) {
+        let likes = this.getLikes().filter(item => item.index !== joke.index);
+        likes.unshift({ index: joke.index, duanzi: joke.duanzi, ts: Date.now() });
+        if (likes.length > 500) likes = likes.slice(0, 500);
+        this.saveLikes(likes);
+        return true;
+      },
+      removeLike(index) {
+        this.saveLikes(this.getLikes().filter(item => item.index !== index));
+        return false;
+      },
+
+      addSeen(index) {
+        const seen = this.getSeen();
+        if (!seen.includes(index)) {
+          seen.push(index);
+          this.saveSeen(seen);
+        }
+      },
+
+      clearLikes() { localStorage.removeItem('duanzi_liked'); },
+
+      // ====== 段子缓存池（预加载的核心） ======
+      // v2：旧版缓存按编号排序，改版为随机顺序后废弃旧缓存
+      getCache() { return JSON.parse(localStorage.getItem('duanzi_cache_v2') || '[]'); },
+      saveCache(arr) { localStorage.setItem('duanzi_cache_v2', JSON.stringify(arr)); },
+      getCacheTime() { return parseInt(localStorage.getItem('duanzi_cache_v2_time')) || 0; },
+      saveCacheTime(ts) { localStorage.setItem('duanzi_cache_v2_time', ts); },
+      // 从缓存池取出一条段子（API 本身随机返回，直接取队首即可）
+      popFromCache() {
+        const cache = this.getCache();
+        if (cache.length === 0) return null;
+        const joke = cache.shift();
+        this.saveCache(cache);
+        return joke;
+      },
+      // 批量写入缓存池（去重后直接追加，保持 API 的随机顺序）
+      addToCache(jokes) {
+        let cache = this.getCache();
+        const existing = new Set(cache.map(j => j.index));
+        jokes.forEach(j => {
+          if (!existing.has(j.index)) {
+            cache.push({ index: j.index, duanzi: j.duanzi });
+            existing.add(j.index);
+          }
+        });
+        // 限制缓存上限 300 条
+        if (cache.length > 300) cache = cache.slice(-300);
+        this.saveCache(cache);
+      },
+      getCacheCount() { return this.getCache().length; }
+    };
+
+    // ===================== 状态 =====================
+    let currentTab = 'feed';
+    let isLoading = false;
+    let seenIndices = new Set();
+    let feedJokes = [];   // 记录信息流已渲染的段子，用于切换主题时重建
+    let fontSize = Store.getFontSize();
+
+    // ===================== 图标（正经 SVG / 整活 emoji 两套） =====================
+    const SVG_ICONS = {
+      heart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
+      copy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>',
+      feed: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
+      likes: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
+      top: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>'
+    };
+
+    const EMOJI_ICONS = {
+      heartOff: '<span class="emoji">🙂</span>',
+      heartOn: '<span class="emoji">🤣</span>',
+      copy: '<span class="emoji">🎒</span>',
+      feed: '<span class="emoji">🤣</span>',
+      likes: '<span class="emoji">🏆</span>',
+      top: '<span class="emoji">👆</span>'
+    };
+
+    // ===================== 文案（正经 / 整活两套） =====================
+    const COPY = {
+      normal: {
+        title: '段子手', seenLabel: '已看', seenSuffix: '',
+        tabFeed: '首页', tabLikes: '喜欢', clear: '清空喜欢',
+        likeLabel: '喜欢', copyLabel: '复制',
+        copyOk: '已复制到剪贴板', copyFail: '复制失败，请手动选择',
+        fontUp: '字号已放大', fontDown: '字号已缩小',
+        clearOk: '喜欢列表已清空',
+        loadFail: '加载失败，请重试', retry: '重新加载',
+        emptyTitle: '还没有喜欢的内容', emptyHint: '看到好笑的，点颗红心收起来'
+      },
+      fun: {
+        title: '笑料铺子', seenLabel: '笑过', seenSuffix: '条',
+        tabFeed: '开刷', tabLikes: '笑话名人堂', clear: '都不爱了',
+        likeLabel: '笑哭了', copyLabel: '打包带走',
+        copyOk: '打包带走，发朋友圈吧', copyFail: '手滑了，没复制成功',
+        fontUp: '字大了，看着不费眼了', fontDown: '字小了，更显文采',
+        clearOk: '行吧，就当没笑过',
+        loadFail: '服务器笑抽了，歇会儿再来', retry: '再试试',
+        emptyTitle: '名人堂还空着', emptyHint: '看到好笑的，点颗红心捧它入堂'
+      }
+    };
+
+    function isFun() { return Store.getTheme() === 'fun'; }
+    function t(key) { return (isFun() ? COPY.fun : COPY.normal)[key]; }
+
+    // ===================== 卡片渲染 =====================
+    function createCard(joke, options = {}) {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.dataset.index = joke.index;
+      if (options.noAnim) card.classList.add('no-anim');
+
+      const liked = Store.isLiked(joke.index);
+      const fun = isFun();
+
+      // 仅历史页显示浏览时间，信息流卡片不显示编号
+      const metaHtml = options.timestamp
+        ? `<span class="joke-meta">${formatTime(options.timestamp)}</span>`
+        : '';
+
+      const likeIcon = fun
+        ? (liked ? EMOJI_ICONS.heartOn : EMOJI_ICONS.heartOff)
+        : SVG_ICONS.heart;
+      const copyIcon = fun ? EMOJI_ICONS.copy : SVG_ICONS.copy;
+
+      card.innerHTML = `
+        <div class="joke-text">${escapeHtml(joke.duanzi)}</div>
+        <div class="card-footer">
+          ${metaHtml}
+          <div class="actions">
+            <button class="action-btn like-btn ${liked ? 'active' : ''}" data-action="like" data-index="${joke.index}" data-text="${escapeAttr(joke.duanzi)}" aria-label="${t('likeLabel')}" title="${t('likeLabel')}">
+              ${likeIcon}
+            </button>
+            <button class="action-btn copy-btn" data-action="copy" data-text="${escapeAttr(joke.duanzi)}" aria-label="${t('copyLabel')}" title="${t('copyLabel')}">
+              ${copyIcon}
+            </button>
+          </div>
+        </div>
+      `;
+
+      return card;
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function escapeAttr(text) {
+      return text.replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function formatTime(ts) {
+      const diff = Date.now() - ts;
+      const min = Math.floor(diff / 60000);
+      const hours = Math.floor(diff / 3600000);
+      const days = Math.floor(diff / 86400000);
+      if (min < 1) return '刚刚';
+      if (min < 60) return `${min}分钟前`;
+      if (hours < 24) return `${hours}小时前`;
+      if (days < 7) return `${days}天前`;
+      return new Date(ts).toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' });
+    }
+
+    // ===================== API 调用（多镜像容错） =====================
+    // 60s API 有多个镜像域名，按速度排序
+    const API_MIRRORS = [
+      'https://60s.viki.moe/v2/duanzi',     // 主域名（最快）
+      'https://60s-api.viki.moe/v2/duanzi', // 子域名备份
+      'https://60s.b23.run/v2/duanzi',      // 社区镜像（较慢但兜底）
+    ];
+    const API_PROXY = '/api/duanzi';
+    // 本地开发环境自动使用代理（浏览器无法直连外部 API）
+    let useProxy = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+    let mirrorIdx = 0; // 当前使用的镜像索引
+
+    // 单条请求：从当前镜像获取，失败自动切换下一个镜像
+    async function fetchJoke() {
+      const url = useProxy ? API_PROXY : API_MIRRORS[mirrorIdx];
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('API请求失败');
+      const json = await res.json();
+      if (json.code !== 200 || !json.data) throw new Error('接口返回异常');
+      return json.data;
+    }
+
+    // 容错获取：尝试所有镜像直到成功
+    async function fetchJokeWithFallback() {
+      // 代理模式直接请求
+      if (useProxy) {
+        return await fetchJoke();
+      }
+      // 直连模式：尝试所有镜像
+      for (let i = 0; i < API_MIRRORS.length; i++) {
+        try {
+          mirrorIdx = i;
+          return await fetchJoke();
+        } catch (e) {
+          // 尝试下一个镜像
+          if (i === API_MIRRORS.length - 1) {
+            // 所有镜像都失败，切换到代理模式兜底
+            useProxy = true;
+            return await fetchJoke();
+          }
+        }
+      }
+    }
+
+    async function fetchJokes(count = 5) {
+      const promises = Array.from({ length: count }, () => fetchJokeWithFallback());
+      return Promise.all(promises);
+    }
+
+    // ===================== 首页信息流 =====================
+    // 加载策略：优先从本地缓存池随机取段子（毫秒级），缓存不足时才请求 API
+    async function loadMoreJokes() {
+      if (isLoading || currentTab !== 'feed') return;
+      isLoading = true;
+      showFeedLoading();
+
+      const BATCH_SIZE = 5;
+      const CACHE_THRESHOLD = 20; // 缓存低于此值时触发后台补充
+      let jokes = [];
+
+      // 1) 优先从本地缓存池取数据（保持 API 返回的随机顺序）
+      const cacheCount = Store.getCacheCount();
+      if (cacheCount > 0) {
+        for (let i = 0; i < BATCH_SIZE; i++) {
+          const joke = Store.popFromCache();
+          if (joke) jokes.push(joke);
+        }
+      }
+
+      // 2) 缓存不够，从 API 补充后入缓存池再取
+      if (jokes.length < BATCH_SIZE) {
+        try {
+          const apiJokes = await fetchJokes(15);
+          Store.addToCache(apiJokes);
+          while (jokes.length < BATCH_SIZE) {
+            const joke = Store.popFromCache();
+            if (!joke) break;
+            jokes.push(joke);
+          }
+        } catch (e) {
+          // API 失败但缓存有数据，继续用缓存数据
+          if (jokes.length === 0) {
+            showFeedError();
+            isLoading = false;
+            hideFeedLoading();
+            return;
+          }
+        }
+      }
+
+      // 3) 渲染卡片（跳过本次会话已展示过的，避免重复）
+      const list = document.getElementById('feed-list');
+      jokes.forEach(joke => {
+        if (!seenIndices.has(joke.index)) {
+          seenIndices.add(joke.index);
+          Store.addSeen(joke.index);
+          feedJokes.push(joke);
+          const card = createCard(joke);
+          list.appendChild(card);
+        }
+      });
+      updateSeenCount();
+
+      isLoading = false;
+      hideFeedLoading();
+
+      // 4) 后台预加载：缓存不足时异步补充
+      if (Store.getCacheCount() < CACHE_THRESHOLD) {
+        backgroundPrefetch();
+      }
+    }
+
+    // 后台预加载：不影响 UI 的异步缓存补充
+    let isPrefetching = false;
+    async function backgroundPrefetch() {
+      if (isPrefetching) return;
+      isPrefetching = true;
+      try {
+        // 每次补充 20 条随机段子到缓存池
+        const jokes = await fetchJokes(20);
+        Store.addToCache(jokes);
+        Store.saveCacheTime(Date.now());
+      } catch (e) {
+        // 静默失败，不影响用户
+      } finally {
+        isPrefetching = false;
+      }
+    }
+
+    // 更新已浏览计数显示
+    function updateSeenCount() {
+      const el = document.getElementById('seen-count');
+      if (el) {
+        el.textContent = seenIndices.size;
+      }
+    }
+
+    function showFeedLoading() {
+      const existing = document.getElementById('feed-loading');
+      if (existing) return;
+      const el = document.createElement('div');
+      el.id = 'feed-loading';
+      el.className = 'state-card';
+      el.innerHTML = '<div class="spinner"></div><p>加载中...</p>';
+      document.getElementById('feed-list').after(el);
+    }
+
+    function hideFeedLoading() {
+      const el = document.getElementById('feed-loading');
+      if (el) el.remove();
+    }
+
+    function showFeedError() {
+      const el = document.getElementById('feed-loading');
+      if (el) {
+        el.innerHTML = `<p>${t('loadFail')}</p><button class="retry-btn" onclick="loadMoreJokes()">${t('retry')}</button>`;
+        el.classList.add('error-state');
+      }
+    }
+
+    // ===================== 喜欢列表页 =====================
+    function renderLikes() {
+      const list = document.getElementById('likes-list');
+      const subHeader = document.getElementById('likes-sub-header');
+      const likes = Store.getLikes();
+
+      if (likes.length === 0) {
+        subHeader.style.display = 'none';
+        list.innerHTML = `
+          <div class="empty-state">
+            <span class="emoji" style="font-size:40px;opacity:0.3;margin-bottom:8px;display:block;">${isFun() ? '🏆' : '🤍'}</span>
+            <p>${t('emptyTitle')}</p>
+            <p class="hint">${t('emptyHint')}</p>
+          </div>
+        `;
+        return;
+      }
+
+      subHeader.style.display = 'flex';
+      list.innerHTML = '';
+      likes.forEach(item => {
+        // 迁移来的旧收藏没有喜欢时间，不显示时间
+        list.appendChild(createCard(item, item.ts ? { timestamp: item.ts } : {}));
+      });
+    }
+
+    // ===================== 操作处理 =====================
+    function handleAction(e) {
+      const btn = e.target.closest('.action-btn');
+      if (!btn) return;
+
+      const action = btn.dataset.action;
+
+      if (action === 'like') {
+        const index = parseInt(btn.dataset.index);
+        const wasLiked = Store.isLiked(index);
+        // 喜欢时保存完整段子快照，取消时移除
+        const isNowLiked = wasLiked
+          ? Store.removeLike(index)
+          : Store.addLike({ index, duanzi: btn.dataset.text });
+        btn.classList.toggle('active', isNowLiked);
+        // 更新表情图标 + 同步页面上同一条段子的其他按钮
+        document.querySelectorAll(`.like-btn[data-index="${index}"]`).forEach(b => {
+          b.classList.toggle('active', isNowLiked);
+          const emoji = b.querySelector('.emoji');
+          if (emoji) emoji.textContent = isNowLiked ? '🤣' : '🙂';
+        });
+        // 仅在「变为喜欢」时触发粒子特效
+        if (!wasLiked && isNowLiked) {
+          burstParticles(btn);
+        }
+        // 在喜欢列表页取消喜欢：立即移除该卡片
+        if (currentTab === 'likes' && !isNowLiked) {
+          renderLikes();
+        }
+      }
+
+      else if (action === 'copy') {
+        const text = btn.dataset.text;
+        copyText(text);
+      }
+    }
+
+    // ===================== X 风格粒子光晕特效（Web Animations API） =====================
+    function burstParticles(btn) {
+      const target = btn.querySelector('.emoji') || btn.querySelector('svg');
+      if (!target) return;
+
+      const rect = target.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+
+      const elements = [];
+
+      // 扩散光环
+      const ring = document.createElement('div');
+      ring.className = 'particle-ring';
+      ring.style.left = cx + 'px';
+      ring.style.top = cy + 'px';
+      document.body.appendChild(ring);
+      elements.push(ring);
+
+      ring.animate([
+        { opacity: 0.8, transform: 'translate(-50%, -50%) scale(0.3)' },
+        { opacity: 0, transform: 'translate(-50%, -50%) scale(3)' }
+      ], { duration: 800, easing: 'ease-out', fill: 'forwards' });
+
+      // 生成 8 颗粒子，均匀放射
+      const PARTICLE_COUNT = 8;
+      for (let i = 0; i < PARTICLE_COUNT; i++) {
+        const angle = (Math.PI * 2 * i) / PARTICLE_COUNT + (Math.random() * 0.3 - 0.15);
+        const dist = 32 + Math.random() * 16;
+        const tx = Math.cos(angle) * dist;
+        const ty = Math.sin(angle) * dist;
+        const size = 9 + Math.random() * 5;
+
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.style.left = cx + 'px';
+        p.style.top = cy + 'px';
+        p.style.width = size + 'px';
+        p.style.height = size + 'px';
+        document.body.appendChild(p);
+        elements.push(p);
+
+        p.animate([
+          { opacity: 1, transform: 'translate(-50%, -50%) scale(1.4)' },
+          { opacity: 0.9, transform: `translate(calc(-50% + ${tx * 0.5}px), calc(-50% + ${ty * 0.5}px)) scale(1)`, offset: 0.5 },
+          { opacity: 0, transform: `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(0.3)` }
+        ], { duration: 900, easing: 'cubic-bezier(0.16, 1, 0.3, 1)', fill: 'forwards' });
+      }
+
+      // 动画结束后清理 DOM
+      setTimeout(() => elements.forEach(el => el.remove()), 1000);
+    }
+
+    async function copyText(text) {
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast(t('copyOk'));
+      } catch (e) {
+        // 兼容性 fallback
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+          document.execCommand('copy');
+          showToast(t('copyOk'));
+        } catch (err) {
+          showToast(t('copyFail'));
+        }
+        document.body.removeChild(textarea);
+      }
+    }
+
+    // ===================== Toast =====================
+    let toastTimer = null;
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 1800);
+    }
+
+    // ===================== Tab 切换 =====================
+    function switchTab(tab) {
+      currentTab = tab;
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+
+      document.getElementById(`${tab}-view`).classList.add('active');
+      document.querySelector(`.tab[data-tab="${tab}"]`).classList.add('active');
+
+      if (tab === 'likes') renderLikes();
+
+      // 回到顶部
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      updateScrollTopBtn();
+    }
+
+    // ===================== 字号调节 =====================
+    function applyFontSize() {
+      document.documentElement.style.setProperty('--joke-font-size', fontSize + 'px');
+    }
+
+    function changeFontSize(delta) {
+      fontSize = Math.max(14, Math.min(24, fontSize + delta));
+      Store.saveFontSize(fontSize);
+      applyFontSize();
+      showToast(delta > 0 ? t('fontUp') : t('fontDown'));
+    }
+
+    // ===================== 主题切换 =====================
+    // light / dark = 正经主题（SVG 图标 + 中性文案）
+    // fun = 整活主题（emoji 图标 + 浮动表情 + 段子梗文案）
+    const THEMES = ['light', 'dark', 'fun'];
+
+    const THEME_ICONS = {
+      light: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M6.34 17.66l-1.41 1.41"/><path d="M19.07 4.93l-1.41 1.41"/></svg>',
+      dark: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>',
+      fun: '<span style="font-size:16px;line-height:1;">🎉</span>'
+    };
+
+    const THEME_NAMES = { light: '纯白', dark: '纯黑', fun: '整活' };
+    const THEME_COLORS = { light: '#ffffff', dark: '#000000', fun: '#fff6e6' };
+
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      document.getElementById('theme-toggle').innerHTML = THEME_ICONS[theme];
+      // 同步 meta theme-color
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', THEME_COLORS[theme]);
+      // 更新随主题变化的图标 / 文案 / 装饰 / 卡片
+      applyThemeStyles();
+    }
+
+    // 更新所有随主题变化的静态元素与卡片
+    function applyThemeStyles() {
+      const fun = isFun();
+
+      // 顶部标题与计数
+      document.getElementById('app-title').textContent = t('title');
+      document.getElementById('seen-label').textContent = t('seenLabel');
+      document.getElementById('seen-suffix').textContent = t('seenSuffix');
+
+      // 底部 Tab 图标与文字
+      document.querySelector('.tab[data-tab="feed"] .tab-icon').innerHTML = fun ? EMOJI_ICONS.feed : SVG_ICONS.feed;
+      document.querySelector('.tab[data-tab="likes"] .tab-icon').innerHTML = fun ? EMOJI_ICONS.likes : SVG_ICONS.likes;
+      document.getElementById('tab-label-feed').textContent = t('tabFeed');
+      document.getElementById('tab-label-likes').textContent = t('tabLikes');
+
+      // 回到顶部按钮
+      document.querySelector('#scroll-top-btn .scroll-icon').innerHTML = fun ? EMOJI_ICONS.top : SVG_ICONS.top;
+
+      // 清空喜欢按钮
+      document.getElementById('clear-likes').textContent = t('clear');
+
+      // 重建已渲染卡片，使图标/文案跟随主题
+      rerenderCards();
+    }
+
+    // 重建信息流与历史页的卡片（保留滚动位置）
+    function rerenderCards() {
+      const feedList = document.getElementById('feed-list');
+      if (feedList && feedJokes.length) {
+        const y = window.scrollY;
+        feedList.innerHTML = '';
+        feedJokes.forEach(j => feedList.appendChild(createCard(j, { noAnim: true })));
+        window.scrollTo({ top: y, behavior: 'instant' });
+      }
+      if (currentTab === 'likes') renderLikes();
+    }
+
+    function cycleTheme() {
+      const current = Store.getTheme();
+      const idx = THEMES.indexOf(current);
+      const next = THEMES[(idx + 1) % THEMES.length];
+      Store.saveTheme(next);
+      applyTheme(next);
+      showToast('主题：' + THEME_NAMES[next]);
+    }
+
+    // ===================== 回到顶部按钮 =====================
+    function updateScrollTopBtn() {
+      const btn = document.getElementById('scroll-top-btn');
+      if (window.scrollY > 400) {
+        btn.classList.add('show');
+      } else {
+        btn.classList.remove('show');
+      }
+    }
+
+    // ===================== 无限滚动 =====================
+    function setupInfiniteScroll() {
+      const sentinel = document.getElementById('feed-sentinel');
+      const observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && !isLoading && currentTab === 'feed') {
+          loadMoreJokes();
+        }
+      }, { rootMargin: '300px' });
+      observer.observe(sentinel);
+    }
+
+    // ===================== 旧数据迁移（一次性） =====================
+    function migrateData() {
+      if (localStorage.getItem('duanzi_migrate_v3')) return;
+      try {
+        // 旧版喜欢只存编号数组：从旧浏览历史/缓存里找回段子内容，升级为完整快照
+        const rawLikes = localStorage.getItem('duanzi_liked');
+        if (rawLikes) {
+          const old = JSON.parse(rawLikes);
+          if (Array.isArray(old) && old.length && typeof old[0] === 'number') {
+            const contentMap = {};
+            ['duanzi_history', 'duanzi_cache_v2', 'duanzi_cache'].forEach(key => {
+              try {
+                (JSON.parse(localStorage.getItem(key)) || []).forEach(j => {
+                  if (j && j.duanzi && !(j.index in contentMap)) contentMap[j.index] = j.duanzi;
+                });
+              } catch (e) {}
+            });
+            // 找不到内容的旧收藏直接丢弃，避免出现空白卡片
+            const records = old
+              .filter(i => contentMap[i])
+              .map(i => ({ index: i, duanzi: contentMap[i], ts: 0 }));
+            localStorage.setItem('duanzi_liked', JSON.stringify(records));
+          }
+        }
+        // 旧版浏览历史 → 轻量已看编号（保留看过的计数）
+        const seen = new Set(Store.getSeen());
+        try {
+          (JSON.parse(localStorage.getItem('duanzi_history')) || []).forEach(h => seen.add(h.index));
+        } catch (e) {}
+        Store.saveSeen([...seen]);
+        localStorage.removeItem('duanzi_history');
+      } catch (e) {}
+      localStorage.setItem('duanzi_migrate_v3', '1');
+    }
+
+    // ===================== 初始化 =====================
+    function init() {
+      // 旧数据迁移
+      migrateData();
+
+      // 应用字号
+      applyFontSize();
+
+      // 恢复已看记录（用于计数与会话去重）
+      Store.getSeen().forEach(i => seenIndices.add(i));
+      updateSeenCount();
+
+      // 事件委托：操作按钮
+      document.addEventListener('click', (e) => {
+        if (e.target.closest('.action-btn')) {
+          handleAction(e);
+        }
+      });
+
+      // Tab 切换
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+      });
+
+      // 字号调节
+      document.getElementById('font-decrease').addEventListener('click', () => changeFontSize(-1));
+      document.getElementById('font-increase').addEventListener('click', () => changeFontSize(1));
+
+      // 主题切换
+      document.getElementById('theme-toggle').addEventListener('click', cycleTheme);
+      applyTheme(Store.getTheme());
+
+      // 回到顶部
+      document.getElementById('scroll-top-btn').addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      // 滚动监听
+      window.addEventListener('scroll', updateScrollTopBtn, { passive: true });
+
+      // 清空喜欢
+      document.getElementById('clear-likes').addEventListener('click', () => {
+        Store.clearLikes();
+        // 同步信息流中所有卡片的喜欢按钮状态（含整活主题的 emoji）
+        document.querySelectorAll('.like-btn').forEach(b => {
+          b.classList.remove('active');
+          const em = b.querySelector('.emoji');
+          if (em) em.textContent = '🙂';
+        });
+        renderLikes();
+        showToast(t('clearOk'));
+      });
+
+      // 无限滚动
+      setupInfiniteScroll();
+
+      // 首次加载：优先秒显本地缓存，同时后台预热
+      initFeed();
+    }
+
+    // 初始化首页：本地缓存优先，秒开体验
+    async function initFeed() {
+      // 如果本地有缓存，先瞬间渲染 5 条（不等 API）
+      const cacheCount = Store.getCacheCount();
+      if (cacheCount > 0) {
+        loadMoreJokes(); // 缓存有数据，会瞬间完成
+        // 后台静默预热缓存
+        backgroundPrefetch();
+      } else {
+        // 首次使用（无缓存），只能等 API，同时后台预热
+        await loadMoreJokes();
+        backgroundPrefetch();
+      }
+    }
+
+    // DOM 就绪后初始化
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  </script>
+</body>
+</html>
