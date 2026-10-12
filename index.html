@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <meta name="theme-color" content="#ffffff">
+  <meta name="theme-color" content="#000000">
   <meta name="description" content="刷段子 - 随机搞笑段子信息流">
   <title>笑料铺子 · 刷段子</title>
   <style>
-    /* ===== 设计变量：纯白主题（默认，X 风格） ===== */
+    /* ===== 设计变量：纯白主题（亮色，X 风格） ===== */
     :root {
       --bg: #ffffff;
       --bg-elevated: #ffffff;
@@ -39,7 +39,7 @@
       --card-px: 18px;
     }
 
-    /* ===== 纯黑主题（Dark，X 的 Light Out） ===== */
+    /* ===== 纯黑主题（默认，Dark，X 的 Light Out） ===== */
     :root[data-theme="dark"] {
       --bg: #000000;
       --bg-elevated: #000000;
@@ -211,7 +211,7 @@
       border-bottom: 1px solid var(--hairline);
     }
 
-    /* ===== 左上角：品牌名 + 内容分类切换 ===== */
+    /* ===== 左上角：纯标题（品牌/当前分类，仅展示用） ===== */
     .header-left {
       display: flex;
       align-items: center;
@@ -219,22 +219,13 @@
       min-width: 0;
     }
 
-    .brand-switch {
+    .brand-static {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       gap: 0;
-      background: none;
-      border: 0;
-      padding: 2px 8px 2px 0;
-      margin: 0;
-      cursor: pointer;
-      border-radius: 8px;
-      font-family: inherit;
-      text-align: left;
-      -webkit-tap-highlight-color: transparent;
+      padding: 2px 0;
     }
-    .brand-switch:active { background: var(--accent-soft); }
 
     .brand-name {
       font-size: 10.5px;
@@ -257,77 +248,8 @@
       white-space: nowrap;
     }
     .category-emoji { font-size: 14px; line-height: 1; }
-    .category-caret {
-      width: 13px;
-      height: 13px;
-      color: var(--text-secondary);
-      transition: transform 0.2s ease;
-    }
-    .brand-switch[aria-expanded="true"] .category-caret { transform: rotate(180deg); }
 
-    /* 分类下拉菜单 */
-    .category-menu {
-      position: absolute;
-      top: 100%;
-      margin-top: 2px;
-      left: 8px;
-      min-width: 168px;
-      background: var(--bg-elevated);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      box-shadow: 0 10px 32px rgba(0, 0, 0, 0.16);
-      padding: 5px;
-      display: none;
-      z-index: 200;
-    }
-    .category-menu.open { display: block; }
-
-    .menu-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      width: 100%;
-      padding: 10px 12px;
-      border: 0;
-      background: none;
-      border-radius: 8px;
-      font-size: 14.5px;
-      font-family: inherit;
-      color: var(--text);
-      cursor: pointer;
-      text-align: left;
-    }
-    .menu-item:active { background: var(--accent-soft); }
-    .menu-item .menu-emoji { font-size: 17px; line-height: 1; }
-    .menu-item .menu-check {
-      margin-left: auto;
-      color: var(--accent);
-      font-weight: 700;
-      font-size: 14px;
-      visibility: hidden;
-    }
-    .menu-item.active .menu-check { visibility: visible; }
-
-    .seen-badge {
-      font-size: 11.5px;
-      font-weight: 500;
-      color: var(--text-secondary);
-      background: var(--accent-soft);
-      padding: 2px 9px;
-      border-radius: 10px;
-      margin-left: 8px;
-      letter-spacing: 0.02em;
-      white-space: nowrap;
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
-    }
-
-    .seen-badge .num {
-      color: var(--accent);
-      font-weight: 700;
-    }
-
+    /* 字号 / 主题控件已移入「我的」页 */
     .font-controls {
       display: flex;
       align-items: center;
@@ -358,32 +280,13 @@
     .font-btn.small { font-size: 12px; }
     .font-btn.large { font-size: 16px; }
 
-    /* 主题切换按钮 */
-    .theme-btn {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .font-value {
+      min-width: 30px;
+      text-align: center;
+      font-size: 13.5px;
+      font-weight: 600;
       color: var(--text-secondary);
-      transition: background 0.15s, color 0.15s, transform 0.2s;
-      margin-left: 2px;
-    }
-
-    .theme-btn:hover {
-      background: var(--accent-soft);
-      color: var(--accent);
-    }
-
-    .theme-btn:active {
-      transform: rotate(60deg) scale(0.9);
-    }
-
-    .theme-btn svg {
-      width: 18px;
-      height: 18px;
-      transition: transform 0.3s;
+      font-variant-numeric: tabular-nums;
     }
 
     /* ===== 主内容区 ===== */
@@ -655,21 +558,155 @@
       color: var(--text-tertiary);
     }
 
-    /* ===== 子头部（清空历史等） ===== */
-    .sub-header {
-      display: flex;
-      justify-content: flex-end;
-      padding: 10px var(--card-px) 8px;
+    /* ===== 「我的」页 ===== */
+    .me-group {
       border-bottom: 1px solid var(--hairline);
     }
 
+    .me-group-title {
+      padding: 15px var(--card-px) 2px;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--text-tertiary);
+      letter-spacing: 0.03em;
+    }
+
+    .me-row {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px var(--card-px);
+      min-height: 52px;
+      text-align: left;
+      font-size: 15px;
+      color: var(--text);
+      transition: background 0.15s;
+    }
+
+    .me-row:active {
+      background: var(--bg);
+    }
+
+    .me-row.tap:active {
+      background: var(--accent-soft);
+    }
+
+    .me-ico {
+      width: 22px;
+      height: 22px;
+      flex: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+    }
+    .me-ico svg { width: 19px; height: 19px; }
+    .me-ico .emoji { font-size: 18px; line-height: 1; }
+
+    .me-label {
+      font-size: 15px;
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    .me-side {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13.5px;
+      color: var(--text-secondary);
+    }
+
+    .me-badge {
+      font-variant-numeric: tabular-nums;
+      color: var(--text-secondary);
+    }
+
+    .me-chevron {
+      width: 16px;
+      height: 16px;
+      color: var(--text-tertiary);
+      flex: none;
+    }
+    .me-chevron svg { width: 16px; height: 16px; }
+
+    .me-check {
+      margin-left: auto;
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 14px;
+      visibility: hidden;
+    }
+    .me-row.active .me-check { visibility: visible; }
+
+    /* 主题选择：四枚色板直选 */
+    .theme-opts {
+      display: flex;
+      gap: 18px;
+      padding: 10px var(--card-px) 16px;
+    }
+    .theme-opt {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-tertiary);
+      transition: color 0.15s;
+    }
+    .theme-opt .theme-dot {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--dot-bg, #fff);
+      border: 1px solid var(--border);
+      box-shadow: 0 0 0 0 var(--accent);
+      transition: box-shadow 0.15s, transform 0.12s;
+    }
+    .theme-opt:active .theme-dot { transform: scale(0.9); }
+    .theme-opt.active { color: var(--text); font-weight: 600; }
+    .theme-opt.active .theme-dot {
+      box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent);
+    }
+
+    /* 喜欢子页面：返回栏 */
+    .likes-topbar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 10px 7px 6px;
+      border-bottom: 1px solid var(--hairline);
+    }
+    .me-back {
+      width: 38px;
+      height: 38px;
+      flex: none;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      transition: background 0.15s;
+    }
+    .me-back:active { background: var(--accent-soft); }
+    .me-back svg { width: 21px; height: 21px; }
+    .likes-top-title {
+      font-size: 16px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
     .clear-btn {
+      margin-left: auto;
       font-size: 13px;
       font-weight: 600;
       color: var(--text-secondary);
       padding: 6px 14px;
       border-radius: 16px;
       transition: background 0.15s, color 0.15s;
+      flex: none;
     }
 
     .clear-btn:hover {
@@ -680,6 +717,11 @@
     .clear-btn:active {
       transform: scale(0.95);
     }
+
+    /* 面板切换：我的菜单 ⇄ 喜欢列表 */
+    .me-subview { display: none; }
+    #me-view.likes-open #me-panel { display: none; }
+    #me-view.likes-open #likes-panel { display: block; }
 
     /* ===== 底部 Tab 栏 ===== */
     #tab-bar {
@@ -739,8 +781,9 @@
       fill: var(--text);
     }
 
-    /* ===== 听听页：顶部标题 ===== */
-    .listen-title {
+    /* ===== 听听 / 我的：顶部纯标题，按 Tab 显隐 ===== */
+    .listen-title,
+    .me-title {
       display: none;
       font-size: 17px;
       font-weight: 700;
@@ -753,11 +796,12 @@
       color: var(--text-secondary);
       margin-left: 5px;
     }
-    body[data-tab="listen"] #category-switch,
-    body[data-tab="listen"] .seen-badge {
+    body[data-tab="listen"] .brand-static,
+    body[data-tab="me"] .brand-static {
       display: none;
     }
-    body[data-tab="listen"] #listen-title {
+    body[data-tab="listen"] #listen-title,
+    body[data-tab="me"] #me-title {
       display: block;
     }
 
@@ -1070,11 +1114,6 @@
       .category-line {
         font-size: 14.5px;
       }
-      .seen-badge {
-        font-size: 10px;
-        padding: 2px 6px;
-        margin-left: 4px;
-      }
       .tab {
         font-size: 12px;
         gap: 5px;
@@ -1097,37 +1136,18 @@
 </head>
 <body>
 
-  <!-- 顶部导航 -->
+  <!-- 顶部导航：纯标题，所有选项收进「我的」 -->
   <header>
     <div class="header-left">
-      <button class="brand-switch" id="category-switch" aria-haspopup="true" aria-expanded="false" aria-label="选择内容分类">
+      <div class="brand-static" id="brand-static">
         <span class="brand-name"><span id="app-title">段子手</span><span class="dot">.</span></span>
         <span class="category-line">
           <span class="category-emoji" id="category-emoji">🤣</span>
           <span id="category-label">搞笑段子</span>
-          <svg class="category-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </span>
-      </button>
-      <span class="seen-badge"><span id="seen-label">已看</span> <span class="num" id="seen-count">0</span><span id="seen-suffix"></span></span>
+      </div>
       <span class="listen-title" id="listen-title">听听<span class="listen-sub" id="listen-title-sub">· 路人弹唱</span></span>
-    </div>
-    <div class="font-controls">
-      <button class="font-btn small" id="font-decrease" title="缩小字体">A</button>
-      <button class="font-btn large" id="font-increase" title="放大字体">A</button>
-      <button class="theme-btn" id="theme-toggle" title="切换主题" aria-label="切换主题"></button>
-    </div>
-
-    <!-- 内容分类下拉菜单 -->
-    <div class="category-menu" id="category-menu" role="menu">
-      <button class="menu-item" role="menuitemradio" data-category="duanzi">
-        <span class="menu-emoji">🤣</span><span>搞笑段子</span><span class="menu-check">✓</span>
-      </button>
-      <button class="menu-item" role="menuitemradio" data-category="dad-joke">
-        <span class="menu-emoji">🧊</span><span>冷笑话</span><span class="menu-check">✓</span>
-      </button>
-      <button class="menu-item" role="menuitemradio" data-category="hitokoto">
-        <span class="menu-emoji">💬</span><span>一言</span><span class="menu-check">✓</span>
-      </button>
+      <span class="me-title" id="me-title">我的</span>
     </div>
   </header>
 
@@ -1139,12 +1159,90 @@
       <div id="feed-sentinel" style="height: 1px;"></div>
     </section>
 
-    <!-- 喜欢列表 -->
-    <section id="likes-view" class="view">
-      <div class="sub-header" id="likes-sub-header" style="display:none;">
-        <button class="clear-btn" id="clear-likes">清空喜欢</button>
+    <!-- 我的：设置入口 + 喜欢子页面 -->
+    <section id="me-view" class="view">
+      <!-- 菜单面板 -->
+      <div id="me-panel">
+        <div class="me-group">
+          <button class="me-row tap" id="me-open-likes" type="button">
+            <span class="me-ico" id="me-likes-icon"></span>
+            <span class="me-label" id="me-likes-label">我的喜欢</span>
+            <span class="me-side">
+              <span class="me-badge" id="me-likes-count">0</span>
+              <span class="me-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+            </span>
+          </button>
+        </div>
+
+        <div class="me-group">
+          <div class="me-group-title" id="me-cat-title">内容分类</div>
+          <button class="me-row tap me-cat" type="button" data-category="duanzi">
+            <span class="me-ico"><span class="emoji">🤣</span></span>
+            <span class="me-label">搞笑段子</span>
+            <span class="me-check">✓</span>
+          </button>
+          <button class="me-row tap me-cat" type="button" data-category="dad-joke">
+            <span class="me-ico"><span class="emoji">🧊</span></span>
+            <span class="me-label">冷笑话</span>
+            <span class="me-check">✓</span>
+          </button>
+          <button class="me-row tap me-cat" type="button" data-category="hitokoto">
+            <span class="me-ico"><span class="emoji">💬</span></span>
+            <span class="me-label">一言</span>
+            <span class="me-check">✓</span>
+          </button>
+        </div>
+
+        <div class="me-group">
+          <div class="me-group-title" id="me-display-title">显示设置</div>
+          <div class="me-row">
+            <span class="me-label" id="me-font-title">字号</span>
+            <span class="me-side">
+              <span class="font-controls">
+                <button class="font-btn small" id="font-decrease" type="button" title="缩小字体" aria-label="缩小字体">A</button>
+                <span class="font-value" id="font-value">17</span>
+                <button class="font-btn large" id="font-increase" type="button" title="放大字体" aria-label="放大字体">A</button>
+              </span>
+            </span>
+          </div>
+          <div class="me-group-title" id="me-theme-title" style="padding-top:6px;">主题</div>
+          <div class="theme-opts" id="theme-opts">
+            <button class="theme-opt" type="button" data-theme="light">
+              <span class="theme-dot" style="--dot-bg:#ffffff"></span><span>纯白</span>
+            </button>
+            <button class="theme-opt" type="button" data-theme="dark">
+              <span class="theme-dot" style="--dot-bg:#000000"></span><span>纯黑</span>
+            </button>
+            <button class="theme-opt" type="button" data-theme="fun">
+              <span class="theme-dot" style="--dot-bg:#ffd9a0"></span><span>整活</span>
+            </button>
+            <button class="theme-opt" type="button" data-theme="paper">
+              <span class="theme-dot" style="--dot-bg:#f8f0da"></span><span>阅读</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="me-group">
+          <div class="me-row">
+            <span class="me-label"><span id="seen-label">已看</span></span>
+            <span class="me-side">
+              <span class="me-badge"><span id="seen-count">0</span> <span id="seen-suffix"></span></span>
+            </span>
+          </div>
+        </div>
       </div>
-      <div id="likes-list"></div>
+
+      <!-- 喜欢列表面板 -->
+      <div class="me-subview" id="likes-panel">
+        <div class="likes-topbar">
+          <button class="me-back" id="me-likes-back" type="button" aria-label="返回">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <span class="likes-top-title" id="likes-top-title">我的喜欢</span>
+          <button class="clear-btn" id="clear-likes" type="button">清空喜欢</button>
+        </div>
+        <div id="likes-list"></div>
+      </div>
     </section>
 
     <!-- 听听：随机弹唱音频流 -->
@@ -1169,9 +1267,9 @@
       <span class="tab-icon"></span>
       <span class="tab-label" id="tab-label-listen">听听</span>
     </button>
-    <button class="tab" data-tab="likes">
+    <button class="tab" data-tab="me">
       <span class="tab-icon"></span>
-      <span class="tab-label" id="tab-label-likes">喜欢</span>
+      <span class="tab-label" id="tab-label-me">我的</span>
     </button>
   </nav>
 
@@ -1190,12 +1288,11 @@
       getFontSize() { return parseInt(localStorage.getItem('duanzi_fontsize')) || 17; },
       saveFontSize(size) { localStorage.setItem('duanzi_fontsize', size); },
       getTheme() {
-        // 暖色主题已下线，旧用户迁移到纯白
-        const theme = localStorage.getItem('duanzi_theme');
-        if (!theme || theme === 'warm') return 'light';
-        return theme;
+        // 默认纯黑；v2 key 版本化（旧偏好重置一次，让所有人落到黑色默认）
+        const theme = localStorage.getItem('duanzi_theme_v2');
+        return ['light', 'dark', 'fun', 'paper'].includes(theme) ? theme : 'dark';
       },
-      saveTheme(theme) { localStorage.setItem('duanzi_theme', theme); },
+      saveTheme(theme) { localStorage.setItem('duanzi_theme_v2', theme); },
       // 当前选中的内容分类
       getCategory() { return localStorage.getItem('duanzi_category') || 'duanzi'; },
       saveCategory(type) { localStorage.setItem('duanzi_category', type); },
@@ -1312,7 +1409,7 @@
       copy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>',
       feed: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
       listen: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>',
-      likes: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
+      me: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
       top: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>',
       play: '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>',
       pause: '<svg viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>',
@@ -1325,7 +1422,8 @@
       copy: '<span class="emoji">🎒</span>',
       feed: '<span class="emoji">🤣</span>',
       listen: '<span class="emoji">🎵</span>',
-      likes: '<span class="emoji">🏆</span>',
+      me: '<span class="emoji">😎</span>',
+      likesTrophy: '<span class="emoji">🏆</span>',
       top: '<span class="emoji">👆</span>'
     };
 
@@ -1333,7 +1431,9 @@
     const COPY = {
       normal: {
         title: '段子手', seenLabel: '已看', seenSuffix: '',
-        tabFeed: '首页', tabListen: '听听', tabLikes: '喜欢', clear: '清空喜欢',
+        tabFeed: '首页', tabListen: '听听', tabMe: '我的', clear: '清空喜欢',
+        meLikes: '我的喜欢', meCategory: '内容分类', meDisplay: '显示设置',
+        meFont: '字号', meTheme: '主题', likesTitle: '我的喜欢',
         listenSub: '· 路人弹唱',
         likeLabel: '喜欢', copyLabel: '复制',
         copyOk: '已复制到剪贴板', copyFail: '复制失败，请手动选择',
@@ -1347,7 +1447,9 @@
       },
       fun: {
         title: '笑料铺子', seenLabel: '笑过', seenSuffix: '条',
-        tabFeed: '开刷', tabListen: '开听', tabLikes: '笑话名人堂', clear: '都不爱了',
+        tabFeed: '开刷', tabListen: '开听', tabMe: '俺的', clear: '都不爱了',
+        meLikes: '笑话名人堂', meCategory: '整点啥乐子', meDisplay: '看着舒服',
+        meFont: '字号大小', meTheme: '换个皮肤', likesTitle: '笑话名人堂',
         listenSub: '· 路人开嗓',
         likeLabel: '笑哭了', copyLabel: '打包带走',
         copyOk: '打包带走，发朋友圈吧', copyFail: '手滑了，没复制成功',
@@ -1601,14 +1703,14 @@
     // ===================== 喜欢列表页（文字 + 音频混排，按收藏时间倒序） =====================
     function renderLikes() {
       const list = document.getElementById('likes-list');
-      const subHeader = document.getElementById('likes-sub-header');
+      const clearBtn = document.getElementById('clear-likes');
 
       const textLikes = Store.getLikes().map(x => ({ kind: 'text', ts: x.ts || 0, data: x }));
       const audioLikes = Store.getAudioLikes().map(x => ({ kind: 'audio', ts: x.ts || 0, data: x }));
       const all = textLikes.concat(audioLikes).sort((a, b) => b.ts - a.ts);
 
       if (all.length === 0) {
-        subHeader.style.display = 'none';
+        clearBtn.style.display = 'none';
         list.innerHTML = `
           <div class="empty-state">
             <span class="emoji" style="font-size:40px;opacity:0.3;margin-bottom:8px;display:block;">${isFun() ? '🏆' : '🤍'}</span>
@@ -1616,10 +1718,11 @@
             <p class="hint">${t('emptyHint')}</p>
           </div>
         `;
+        updateMeLikesCount();
         return;
       }
 
-      subHeader.style.display = 'flex';
+      clearBtn.style.display = '';
       list.innerHTML = '';
       all.forEach(entry => {
         if (entry.kind === 'audio') {
@@ -1629,6 +1732,20 @@
           list.appendChild(createCard(entry.data, entry.ts ? { timestamp: entry.ts } : {}));
         }
       });
+      updateMeLikesCount();
+    }
+
+    // 「我的」页喜欢入口上的数量角标
+    function updateMeLikesCount() {
+      const el = document.getElementById('me-likes-count');
+      if (el) {
+        el.textContent = Store.getLikes().length + Store.getAudioLikes().length;
+      }
+    }
+
+    // 喜欢子页面是否处于打开状态（替代旧的 currentTab === 'likes' 判断）
+    function likesPanelOpen() {
+      return currentTab === 'me' && document.getElementById('me-view').classList.contains('likes-open');
     }
 
     // ===================== 听听：随机弹唱音频流 =====================
@@ -1800,8 +1917,8 @@
           burstParticles(likeBtn);
           showToast(t('collectOk'));
         }
-        // 在喜欢页取消收藏：立即从列表移除（播放器不受影响）
-        if (currentTab === 'likes' && !nowLiked) renderLikes();
+        // 在喜欢子页面取消收藏：立即从列表移除（播放器不受影响）
+        if (likesPanelOpen() && !nowLiked) renderLikes();
       });
 
       // 若全局播放器正在播这条（主题切换重建场景），恢复 UI 态
@@ -2043,8 +2160,8 @@
         if (!wasLiked && isNowLiked) {
           burstParticles(btn);
         }
-        // 在喜欢列表页取消喜欢：立即移除该卡片
-        if (currentTab === 'likes' && !isNowLiked) {
+        // 在喜欢子页面取消喜欢：立即移除该卡片
+        if (likesPanelOpen() && !isNowLiked) {
           renderLikes();
         }
       }
@@ -2141,7 +2258,10 @@
     }
 
     // ===================== Tab 切换 =====================
+    const TABS = ['feed', 'listen', 'me'];
+
     function switchTab(tab) {
+      if (!TABS.includes(tab)) return;
       currentTab = tab;
       document.body.dataset.tab = tab;
       document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
@@ -2150,17 +2270,37 @@
       document.getElementById(`${tab}-view`).classList.add('active');
       document.querySelector(`.tab[data-tab="${tab}"]`).classList.add('active');
 
-      if (tab === 'likes') renderLikes();
+      if (tab === 'me') {
+        // 每次进入「我的」都回到菜单根层
+        closeLikesPanel();
+        updateMeLikesCount();
+      }
       if (tab === 'listen' && !listenLoaded && !listenLoading) loadMoreAudio();
+      // 在「我的」里切换过分类后，首页需要补载
+      if (tab === 'feed' && !document.getElementById('feed-list').children.length) loadMoreJokes();
 
       // 回到顶部
       window.scrollTo({ top: 0, behavior: 'instant' });
       updateScrollTopBtn();
     }
 
+    // 「我的」内：菜单 ⇄ 喜欢列表
+    function openLikesPanel() {
+      document.getElementById('me-view').classList.add('likes-open');
+      renderLikes();
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      updateScrollTopBtn();
+    }
+
+    function closeLikesPanel() {
+      document.getElementById('me-view').classList.remove('likes-open');
+    }
+
     // ===================== 字号调节 =====================
     function applyFontSize() {
       document.documentElement.style.setProperty('--joke-font-size', fontSize + 'px');
+      const v = document.getElementById('font-value');
+      if (v) v.textContent = fontSize;
     }
 
     function changeFontSize(delta) {
@@ -2170,35 +2310,39 @@
       showToast(delta > 0 ? t('fontUp') : t('fontDown'));
     }
 
-    // ===================== 主题切换 =====================
+    // ===================== 主题切换（在「我的」页四选一） =====================
     // light / dark / paper = 正经主题（SVG 图标 + 中性文案）
     // fun = 整活主题（emoji 图标 + 浮动表情 + 段子梗文案）
     const THEMES = ['light', 'dark', 'fun', 'paper'];
 
-    const THEME_ICONS = {
-      light: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M6.34 17.66l-1.41 1.41"/><path d="M19.07 4.93l-1.41 1.41"/></svg>',
-      dark: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>',
-      fun: '<span style="font-size:16px;line-height:1;">🎉</span>',
-      paper: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="8.5" y1="7.5" x2="16" y2="7.5"/><line x1="8.5" y1="11.5" x2="16" y2="11.5"/></svg>'
-    };
-
-    const THEME_NAMES = { light: '纯白', dark: '纯黑', fun: '整活', paper: '仿真阅读' };
     const THEME_COLORS = { light: '#ffffff', dark: '#000000', fun: '#fff6e6', paper: '#f8f0da' };
 
     function applyTheme(theme) {
       document.documentElement.setAttribute('data-theme', theme);
-      document.getElementById('theme-toggle').innerHTML = THEME_ICONS[theme];
       // 同步 meta theme-color
-      document.querySelector('meta[name="theme-color"]').setAttribute('content', THEME_COLORS[theme]);
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', THEME_COLORS[theme] || '#000000');
       // 更新随主题变化的图标 / 文案 / 装饰 / 卡片
       applyThemeStyles();
+    }
+
+    // 更新主题色板选中态
+    function updateThemeOptions(theme) {
+      document.querySelectorAll('.theme-opt').forEach(opt => {
+        opt.classList.toggle('active', opt.dataset.theme === theme);
+      });
+    }
+
+    function selectTheme(theme) {
+      if (!THEMES.includes(theme) || theme === Store.getTheme()) return;
+      Store.saveTheme(theme);
+      applyTheme(theme);
     }
 
     // 更新所有随主题变化的静态元素与卡片
     function applyThemeStyles() {
       const fun = isFun();
 
-      // 顶部标题与计数
+      // 顶部品牌名与已看计数
       document.getElementById('app-title').textContent = t('title');
       document.getElementById('seen-label').textContent = t('seenLabel');
       document.getElementById('seen-suffix').textContent = t('seenSuffix');
@@ -2206,11 +2350,21 @@
       // 底部 Tab 图标与文字
       document.querySelector('.tab[data-tab="feed"] .tab-icon').innerHTML = fun ? EMOJI_ICONS.feed : SVG_ICONS.feed;
       document.querySelector('.tab[data-tab="listen"] .tab-icon').innerHTML = fun ? EMOJI_ICONS.listen : SVG_ICONS.listen;
-      document.querySelector('.tab[data-tab="likes"] .tab-icon').innerHTML = fun ? EMOJI_ICONS.likes : SVG_ICONS.likes;
+      document.querySelector('.tab[data-tab="me"] .tab-icon').innerHTML = fun ? EMOJI_ICONS.me : SVG_ICONS.me;
       document.getElementById('tab-label-feed').textContent = t('tabFeed');
       document.getElementById('tab-label-listen').textContent = t('tabListen');
-      document.getElementById('tab-label-likes').textContent = t('tabLikes');
+      document.getElementById('tab-label-me').textContent = t('tabMe');
       document.getElementById('listen-title-sub').textContent = t('listenSub');
+
+      // 「我的」页文案与图标
+      document.getElementById('me-likes-label').textContent = t('meLikes');
+      document.getElementById('me-likes-icon').innerHTML = fun ? EMOJI_ICONS.likesTrophy : SVG_ICONS.heart;
+      document.getElementById('me-cat-title').textContent = t('meCategory');
+      document.getElementById('me-display-title').textContent = t('meDisplay');
+      document.getElementById('me-font-title').textContent = t('meFont');
+      document.getElementById('me-theme-title').textContent = t('meTheme');
+      document.getElementById('likes-top-title').textContent = t('likesTitle');
+      updateThemeOptions(Store.getTheme());
 
       // 回到顶部按钮
       document.querySelector('#scroll-top-btn .scroll-icon').innerHTML = fun ? EMOJI_ICONS.top : SVG_ICONS.top;
@@ -2231,17 +2385,8 @@
         feedJokes.forEach(j => feedList.appendChild(createCard(j, { noAnim: true })));
         window.scrollTo({ top: y, behavior: 'instant' });
       }
-      if (currentTab === 'likes') renderLikes();
+      if (likesPanelOpen()) renderLikes();
       rerenderAudioCards();
-    }
-
-    function cycleTheme() {
-      const current = Store.getTheme();
-      const idx = THEMES.indexOf(current);
-      const next = THEMES[(idx + 1) % THEMES.length];
-      Store.saveTheme(next);
-      applyTheme(next);
-      showToast('主题：' + THEME_NAMES[next]);
     }
 
     // ===================== 回到顶部按钮 =====================
@@ -2318,19 +2463,14 @@
       localStorage.setItem('duanzi_migrate_v4', '1');
     }
 
-    // ===================== 内容分类切换 =====================
+    // ===================== 内容分类切换（在「我的」页选择） =====================
     function renderCategoryUI() {
       const cat = CATEGORY_MAP[currentCategory];
       document.getElementById('category-emoji').textContent = cat.emoji;
       document.getElementById('category-label').textContent = cat.label;
-      document.querySelectorAll('.menu-item').forEach(mi => {
+      document.querySelectorAll('.me-cat').forEach(mi => {
         mi.classList.toggle('active', mi.dataset.category === currentCategory);
       });
-    }
-
-    function setMenuOpen(open) {
-      document.getElementById('category-menu').classList.toggle('open', open);
-      document.getElementById('category-switch').setAttribute('aria-expanded', open ? 'true' : 'false');
     }
 
     function switchCategory(type) {
@@ -2346,8 +2486,8 @@
       hideFeedLoading();
       updateSeenCount();
       renderCategoryUI();
-      setMenuOpen(false);
-      window.scrollTo({ top: 0 });
+      // 回到首页立刻看到新分类；仍停在「我的」也会在切回首页时补载
+      switchTab('feed');
       loadMoreJokes();
     }
 
@@ -2374,37 +2514,37 @@
         }
       });
 
-      // Tab 切换
+      // Tab 切换（重复点「我的」= 从喜欢子页面返回菜单根层）
       document.querySelectorAll('.tab').forEach(tab => {
-        tab.addEventListener('click', () => switchTab(tab.dataset.tab));
-      });
-
-      // 内容分类下拉
-      document.getElementById('category-switch').addEventListener('click', (e) => {
-        e.stopPropagation();
-        const menu = document.getElementById('category-menu');
-        setMenuOpen(!menu.classList.contains('open'));
-      });
-      document.querySelectorAll('.menu-item').forEach(item => {
-        item.addEventListener('click', (e) => {
-          e.stopPropagation();
-          switchCategory(item.dataset.category);
+        tab.addEventListener('click', () => {
+          if (tab.dataset.tab === 'me' && currentTab === 'me' && likesPanelOpen()) {
+            closeLikesPanel();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            return;
+          }
+          switchTab(tab.dataset.tab);
         });
       });
-      // 点击菜单外部关闭
-      document.addEventListener('click', (e) => {
-        if (!e.target.closest('.category-menu') && !e.target.closest('#category-switch')) {
-          setMenuOpen(false);
-        }
+
+      // 「我的」：进入 / 返回喜欢列表
+      document.getElementById('me-open-likes').addEventListener('click', openLikesPanel);
+      document.getElementById('me-likes-back').addEventListener('click', closeLikesPanel);
+
+      // 内容分类（我的页内联选择，选中即切回首页）
+      document.querySelectorAll('.me-cat').forEach(item => {
+        item.addEventListener('click', () => switchCategory(item.dataset.category));
       });
 
       // 字号调节
       document.getElementById('font-decrease').addEventListener('click', () => changeFontSize(-1));
       document.getElementById('font-increase').addEventListener('click', () => changeFontSize(1));
 
-      // 主题切换
-      document.getElementById('theme-toggle').addEventListener('click', cycleTheme);
+      // 主题：四枚色板直选
+      document.querySelectorAll('.theme-opt').forEach(opt => {
+        opt.addEventListener('click', () => selectTheme(opt.dataset.theme));
+      });
       applyTheme(Store.getTheme());
+      updateMeLikesCount();
 
       // 回到顶部
       document.getElementById('scroll-top-btn').addEventListener('click', () => {
