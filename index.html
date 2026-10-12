@@ -6,6 +6,10 @@
   <meta name="theme-color" content="#000000">
   <meta name="description" content="刷段子 - 随机搞笑段子信息流">
   <title>笑料铺子 · 刷段子</title>
+  <!-- 手写 / 萌趣字体（网络字体，加载失败自动回退到系统楷体/圆体） -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+KuaiLe&display=swap">
   <style>
     /* ===== 设计变量：纯白主题（亮色，X 风格） ===== */
     :root {
@@ -32,6 +36,7 @@
       --scroll-btn-shadow: rgba(15, 20, 25, 0.12);
       --meta-bar-bg: #1d9bf0;
       --joke-font-size: 16.5px;
+      --app-font: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Noto Sans SC", "Microsoft YaHei", Roboto, sans-serif;
       --radius: 0;
       --tab-h: 56px;
       --max-width: 620px;
@@ -151,16 +156,10 @@
       background: rgba(120, 90, 40, 0.06);
     }
 
-    /* 衬线字体，像印在纸上的文字 */
+    /* 纸张主题：行距对齐横线（字体由 --app-font 统一控制，可选手写体） */
     :root[data-theme="paper"] .joke-text {
-      font-family: Georgia, "Songti SC", "STSong", "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
       line-height: 34px;        /* 与横线行距对齐，文字落在横线上方 */
       letter-spacing: 0.02em;
-    }
-
-    /* 顶部品牌小字也用衬线，像本子封面的题字 */
-    :root[data-theme="paper"] .brand-name {
-      font-family: Georgia, "Songti SC", "STSong", "Noto Serif SC", serif;
     }
 
     /* ===== Reset ===== */
@@ -170,7 +169,7 @@
     html { scroll-behavior: smooth; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Noto Sans SC", "Microsoft YaHei", Roboto, sans-serif;
+      font-family: var(--app-font);
       background: var(--bg);
       color: var(--text);
       line-height: 1.5;
@@ -227,12 +226,109 @@
     .font-btn.large { font-size: 16px; }
 
     .font-value {
-      min-width: 30px;
+      min-width: 26px;
       text-align: center;
-      font-size: 13.5px;
+      font-size: 12px;
       font-weight: 600;
-      color: var(--text-secondary);
+      color: var(--text-tertiary);
       font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+
+    /* 字号实时预览：样字按当前字号真实渲染 */
+    .font-preview {
+      min-width: 34px;
+      text-align: center;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.05;
+      color: var(--text);
+      transition: font-size 0.1s ease;
+      user-select: none;
+    }
+    .font-preview .fp-char { line-height: 1.1; }
+
+    /* 字体选项行：名称用自身字体渲染，所见即所得 */
+    .font-opt { width: 100%; }
+    .font-opt .fo-sample {
+      margin-left: auto;
+      font-size: 17px;
+      color: var(--text-secondary);
+      max-width: 52%;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .font-opt.active .fo-sample { color: var(--text); }
+    .font-opt .me-check { margin-left: 10px; }
+
+    /* 主题色板 */
+    .accent-opts {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 10px var(--card-px) 16px;
+    }
+    .accent-opt {
+      position: relative;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      flex: none;
+      transition: transform 0.12s;
+      cursor: pointer;
+    }
+    .accent-opt:active { transform: scale(0.9); }
+    .accent-opt.active::after {
+      content: '';
+      position: absolute;
+      inset: -5px;
+      border-radius: 50%;
+      border: 2px solid var(--text);
+    }
+    .accent-opt.auto-opt {
+      background: conic-gradient(#1d9bf0 0 30%, #ff8a3d 30% 55%, #17bf63 55% 80%, #794bc4 80% 100%);
+    }
+    /* 自定义取色器：外观与色板一致，点开系统选色 */
+    .accent-custom {
+      position: relative;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 1px dashed var(--text-tertiary);
+      background: var(--accent);
+      flex: none;
+      padding: 0;
+    }
+    .accent-custom.active {
+      box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--text);
+    }
+    .accent-custom input[type="color"] {
+      position: absolute;
+      inset: -6px;
+      width: calc(100% + 12px);
+      height: calc(100% + 12px);
+      border: 0;
+      padding: 0;
+      background: none;
+      cursor: pointer;
+      opacity: 0;
+    }
+    .accent-custom::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      margin: auto;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #fff;
+      opacity: 0.92;
+      pointer-events: none;
     }
 
     /* ===== 主内容区：铺满全屏，仅预留底部 Tab 高度 ===== */
@@ -989,11 +1085,6 @@
       padding-right: 22px;
       border-bottom: none;
     }
-    :root[data-theme="paper"] .au-song,
-    :root[data-theme="paper"] .au-name {
-      font-family: Georgia, "Songti SC", "STSong", "Noto Serif SC", serif;
-    }
-
     /* ===== 回到顶部浮动按钮 ===== */
     .scroll-top-btn {
       position: fixed;
@@ -1157,11 +1248,28 @@
             <span class="me-side">
               <span class="font-controls">
                 <button class="font-btn small" id="font-decrease" type="button" title="缩小字体" aria-label="缩小字体">A</button>
-                <span class="font-value" id="font-value">17</span>
+                <span class="font-preview" id="font-preview"><span class="fp-char" id="fp-char" style="font-size:17px;">笑</span><span class="font-value" id="font-value">17</span></span>
                 <button class="font-btn large" id="font-increase" type="button" title="放大字体" aria-label="放大字体">A</button>
               </span>
             </span>
           </div>
+
+          <div class="me-group-title" id="me-fontface-title">字体</div>
+          <div id="font-opts"></div>
+
+          <div class="me-group-title" id="me-color-title">主题色</div>
+          <div class="accent-opts" id="accent-opts">
+            <button class="accent-opt auto-opt" type="button" data-accent="" title="跟随主题" aria-label="跟随主题"></button>
+            <button class="accent-opt" type="button" data-accent="#1d9bf0" style="background:#1d9bf0" aria-label="蓝色"></button>
+            <button class="accent-opt" type="button" data-accent="#f91880" style="background:#f91880" aria-label="粉色"></button>
+            <button class="accent-opt" type="button" data-accent="#ff8a3d" style="background:#ff8a3d" aria-label="橙色"></button>
+            <button class="accent-opt" type="button" data-accent="#17bf63" style="background:#17bf63" aria-label="绿色"></button>
+            <button class="accent-opt" type="button" data-accent="#794bc4" style="background:#794bc4" aria-label="紫色"></button>
+            <label class="accent-custom" id="accent-custom" title="自定义颜色">
+              <input type="color" id="accent-picker" value="#1d9bf0" aria-label="自定义主题色">
+            </label>
+          </div>
+
           <div class="me-group-title" id="me-theme-title" style="padding-top:6px;">主题</div>
           <div class="theme-opts" id="theme-opts">
             <button class="theme-opt" type="button" data-theme="light">
@@ -1247,6 +1355,12 @@
       saveSeen(type, arr) { localStorage.setItem(`duanzi_seen_v3_${type}`, JSON.stringify(arr.slice(-2000))); },
       getFontSize() { return parseInt(localStorage.getItem('duanzi_fontsize')) || 17; },
       saveFontSize(size) { localStorage.setItem('duanzi_fontsize', size); },
+      // 字体：auto=跟随主题，其余为 FONTS 中的 key
+      getFontPref() { return localStorage.getItem('duanzi_font_pref') || 'auto'; },
+      saveFontPref(key) { localStorage.setItem('duanzi_font_pref', key); },
+      // 自定义主题色：空串=跟随主题
+      getAccent() { return (localStorage.getItem('duanzi_accent') || '').trim(); },
+      saveAccent(hex) { localStorage.setItem('duanzi_accent', hex || ''); },
       getTheme() {
         // 默认纯黑；v2 key 版本化（旧偏好重置一次，让所有人落到黑色默认）
         const theme = localStorage.getItem('duanzi_theme_v2');
@@ -1337,6 +1451,98 @@
     ];
     const CATEGORY_MAP = Object.fromEntries(CATEGORIES.map(c => [c.key, c]));
 
+    // ===================== 字体预设（差异尽量大，手写体优先本地楷体兜底） =====================
+    const SANS_STACK = '-apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Noto Sans SC", "Microsoft YaHei", Roboto, sans-serif';
+    const FONTS = [
+      { key: 'heiti',  name: '黑体',   stack: SANS_STACK },
+      { key: 'songti', name: '宋体',   stack: 'Georgia, "Songti SC", "STSong", "Noto Serif SC", "Source Han Serif SC", "SimSun", serif' },
+      { key: 'kaiti',  name: '楷体手写', stack: '"Kaiti SC", "STKaiti", "BiauKai", "DFKai-SB", "KaiTi", "楷体", cursive' },
+      { key: 'yuanti', name: '圆体',   stack: '"Yuanti SC", "Hiragino Maru Gothic ProN", "Rounded Mplus 1c", "Microsoft YaHei", "PingFang SC", sans-serif' },
+      { key: 'kuaile', name: '萌趣体', stack: '"ZCOOL KuaiLe", "Yuanti SC", "Hiragino Maru Gothic ProN", "Microsoft YaHei", sans-serif' },
+      { key: 'mashan', name: '毛笔手写', stack: '"Ma Shan Zheng", "Kaiti SC", "STKaiti", "KaiTi", "楷体", cursive' }
+    ];
+    const FONT_MAP = Object.fromEntries(FONTS.map(f => [f.key, f]));
+
+    // auto：跟随主题（阅读主题用宋体衬线，其余黑体）
+    function resolvedFontStack() {
+      const pref = Store.getFontPref();
+      if (pref === 'auto') return Store.getTheme() === 'paper' ? FONT_MAP.songti.stack : SANS_STACK;
+      return (FONT_MAP[pref] || FONT_MAP.heiti).stack;
+    }
+
+    function applyFontPref() {
+      document.documentElement.style.setProperty('--app-font', resolvedFontStack());
+      document.querySelectorAll('.font-opt').forEach(row => {
+        row.classList.toggle('active', row.dataset.font === Store.getFontPref());
+      });
+    }
+
+    function renderFontOptions() {
+      const box = document.getElementById('font-opts');
+      if (!box) return;
+      const sample = '笑口常开';
+      const rows = [
+        `<button class="me-row tap font-opt" type="button" data-font="auto">
+          <span class="me-label">跟随主题</span>
+          <span class="fo-sample" style="font-family:${SANS_STACK}">${sample}</span>
+          <span class="me-check">✓</span>
+        </button>`
+      ].concat(FONTS.map(f =>
+        `<button class="me-row tap font-opt" type="button" data-font="${f.key}">
+          <span class="me-label">${f.name}</span>
+          <span class="fo-sample" style="font-family:${f.stack}">${sample}</span>
+          <span class="me-check">✓</span>
+        </button>`
+      ));
+      box.innerHTML = rows.join('');
+      box.querySelectorAll('.font-opt').forEach(row => {
+        row.addEventListener('click', () => {
+          Store.saveFontPref(row.dataset.font);
+          applyFontPref();
+          // 字体变化重建卡片，保证已渲染内容立即跟随
+          rerenderCards();
+        });
+      });
+      applyFontPref();
+    }
+
+    // ===================== 主题色（预设 + 自定义取色器） =====================
+    function hexToRgba(hex, alpha) {
+      const h = hex.replace('#', '');
+      const full = h.length === 3 ? h.split('').map(c => c + c).join('') : h;
+      const n = parseInt(full, 16);
+      return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${alpha})`;
+    }
+
+    function applyAccent(hex) {
+      const root = document.documentElement;
+      if (!hex) {
+        // 跟随主题：清除行内覆写，交回各主题变量
+        root.style.removeProperty('--accent');
+        root.style.removeProperty('--accent-soft');
+        root.style.removeProperty('--meta-bar-bg');
+      } else {
+        root.style.setProperty('--accent', hex);
+        root.style.setProperty('--accent-soft', hexToRgba(hex, 0.12));
+        root.style.setProperty('--meta-bar-bg', hex);
+      }
+      // 色板选中态
+      const cur = (hex || '').toLowerCase();
+      document.querySelectorAll('.accent-opt').forEach(btn => {
+        btn.classList.toggle('active', (btn.dataset.accent || '').toLowerCase() === cur);
+      });
+      const custom = document.getElementById('accent-custom');
+      const picker = document.getElementById('accent-picker');
+      if (custom && picker) {
+        const isPreset = [...document.querySelectorAll('.accent-opt')].some(b => (b.dataset.accent || '').toLowerCase() === cur);
+        custom.classList.toggle('active', !!cur && !isPreset);
+        if (cur) {
+          picker.value = cur;
+          custom.style.background = cur;
+        }
+      }
+    }
+
     // ===================== 状态 =====================
     let currentTab = 'feed';
     let currentCategory = Store.getCategory();
@@ -1375,7 +1581,7 @@
         title: '段子手', seenLabel: '已看', seenSuffix: '',
         tabFeed: '首页', tabListen: '听听', tabMe: '我的', clear: '清空喜欢',
         meLikes: '我的喜欢', meCategory: '内容分类', meDisplay: '显示设置',
-        meFont: '字号', meTheme: '主题', likesTitle: '我的喜欢',
+        meFont: '字号', meFontFace: '字体', meColor: '主题色', meTheme: '主题', likesTitle: '我的喜欢',
         likeLabel: '喜欢', copyLabel: '复制',
         copyOk: '已复制到剪贴板', copyFail: '复制失败，请手动选择',
         fontUp: '字号已放大', fontDown: '字号已缩小',
@@ -1391,7 +1597,7 @@
         title: '笑料铺子', seenLabel: '笑过', seenSuffix: '条',
         tabFeed: '开刷', tabListen: '开听', tabMe: '俺的', clear: '都不爱了',
         meLikes: '笑话名人堂', meCategory: '整点啥乐子', meDisplay: '看着舒服',
-        meFont: '字号大小', meTheme: '换个皮肤', likesTitle: '笑话名人堂',
+        meFont: '字号大小', meFontFace: '换个笔体', meColor: '加点颜色', meTheme: '换个皮肤', likesTitle: '笑话名人堂',
         likeLabel: '笑哭了', copyLabel: '打包带走',
         copyOk: '打包带走，发朋友圈吧', copyFail: '手滑了，没复制成功',
         fontUp: '字大了，看着不费眼了', fontDown: '字小了，更显文采',
@@ -2291,6 +2497,9 @@
       document.documentElement.style.setProperty('--joke-font-size', fontSize + 'px');
       const v = document.getElementById('font-value');
       if (v) v.textContent = fontSize;
+      // 样字按当前真实字号实时渲染
+      const c = document.getElementById('fp-char');
+      if (c) c.style.fontSize = fontSize + 'px';
     }
 
     function changeFontSize(delta) {
@@ -2350,9 +2559,15 @@
       document.getElementById('me-cat-title').textContent = t('meCategory');
       document.getElementById('me-display-title').textContent = t('meDisplay');
       document.getElementById('me-font-title').textContent = t('meFont');
+      document.getElementById('me-fontface-title').textContent = t('meFontFace');
+      document.getElementById('me-color-title').textContent = t('meColor');
       document.getElementById('me-theme-title').textContent = t('meTheme');
       document.getElementById('likes-top-title').textContent = t('likesTitle');
       updateThemeOptions(Store.getTheme());
+
+      // auto 字体随主题变化（阅读主题→宋体）；自定义主题色在换肤后继续生效
+      applyFontPref();
+      applyAccent(Store.getAccent());
 
       // 回到顶部按钮
       document.querySelector('#scroll-top-btn .scroll-icon').innerHTML = fun ? EMOJI_ICONS.top : SVG_ICONS.top;
@@ -2531,6 +2746,24 @@
       // 字号调节
       document.getElementById('font-decrease').addEventListener('click', () => changeFontSize(-1));
       document.getElementById('font-increase').addEventListener('click', () => changeFontSize(1));
+
+      // 字体选项（先渲染，applyTheme 时才能同步选中态与 auto 字体栈）
+      renderFontOptions();
+
+      // 主题色：预设色板直选
+      document.getElementById('accent-opts').addEventListener('click', (e) => {
+        const btn = e.target.closest('.accent-opt');
+        if (!btn) return;
+        const hex = (btn.dataset.accent || '').trim();
+        Store.saveAccent(hex);
+        applyAccent(hex);
+      });
+      // 主题色：自定义取色器（拖动即实时预览，松手/确认时值相同无副作用）
+      const accentPicker = document.getElementById('accent-picker');
+      accentPicker.addEventListener('input', () => {
+        Store.saveAccent(accentPicker.value);
+        applyAccent(accentPicker.value);
+      });
 
       // 主题：四枚色板直选
       document.querySelectorAll('.theme-opt').forEach(opt => {
