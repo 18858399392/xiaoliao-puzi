@@ -739,6 +739,226 @@
       fill: var(--text);
     }
 
+    /* ===== 听听页：顶部标题 ===== */
+    .listen-title {
+      display: none;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+    }
+    .listen-title .listen-sub {
+      font-weight: 400;
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      margin-left: 5px;
+    }
+    body[data-tab="listen"] #category-switch,
+    body[data-tab="listen"] .seen-badge {
+      display: none;
+    }
+    body[data-tab="listen"] #listen-title {
+      display: block;
+    }
+
+    /* ===== 听听页：音频卡片（X 风格时间线） ===== */
+    .audio-card {
+      display: flex;
+      gap: 12px;
+      padding: 16px var(--card-px);
+      border-bottom: 1px solid var(--hairline);
+      transition: background 0.15s;
+      animation: cardEnter 0.35s ease-out both;
+    }
+    .audio-card:active {
+      background: var(--bg);
+    }
+    .au-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex: none;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+    .au-main {
+      flex: 1;
+      min-width: 0;
+    }
+    .au-head {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+    .au-name {
+      font-weight: 700;
+      color: var(--text);
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .au-gender {
+      font-size: 12px;
+      line-height: 1;
+    }
+    .au-gender.female { color: #e0578a; }
+    .au-gender.male { color: #3f86d4; }
+    .au-dot {
+      color: var(--text-tertiary);
+      font-size: 12px;
+    }
+    .au-time {
+      color: var(--text-tertiary);
+      font-size: 12.5px;
+    }
+    .au-song {
+      margin-top: 3px;
+      font-size: 14.5px;
+      color: var(--text);
+      line-height: 1.45;
+    }
+    .au-song .singer {
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight: 400;
+    }
+    .au-lyrics {
+      margin: 9px 0 11px;
+      padding: 9px 12px;
+      background: var(--accent-soft);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+    }
+    .au-lyrics .lyr-line {
+      display: block;
+      font-size: 13.5px;
+      line-height: 1.85;
+      color: var(--text-secondary);
+      letter-spacing: 0.01em;
+    }
+    .au-player {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .ap-play {
+      width: 40px;
+      height: 40px;
+      flex: none;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.12s, opacity 0.12s;
+    }
+    .ap-play:active { transform: scale(0.92); }
+    .ap-play svg { width: 18px; height: 18px; fill: currentColor; }
+    .ap-play .ic-pause { display: none; }
+    .audio-card.playing .ap-play .ic-play { display: none; }
+    .audio-card.playing .ap-play .ic-pause { display: block; }
+    .audio-card.buffering .ap-play svg { opacity: 0.55; }
+    .ap-mid {
+      flex: 1;
+      min-width: 0;
+    }
+    .ap-range {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 18px;
+      margin: 0;
+      background: transparent;
+      cursor: pointer;
+      display: block;
+    }
+    .ap-range::-webkit-slider-runnable-track {
+      height: 3px;
+      border-radius: 2px;
+      background: linear-gradient(to right,
+        var(--accent) 0%, var(--accent) var(--p, 0%),
+        var(--border) var(--p, 0%), var(--border) 100%);
+    }
+    .ap-range::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: var(--accent);
+      margin-top: -5px;
+      box-shadow: 0 0 0 3px var(--accent-soft);
+    }
+    .ap-range::-moz-range-track {
+      height: 3px;
+      border-radius: 2px;
+      background: var(--border);
+    }
+    .ap-range::-moz-range-progress {
+      height: 3px;
+      border-radius: 2px;
+      background: var(--accent);
+    }
+    .ap-range::-moz-range-thumb {
+      width: 13px;
+      height: 13px;
+      border: none;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-soft);
+    }
+    .ap-times {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-tertiary);
+      font-variant-numeric: tabular-nums;
+      margin-top: 1px;
+    }
+    .ap-times .t-error { color: var(--like-color); }
+    .ap-foot {
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 12.5px;
+      color: var(--text-secondary);
+    }
+    .ap-stat {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .ap-stat svg {
+      width: 15px;
+      height: 15px;
+    }
+    .ap-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+    .ap-link svg { width: 14px; height: 14px; }
+    .ap-link:active { color: var(--accent); }
+
+    /* 纸张主题：音频卡横线对齐 + 歌词块更像贴在本子上的剪报 */
+    :root[data-theme="paper"] .audio-card {
+      padding-left: 42px;
+      padding-right: 22px;
+      border-bottom: none;
+    }
+    :root[data-theme="paper"] .au-song,
+    :root[data-theme="paper"] .au-name {
+      font-family: Georgia, "Songti SC", "STSong", "Noto Serif SC", serif;
+    }
+
     /* ===== 回到顶部浮动按钮 ===== */
     .scroll-top-btn {
       position: fixed;
@@ -873,6 +1093,7 @@
         </span>
       </button>
       <span class="seen-badge"><span id="seen-label">已看</span> <span class="num" id="seen-count">0</span><span id="seen-suffix"></span></span>
+      <span class="listen-title" id="listen-title">听听<span class="listen-sub" id="listen-title-sub">· 路人弹唱</span></span>
     </div>
     <div class="font-controls">
       <button class="font-btn small" id="font-decrease" title="缩小字体">A</button>
@@ -909,6 +1130,12 @@
       </div>
       <div id="likes-list"></div>
     </section>
+
+    <!-- 听听：随机弹唱音频流 -->
+    <section id="listen-view" class="view">
+      <div id="listen-list"></div>
+      <div id="listen-sentinel" style="height:1px;"></div>
+    </section>
   </main>
 
   <!-- 回到顶部 -->
@@ -921,6 +1148,10 @@
     <button class="tab active" data-tab="feed">
       <span class="tab-icon"></span>
       <span class="tab-label" id="tab-label-feed">首页</span>
+    </button>
+    <button class="tab" data-tab="listen">
+      <span class="tab-icon"></span>
+      <span class="tab-label" id="tab-label-listen">听听</span>
     </button>
     <button class="tab" data-tab="likes">
       <span class="tab-icon"></span>
@@ -1047,8 +1278,13 @@
       heart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
       copy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>',
       feed: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
+      listen: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>',
       likes: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
-      top: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>'
+      top: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>',
+      play: '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>',
+      pause: '<svg viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>',
+      heartSmall: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
+      external: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>'
     };
 
     const EMOJI_ICONS = {
@@ -1056,6 +1292,7 @@
       heartOn: '<span class="emoji">🤣</span>',
       copy: '<span class="emoji">🎒</span>',
       feed: '<span class="emoji">🤣</span>',
+      listen: '<span class="emoji">🎵</span>',
       likes: '<span class="emoji">🏆</span>',
       top: '<span class="emoji">👆</span>'
     };
@@ -1064,17 +1301,20 @@
     const COPY = {
       normal: {
         title: '段子手', seenLabel: '已看', seenSuffix: '',
-        tabFeed: '首页', tabLikes: '喜欢', clear: '清空喜欢',
+        tabFeed: '首页', tabListen: '听听', tabLikes: '喜欢', clear: '清空喜欢',
+        listenSub: '· 路人弹唱',
         likeLabel: '喜欢', copyLabel: '复制',
         copyOk: '已复制到剪贴板', copyFail: '复制失败，请手动选择',
         fontUp: '字号已放大', fontDown: '字号已缩小',
         clearOk: '喜欢列表已清空',
         loadFail: '加载失败，请重试', retry: '重新加载',
+        audioFail: '这个片段打不开，下滑听个新的',
         emptyTitle: '还没有喜欢的内容', emptyHint: '看到好笑的，点颗红心收起来'
       },
       fun: {
         title: '笑料铺子', seenLabel: '笑过', seenSuffix: '条',
-        tabFeed: '开刷', tabLikes: '笑话名人堂', clear: '都不爱了',
+        tabFeed: '开刷', tabListen: '开听', tabLikes: '笑话名人堂', clear: '都不爱了',
+        listenSub: '· 路人开嗓',
         likeLabel: '笑哭了', copyLabel: '打包带走',
         copyOk: '打包带走，发朋友圈吧', copyFail: '手滑了，没复制成功',
         fontUp: '字大了，看着不费眼了', fontDown: '字小了，更显文采',
@@ -1347,6 +1587,369 @@
       });
     }
 
+    // ===================== 听听：随机弹唱音频流 =====================
+    // 统一音频结构（唯一归一化入口）：
+    // { id, nickname, gender, avatar, songName, singer, lyrics[],
+    //   audioUrl, durationSec, likeCount, link, publishAt }
+
+    function normalizeAudio(data) {
+      const u = data.user || {};
+      const s = data.song || {};
+      const a = data.audio || {};
+      // HTTPS 页面不允许 http 音频（混合内容拦截），CDN 已确认支持 HTTPS，仅做协议升级
+      const toHttps = (u0) => String(u0 || '').trim().replace(/^http:\/\//i, 'https://');
+      const link = String(a.link || '').trim();
+      const id = 'cy:' + (link.split('/').pop() || toHttps(a.url).slice(-32));
+      return {
+        id,
+        nickname: String(u.nickname || '匿名唱作人'),
+        gender: String(u.gender || ''),
+        avatar: toHttps(u.avatar_url),
+        songName: String(s.name || '未知歌曲'),
+        singer: String(s.singer || ''),
+        lyrics: Array.isArray(s.lyrics) ? s.lyrics.map(x => String(x)).filter(Boolean) : [],
+        audioUrl: toHttps(a.url),
+        durationSec: Math.max(1, Math.round((a.duration || 0) / 1000)),
+        likeCount: Number(a.like_count) || 0,
+        link,
+        publishAt: Number(a.publish_at) || 0
+      };
+    }
+
+    async function fetchChangya() {
+      const url = useProxy ? '/api/changya' : `${MIRROR_HOSTS[mirrorIdx]}/v2/changya`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('API请求失败');
+      const json = await res.json();
+      if (json.code !== 200 || !json.data || !json.data.audio) throw new Error('接口返回异常');
+      return normalizeAudio(json.data);
+    }
+
+    async function fetchChangyaWithFallback() {
+      if (useProxy) return await fetchChangya();
+      for (let i = 0; i < MIRROR_HOSTS.length; i++) {
+        try {
+          mirrorIdx = i;
+          return await fetchChangya();
+        } catch (e) {
+          if (i === MIRROR_HOSTS.length - 1) {
+            useProxy = true;
+            return await fetchChangya();
+          }
+        }
+      }
+    }
+
+    async function fetchAudios(count) {
+      return Promise.all(Array.from({ length: count }, () => fetchChangyaWithFallback()));
+    }
+
+    // 入池统一去重：会话已展示的、池内已有的都不收（并发批次可能抽到同一首）
+    function pushAudioPool(items) {
+      let added = 0;
+      items.forEach(it => {
+        if (!audioSeen.has(it.id) && !audioPool.some(p => p.id === it.id)) {
+          audioPool.push(it);
+          added++;
+        }
+      });
+      return added;
+    }
+
+    // ---- 音频流状态（仅内存：音频链接带时效签名，不做持久化缓存） ----
+    let audioPool = [];
+    const audioSeen = new Set();
+    let audioItems = [];      // 已渲染条目，主题切换重建用
+    let listenLoading = false;
+    let listenLoaded = false;
+
+    function fmtDuration(sec) {
+      sec = Math.max(0, Math.floor(sec || 0));
+      const m = Math.floor(sec / 60);
+      const s = sec % 60;
+      return `${m}:${String(s).padStart(2, '0')}`;
+    }
+
+    function fmtCount(n) {
+      if (n >= 10000) return (n / 10000).toFixed(1).replace(/\.0$/, '') + '万';
+      return String(n);
+    }
+
+    function genderHtml(g) {
+      if (g === 'female') return '<span class="au-gender female" title="女生">♀</span>';
+      if (g === 'male') return '<span class="au-gender male" title="男生">♂</span>';
+      return '';
+    }
+
+    function createAudioCard(item, options = {}) {
+      const card = document.createElement('div');
+      card.className = 'audio-card';
+      card.dataset.id = item.id;
+      if (options.noAnim) card.classList.add('no-anim');
+
+      const lyricsHtml = item.lyrics.length
+        ? `<div class="au-lyrics">${item.lyrics.map(l =>
+            `<span class="lyr-line">${escapeHtml(l)}</span>`).join('')}</div>`
+        : '';
+      const avatarHtml = item.avatar
+        ? `<img class="au-avatar" src="${escapeAttr(item.avatar)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.visibility='hidden'">`
+        : '<div class="au-avatar"></div>';
+      const singerHtml = item.singer
+        ? `<span class="singer">原唱：${escapeHtml(item.singer)}</span>` : '';
+      const timeHtml = item.publishAt
+        ? `<span class="au-dot">·</span><span class="au-time">${formatTime(item.publishAt)}</span>` : '';
+      const linkHtml = item.link
+        ? `<a class="ap-link" href="${escapeAttr(item.link)}" target="_blank" rel="noopener noreferrer">${SVG_ICONS.external}原作品</a>` : '';
+
+      card.innerHTML = `
+        ${avatarHtml}
+        <div class="au-main">
+          <div class="au-head">
+            <span class="au-name">${escapeHtml(item.nickname)}</span>
+            ${genderHtml(item.gender)}
+            ${timeHtml}
+          </div>
+          <div class="au-song">《${escapeHtml(item.songName)}》 ${singerHtml}</div>
+          ${lyricsHtml}
+          <div class="au-player">
+            <button class="ap-play" aria-label="播放/暂停">
+              <span class="ic-play">${SVG_ICONS.play}</span>
+              <span class="ic-pause">${SVG_ICONS.pause}</span>
+            </button>
+            <div class="ap-mid">
+              <input class="ap-range" type="range" min="0" max="${item.durationSec}" value="0" step="1" aria-label="播放进度">
+              <div class="ap-times">
+                <span class="t-cur">0:00</span>
+                <span class="t-dur">${fmtDuration(item.durationSec)}</span>
+              </div>
+            </div>
+          </div>
+          <div class="ap-foot">
+            <span class="ap-stat">${SVG_ICONS.heartSmall}${fmtCount(item.likeCount)}</span>
+            ${linkHtml}
+          </div>
+        </div>
+      `;
+
+      // 事件：播放/暂停 + 进度拖动
+      const playBtn = card.querySelector('.ap-play');
+      const range = card.querySelector('.ap-range');
+      playBtn.addEventListener('click', () => Player.toggle(item, card));
+      range.addEventListener('input', () => {
+        if (Player.currentId !== item.id) return;
+        Player.el.currentTime = parseFloat(range.value);
+      });
+
+      // 若全局播放器正在播这条（主题切换重建场景），恢复 UI 态
+      if (Player.currentId === item.id) {
+        card.classList.add('playing');
+        Player.attachUI(card);
+        Player.syncUI();
+      }
+
+      return card;
+    }
+
+    // ---- 全局唯一播放器（单例：互斥、当前播放项单一事实来源） ----
+    const Player = {
+      el: null,
+      currentId: null,
+      currentItem: null,
+      currentCard: null,
+
+      ensure() {
+        if (this.el) return;
+        const el = new Audio();
+        el.preload = 'none';
+        el.addEventListener('timeupdate', () => this.syncUI());
+        el.addEventListener('loadedmetadata', () => {
+          if (this.currentCard) {
+            const range = this.currentCard.querySelector('.ap-range');
+            const dur = this.currentCard.querySelector('.t-dur');
+            if (el.duration && isFinite(el.duration)) {
+              range.max = Math.round(el.duration);
+              dur.textContent = fmtDuration(el.duration);
+            }
+          }
+          this.syncUI();
+        });
+        el.addEventListener('playing', () => {
+          this.currentCard?.classList.remove('buffering');
+        });
+        el.addEventListener('waiting', () => {
+          this.currentCard?.classList.add('buffering');
+        });
+        el.addEventListener('ended', () => this.reset());
+        el.addEventListener('error', () => {
+          this.reset();
+          showToast(t('audioFail'));
+        });
+        this.el = el;
+      },
+
+      // 绑定当前卡片的 UI 引用（重建卡片后重新指向）
+      attachUI(card) {
+        this.currentCard = card;
+      },
+
+      syncUI() {
+        const card = this.currentCard;
+        if (!card || !this.el) return;
+        const item = this.currentItem;
+        if (!item) return;
+        const range = card.querySelector('.ap-range');
+        const cur = card.querySelector('.t-cur');
+        const dur = isFinite(this.el.duration) && this.el.duration ? this.el.duration : item.durationSec;
+        const pos = this.el.currentTime || 0;
+        if (document.activeElement !== range) {
+          range.value = Math.round(pos);
+        }
+        range.style.setProperty('--p', `${(pos / (dur || 1)) * 100}%`);
+        cur.textContent = fmtDuration(pos);
+      },
+
+      reset() {
+        const old = this.currentCard;
+        if (old) {
+          old.classList.remove('playing', 'buffering');
+          const range = old.querySelector('.ap-range');
+          const cur = old.querySelector('.t-cur');
+          if (range) { range.value = 0; range.style.setProperty('--p', '0%'); }
+          if (cur) cur.textContent = '0:00';
+        }
+        if (this.el) { this.el.pause(); this.el.removeAttribute('src'); this.el.load(); }
+        this.currentId = null;
+        this.currentItem = null;
+        this.currentCard = null;
+      },
+
+      async toggle(item, card) {
+        this.ensure();
+        // 同一条：播放/暂停切换
+        if (this.currentId === item.id) {
+          if (this.el.paused) {
+            card.classList.add('buffering');
+            try { await this.el.play(); } catch (e) {}
+          } else {
+            this.el.pause();
+            card.classList.remove('playing');
+          }
+          return;
+        }
+        // 切新歌：先复位旧卡片
+        const oldCard = this.currentCard;
+        if (oldCard && oldCard !== card) {
+          oldCard.classList.remove('playing', 'buffering');
+          const range = oldCard.querySelector('.ap-range');
+          if (range) { range.value = 0; range.style.setProperty('--p', '0%'); }
+          const cur = oldCard.querySelector('.t-cur');
+          if (cur) cur.textContent = '0:00';
+        }
+        this.currentId = item.id;
+        this.currentItem = item;
+        this.currentCard = card;
+        this.el.src = item.audioUrl;
+        card.classList.add('playing', 'buffering');
+        try {
+          await this.el.play();
+          card.classList.remove('buffering');
+        } catch (e) {
+          this.reset();
+          showToast(t('audioFail'));
+        }
+      }
+    };
+
+    function rerenderAudioCards() {
+      const list = document.getElementById('listen-list');
+      if (!list || !audioItems.length) return;
+      list.innerHTML = '';
+      audioItems.forEach(it => list.appendChild(createAudioCard(it, { noAnim: true })));
+    }
+
+    async function loadMoreAudio() {
+      if (listenLoading || currentTab !== 'listen') return;
+      listenLoading = true;
+      showListenLoading();
+
+      const BATCH = 4;
+      let picked = [];
+
+      // 1) 内存池取
+      while (audioPool.length && picked.length < BATCH) {
+        const it = audioPool.shift();
+        if (!audioSeen.has(it.id)) picked.push(it);
+      }
+
+      // 2) 不足则请求（最多补两轮，滤掉重复随机结果）
+      if (picked.length < BATCH) {
+        try {
+          for (let round = 0; round < 2 && picked.length < BATCH; round++) {
+            const batch = await fetchAudios(BATCH * 2);
+            pushAudioPool(batch);
+            while (audioPool.length && picked.length < BATCH) {
+              const it = audioPool.shift();
+              if (!audioSeen.has(it.id) && !picked.some(p => p.id === it.id)) picked.push(it);
+            }
+          }
+        } catch (e) {
+          if (picked.length === 0 && audioItems.length === 0) {
+            showListenError();
+            listenLoading = false;
+            hideListenLoading();
+            return;
+          }
+        }
+      }
+
+      // 3) 渲染（双保险：跳过任何重复 id）
+      const list = document.getElementById('listen-list');
+      picked.forEach(it => {
+        if (audioSeen.has(it.id)) return;
+        audioSeen.add(it.id);
+        audioItems.push(it);
+        list.appendChild(createAudioCard(it));
+      });
+
+      listenLoading = false;
+      hideListenLoading();
+      listenLoaded = true;
+
+      // 4) 池子见底时后台补一批
+      if (audioPool.length < 6) backgroundAudioPrefetch();
+    }
+
+    const audioPrefetching = { v: false };
+    async function backgroundAudioPrefetch() {
+      if (audioPrefetching.v) return;
+      audioPrefetching.v = true;
+      try {
+        const batch = await fetchAudios(8);
+        pushAudioPool(batch);
+      } catch (e) { /* 静默 */ } finally {
+        audioPrefetching.v = false;
+      }
+    }
+
+    function showListenLoading() {
+      if (document.getElementById('listen-loading')) return;
+      const el = document.createElement('div');
+      el.id = 'listen-loading';
+      el.className = 'state-card';
+      el.innerHTML = '<div class="spinner"></div><p>寻找正在唱歌的人...</p>';
+      document.getElementById('listen-list').after(el);
+    }
+    function hideListenLoading() {
+      document.getElementById('listen-loading')?.remove();
+    }
+    function showListenError() {
+      const el = document.getElementById('listen-loading');
+      if (el) {
+        el.innerHTML = `<p>${t('loadFail')}</p><button class="retry-btn" onclick="loadMoreAudio()">${t('retry')}</button>`;
+        el.classList.add('error-state');
+      }
+    }
+
     // ===================== 操作处理 =====================
     function handleAction(e) {
       const btn = e.target.closest('.action-btn');
@@ -1475,6 +2078,7 @@
     // ===================== Tab 切换 =====================
     function switchTab(tab) {
       currentTab = tab;
+      document.body.dataset.tab = tab;
       document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
 
@@ -1482,6 +2086,7 @@
       document.querySelector(`.tab[data-tab="${tab}"]`).classList.add('active');
 
       if (tab === 'likes') renderLikes();
+      if (tab === 'listen' && !listenLoaded && !listenLoading) loadMoreAudio();
 
       // 回到顶部
       window.scrollTo({ top: 0, behavior: 'instant' });
@@ -1535,9 +2140,12 @@
 
       // 底部 Tab 图标与文字
       document.querySelector('.tab[data-tab="feed"] .tab-icon').innerHTML = fun ? EMOJI_ICONS.feed : SVG_ICONS.feed;
+      document.querySelector('.tab[data-tab="listen"] .tab-icon').innerHTML = fun ? EMOJI_ICONS.listen : SVG_ICONS.listen;
       document.querySelector('.tab[data-tab="likes"] .tab-icon').innerHTML = fun ? EMOJI_ICONS.likes : SVG_ICONS.likes;
       document.getElementById('tab-label-feed').textContent = t('tabFeed');
+      document.getElementById('tab-label-listen').textContent = t('tabListen');
       document.getElementById('tab-label-likes').textContent = t('tabLikes');
+      document.getElementById('listen-title-sub').textContent = t('listenSub');
 
       // 回到顶部按钮
       document.querySelector('#scroll-top-btn .scroll-icon').innerHTML = fun ? EMOJI_ICONS.top : SVG_ICONS.top;
@@ -1559,6 +2167,7 @@
         window.scrollTo({ top: y, behavior: 'instant' });
       }
       if (currentTab === 'likes') renderLikes();
+      rerenderAudioCards();
     }
 
     function cycleTheme() {
@@ -1582,13 +2191,19 @@
 
     // ===================== 无限滚动 =====================
     function setupInfiniteScroll() {
-      const sentinel = document.getElementById('feed-sentinel');
-      const observer = new IntersectionObserver((entries) => {
+      const feedObs = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting && !isLoading && currentTab === 'feed') {
           loadMoreJokes();
         }
-      }, { rootMargin: '300px' });
-      observer.observe(sentinel);
+      }, { rootMargin: '600px' });
+      feedObs.observe(document.getElementById('feed-sentinel'));
+
+      const listenObs = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && !listenLoading && currentTab === 'listen') {
+          loadMoreAudio();
+        }
+      }, { rootMargin: '600px' });
+      listenObs.observe(document.getElementById('listen-sentinel'));
     }
 
     // ===================== 旧数据迁移（一次性） =====================
@@ -1675,6 +2290,9 @@
     function init() {
       // 旧数据迁移
       migrateData();
+
+      // 初始 Tab 标记（控制顶栏标题显隐）
+      document.body.dataset.tab = currentTab;
 
       // 应用字号
       applyFontSize();

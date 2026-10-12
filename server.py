@@ -11,6 +11,7 @@ API_PATHS = {
     'duanzi': 'duanzi',        # 搞笑段子
     'dad-joke': 'dad-joke',    # 冷笑话
     'hitokoto': 'hitokoto',    # 随机一言
+    'changya': 'changya',      # 随机唱歌音频
 }
 # 60s API 多镜像域名
 MIRROR_HOSTS = [
