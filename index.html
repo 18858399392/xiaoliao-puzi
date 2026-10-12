@@ -92,6 +92,78 @@
       --meta-bar-bg: #ff8a3d;
     }
 
+    /* ===== 仿真阅读主题（复古黄本子：横线纸 + 红色装订线 + 衬线正文） ===== */
+    :root[data-theme="paper"] {
+      --bg: #e3d5ad;            /* 桌面（纸外）偏深的旧木色 */
+      --bg-elevated: #f8f0da;   /* 纸张 */
+      --card-bg: transparent;   /* 卡片透明，露出横线纸底 */
+      --text: #3a3326;          /* 墨色正文 */
+      --text-secondary: #6f6449;
+      --text-tertiary: #a79b7c;
+      --accent: #355874;        /* 蓝黑墨水 */
+      --accent-soft: rgba(53, 88, 116, 0.12);
+      --like-color: #b03a2e;    /* 老师红笔 */
+      --like-soft: rgba(176, 58, 46, 0.12);
+      --copy-color: #355874;
+      --copy-soft: rgba(53, 88, 116, 0.12);
+      --border: #ddcb9f;
+      --border-light: #e7d9b4;
+      --hairline: rgba(140, 110, 55, 0.20);  /* 纸边淡线；卡片分割线单独去掉，由横线承担 */
+      --header-bg: rgba(248, 240, 218, 0.88);
+      --tab-bg: rgba(248, 240, 218, 0.94);
+      --toast-bg: rgba(58, 51, 38, 0.94);
+      --toast-text: #f8f0da;
+      --scroll-btn-bg: #f8f0da;
+      --scroll-btn-shadow: rgba(120, 90, 40, 0.22);
+      --meta-bar-bg: #b03a2e;
+      --paper-line: rgba(70, 100, 140, 0.28);   /* 横线颜色（作业本蓝） */
+      --paper-margin: rgba(176, 58, 46, 0.38);   /* 红色装订线 */
+      --paper-edge: #d9c79b;
+    }
+
+    /* 纸外：旧木桌面 */
+    :root[data-theme="paper"] body {
+      background: var(--bg);
+    }
+
+    /* 中间栏目即一张竖格作业本：横线 + 左侧红色装订线 */
+    :root[data-theme="paper"] main {
+      background-color: var(--bg-elevated);
+      background-image:
+        linear-gradient(to right,
+          transparent 0, transparent 25px,
+          var(--paper-margin) 25px, var(--paper-margin) 26px,
+          transparent 26px),
+        repeating-linear-gradient(to bottom,
+          transparent 0, transparent 33px,
+          var(--paper-line) 33px, var(--paper-line) 34px);
+      border-left: 1px solid var(--paper-edge);
+      border-right: 1px solid var(--paper-edge);
+      box-shadow: inset 0 0 70px rgba(140, 105, 45, 0.10);
+    }
+
+    /* 正文写在装订线右侧，卡片不再画分割线 */
+    :root[data-theme="paper"] .card {
+      padding-left: 42px;
+      padding-right: 22px;
+      border-bottom: none;
+    }
+    :root[data-theme="paper"] .card:active {
+      background: rgba(120, 90, 40, 0.06);
+    }
+
+    /* 衬线字体，像印在纸上的文字 */
+    :root[data-theme="paper"] .joke-text {
+      font-family: Georgia, "Songti SC", "STSong", "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+      line-height: 34px;        /* 与横线行距对齐，文字落在横线上方 */
+      letter-spacing: 0.02em;
+    }
+
+    /* 顶部品牌小字也用衬线，像本子封面的题字 */
+    :root[data-theme="paper"] .brand-name {
+      font-family: Georgia, "Songti SC", "STSong", "Noto Serif SC", serif;
+    }
+
     /* ===== Reset ===== */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     * { -webkit-tap-highlight-color: transparent; }
@@ -139,17 +211,102 @@
       border-bottom: 1px solid var(--hairline);
     }
 
-    .header-title {
-      font-size: 19px;
-      font-weight: 700;
-      color: var(--text);
-      letter-spacing: 0.02em;
+    /* ===== 左上角：品牌名 + 内容分类切换 ===== */
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
     }
 
-    .header-title .dot {
-      color: var(--accent);
-      margin-left: 1px;
+    .brand-switch {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0;
+      background: none;
+      border: 0;
+      padding: 2px 8px 2px 0;
+      margin: 0;
+      cursor: pointer;
+      border-radius: 8px;
+      font-family: inherit;
+      text-align: left;
+      -webkit-tap-highlight-color: transparent;
     }
+    .brand-switch:active { background: var(--accent-soft); }
+
+    .brand-name {
+      font-size: 10.5px;
+      font-weight: 600;
+      line-height: 1.25;
+      color: var(--text-tertiary);
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+    .brand-name .dot { color: var(--accent); }
+
+    .category-line {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 15.5px;
+      font-weight: 700;
+      line-height: 1.3;
+      color: var(--text);
+      white-space: nowrap;
+    }
+    .category-emoji { font-size: 14px; line-height: 1; }
+    .category-caret {
+      width: 13px;
+      height: 13px;
+      color: var(--text-secondary);
+      transition: transform 0.2s ease;
+    }
+    .brand-switch[aria-expanded="true"] .category-caret { transform: rotate(180deg); }
+
+    /* 分类下拉菜单 */
+    .category-menu {
+      position: absolute;
+      top: 100%;
+      margin-top: 2px;
+      left: 8px;
+      min-width: 168px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 10px 32px rgba(0, 0, 0, 0.16);
+      padding: 5px;
+      display: none;
+      z-index: 200;
+    }
+    .category-menu.open { display: block; }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 10px 12px;
+      border: 0;
+      background: none;
+      border-radius: 8px;
+      font-size: 14.5px;
+      font-family: inherit;
+      color: var(--text);
+      cursor: pointer;
+      text-align: left;
+    }
+    .menu-item:active { background: var(--accent-soft); }
+    .menu-item .menu-emoji { font-size: 17px; line-height: 1; }
+    .menu-item .menu-check {
+      margin-left: auto;
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 14px;
+      visibility: hidden;
+    }
+    .menu-item.active .menu-check { visibility: visible; }
 
     .seen-badge {
       font-size: 11.5px;
@@ -674,13 +831,13 @@
         --card-px: 14px;
         --joke-font-size: 16px;
       }
-      .header-title {
-        font-size: 16px;
+      .category-line {
+        font-size: 14.5px;
       }
       .seen-badge {
         font-size: 10px;
         padding: 2px 6px;
-        margin-left: 6px;
+        margin-left: 4px;
       }
       .tab {
         font-size: 12px;
@@ -706,11 +863,34 @@
 
   <!-- 顶部导航 -->
   <header>
-    <h1 class="header-title"><span id="app-title">段子手</span><span class="dot">.</span><span class="seen-badge"><span id="seen-label">已看</span> <span class="num" id="seen-count">0</span><span id="seen-suffix"></span></span></h1>
+    <div class="header-left">
+      <button class="brand-switch" id="category-switch" aria-haspopup="true" aria-expanded="false" aria-label="选择内容分类">
+        <span class="brand-name"><span id="app-title">段子手</span><span class="dot">.</span></span>
+        <span class="category-line">
+          <span class="category-emoji" id="category-emoji">🤣</span>
+          <span id="category-label">搞笑段子</span>
+          <svg class="category-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </span>
+      </button>
+      <span class="seen-badge"><span id="seen-label">已看</span> <span class="num" id="seen-count">0</span><span id="seen-suffix"></span></span>
+    </div>
     <div class="font-controls">
       <button class="font-btn small" id="font-decrease" title="缩小字体">A</button>
       <button class="font-btn large" id="font-increase" title="放大字体">A</button>
       <button class="theme-btn" id="theme-toggle" title="切换主题" aria-label="切换主题"></button>
+    </div>
+
+    <!-- 内容分类下拉菜单 -->
+    <div class="category-menu" id="category-menu" role="menu">
+      <button class="menu-item" role="menuitemradio" data-category="duanzi">
+        <span class="menu-emoji">🤣</span><span>搞笑段子</span><span class="menu-check">✓</span>
+      </button>
+      <button class="menu-item" role="menuitemradio" data-category="dad-joke">
+        <span class="menu-emoji">🧊</span><span>冷笑话</span><span class="menu-check">✓</span>
+      </button>
+      <button class="menu-item" role="menuitemradio" data-category="hitokoto">
+        <span class="menu-emoji">💬</span><span>一言</span><span class="menu-check">✓</span>
+      </button>
     </div>
   </header>
 
@@ -754,12 +934,12 @@
   <script>
     // ===================== 存储管理 =====================
     const Store = {
-      // 喜欢列表：完整段子快照 { index, duanzi, ts }，按喜欢时间倒序
+      // 喜欢列表：完整内容快照 { id, type, index, duanzi, ts }，按喜欢时间倒序
       getLikes() { return JSON.parse(localStorage.getItem('duanzi_liked') || '[]'); },
       saveLikes(arr) { localStorage.setItem('duanzi_liked', JSON.stringify(arr)); },
-      // 已看编号（轻量，仅用于计数与会话去重）
-      getSeen() { return JSON.parse(localStorage.getItem('duanzi_seen') || '[]'); },
-      saveSeen(arr) { localStorage.setItem('duanzi_seen', JSON.stringify(arr.slice(-2000))); },
+      // 已看编号（按分类隔离，轻量，仅用于当前分类计数与会话去重）
+      getSeen(type) { return JSON.parse(localStorage.getItem(`duanzi_seen_v3_${type}`) || '[]'); },
+      saveSeen(type, arr) { localStorage.setItem(`duanzi_seen_v3_${type}`, JSON.stringify(arr.slice(-2000))); },
       getFontSize() { return parseInt(localStorage.getItem('duanzi_fontsize')) || 17; },
       saveFontSize(size) { localStorage.setItem('duanzi_fontsize', size); },
       getTheme() {
@@ -769,49 +949,50 @@
         return theme;
       },
       saveTheme(theme) { localStorage.setItem('duanzi_theme', theme); },
+      // 当前选中的内容分类
+      getCategory() { return localStorage.getItem('duanzi_category') || 'duanzi'; },
+      saveCategory(type) { localStorage.setItem('duanzi_category', type); },
 
-      isLiked(index) { return this.getLikes().some(item => item.index === index); },
+      isLiked(id) { return this.getLikes().some(item => item.id === id); },
 
       // 喜欢：写入完整快照并置顶；取消：移除
       addLike(joke) {
-        let likes = this.getLikes().filter(item => item.index !== joke.index);
-        likes.unshift({ index: joke.index, duanzi: joke.duanzi, ts: Date.now() });
+        let likes = this.getLikes().filter(item => item.id !== joke.id);
+        likes.unshift({ id: joke.id, type: joke.type, index: joke.index, duanzi: joke.duanzi, ts: Date.now() });
         if (likes.length > 500) likes = likes.slice(0, 500);
         this.saveLikes(likes);
         return true;
       },
-      removeLike(index) {
-        this.saveLikes(this.getLikes().filter(item => item.index !== index));
+      removeLike(id) {
+        this.saveLikes(this.getLikes().filter(item => item.id !== id));
         return false;
       },
 
-      addSeen(index) {
-        const seen = this.getSeen();
+      addSeen(type, index) {
+        const seen = this.getSeen(type);
         if (!seen.includes(index)) {
           seen.push(index);
-          this.saveSeen(seen);
+          this.saveSeen(type, seen);
         }
       },
 
       clearLikes() { localStorage.removeItem('duanzi_liked'); },
 
-      // ====== 段子缓存池（预加载的核心） ======
-      // v2：旧版缓存按编号排序，改版为随机顺序后废弃旧缓存
-      getCache() { return JSON.parse(localStorage.getItem('duanzi_cache_v2') || '[]'); },
-      saveCache(arr) { localStorage.setItem('duanzi_cache_v2', JSON.stringify(arr)); },
-      getCacheTime() { return parseInt(localStorage.getItem('duanzi_cache_v2_time')) || 0; },
-      saveCacheTime(ts) { localStorage.setItem('duanzi_cache_v2_time', ts); },
-      // 从缓存池取出一条段子（API 本身随机返回，直接取队首即可）
-      popFromCache() {
-        const cache = this.getCache();
+      // ====== 内容缓存池（按分类隔离，预加载的核心） ======
+      cacheKey(type) { return `duanzi_cache_v3_${type}`; },
+      getCache(type) { return JSON.parse(localStorage.getItem(this.cacheKey(type)) || '[]'); },
+      saveCache(type, arr) { localStorage.setItem(this.cacheKey(type), JSON.stringify(arr)); },
+      // 从缓存池取出一条（API 本身随机返回，直接取队首即可）
+      popFromCache(type) {
+        const cache = this.getCache(type);
         if (cache.length === 0) return null;
         const joke = cache.shift();
-        this.saveCache(cache);
+        this.saveCache(type, cache);
         return joke;
       },
       // 批量写入缓存池（去重后直接追加，保持 API 的随机顺序）
-      addToCache(jokes) {
-        let cache = this.getCache();
+      addToCache(type, jokes) {
+        let cache = this.getCache(type);
         const existing = new Set(cache.map(j => j.index));
         jokes.forEach(j => {
           if (!existing.has(j.index)) {
@@ -821,16 +1002,44 @@
         });
         // 限制缓存上限 300 条
         if (cache.length > 300) cache = cache.slice(-300);
-        this.saveCache(cache);
+        this.saveCache(type, cache);
       },
-      getCacheCount() { return this.getCache().length; }
+      getCacheCount(type) { return this.getCache(type).length; }
     };
+
+    // ===================== 内容分类 =====================
+    // 统一数据结构：{ id: `${type}:${index}`, type, index, duanzi }
+    const CATEGORIES = [
+      {
+        key: 'duanzi',
+        path: 'duanzi',
+        label: '搞笑段子',
+        emoji: '🤣',
+        contentField: 'duanzi'
+      },
+      {
+        key: 'dad-joke',
+        path: 'dad-joke',
+        label: '冷笑话',
+        emoji: '🧊',
+        contentField: 'content'
+      },
+      {
+        key: 'hitokoto',
+        path: 'hitokoto',
+        label: '一言',
+        emoji: '💬',
+        contentField: 'hitokoto'
+      }
+    ];
+    const CATEGORY_MAP = Object.fromEntries(CATEGORIES.map(c => [c.key, c]));
 
     // ===================== 状态 =====================
     let currentTab = 'feed';
+    let currentCategory = Store.getCategory();
     let isLoading = false;
     let seenIndices = new Set();
-    let feedJokes = [];   // 记录信息流已渲染的段子，用于切换主题时重建
+    let feedJokes = [];   // 记录信息流已渲染的内容，用于切换主题时重建
     let fontSize = Store.getFontSize();
 
     // ===================== 图标（正经 SVG / 整活 emoji 两套） =====================
@@ -882,13 +1091,13 @@
     function createCard(joke, options = {}) {
       const card = document.createElement('div');
       card.className = 'card';
-      card.dataset.index = joke.index;
+      card.dataset.id = joke.id;
       if (options.noAnim) card.classList.add('no-anim');
 
-      const liked = Store.isLiked(joke.index);
+      const liked = Store.isLiked(joke.id);
       const fun = isFun();
 
-      // 仅历史页显示浏览时间，信息流卡片不显示编号
+      // 仅喜欢列表显示收藏时间，信息流卡片不显示编号
       const metaHtml = options.timestamp
         ? `<span class="joke-meta">${formatTime(options.timestamp)}</span>`
         : '';
@@ -903,7 +1112,7 @@
         <div class="card-footer">
           ${metaHtml}
           <div class="actions">
-            <button class="action-btn like-btn ${liked ? 'active' : ''}" data-action="like" data-index="${joke.index}" data-text="${escapeAttr(joke.duanzi)}" aria-label="${t('likeLabel')}" title="${t('likeLabel')}">
+            <button class="action-btn like-btn ${liked ? 'active' : ''}" data-action="like" data-id="${joke.id}" data-type="${joke.type}" data-index="${joke.index}" data-text="${escapeAttr(joke.duanzi)}" aria-label="${t('likeLabel')}" title="${t('likeLabel')}">
               ${likeIcon}
             </button>
             <button class="action-btn copy-btn" data-action="copy" data-text="${escapeAttr(joke.duanzi)}" aria-label="${t('copyLabel')}" title="${t('copyLabel')}">
@@ -938,71 +1147,86 @@
       return new Date(ts).toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' });
     }
 
-    // ===================== API 调用（多镜像容错） =====================
-    // 60s API 有多个镜像域名，按速度排序
-    const API_MIRRORS = [
-      'https://60s.viki.moe/v2/duanzi',     // 主域名（最快）
-      'https://60s-api.viki.moe/v2/duanzi', // 子域名备份
-      'https://60s.b23.run/v2/duanzi',      // 社区镜像（较慢但兜底）
+    // ===================== API 调用（多镜像 + 多分类容错） =====================
+    const MIRROR_HOSTS = [
+      'https://60s.viki.moe',       // 主域名（最快）
+      'https://60s-api.viki.moe',   // 子域名备份
+      'https://60s.b23.run',        // 社区镜像（较慢但兜底）
     ];
-    const API_PROXY = '/api/duanzi';
     // 本地开发环境自动使用代理（浏览器无法直连外部 API）
     let useProxy = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
     let mirrorIdx = 0; // 当前使用的镜像索引
 
+    // 接口字段归一化：搞笑段子返回 duanzi，冷笑话返回 content，统一成内部结构
+    function normalizeItem(type, data) {
+      const cat = CATEGORY_MAP[type];
+      return {
+        id: `${type}:${data.index}`,
+        type,
+        index: data.index,
+        duanzi: data[cat.contentField]
+      };
+    }
+
     // 单条请求：从当前镜像获取，失败自动切换下一个镜像
-    async function fetchJoke() {
-      const url = useProxy ? API_PROXY : API_MIRRORS[mirrorIdx];
+    async function fetchJoke(type) {
+      const cat = CATEGORY_MAP[type];
+      const url = useProxy ? `/api/${cat.path}` : `${MIRROR_HOSTS[mirrorIdx]}/v2/${cat.path}`;
       const res = await fetch(url);
       if (!res.ok) throw new Error('API请求失败');
       const json = await res.json();
       if (json.code !== 200 || !json.data) throw new Error('接口返回异常');
-      return json.data;
+      return normalizeItem(type, json.data);
     }
 
     // 容错获取：尝试所有镜像直到成功
-    async function fetchJokeWithFallback() {
-      // 代理模式直接请求
+    async function fetchJokeWithFallback(type) {
+      // 代理模式直接请求（服务端已做多镜像容错）
       if (useProxy) {
-        return await fetchJoke();
+        return await fetchJoke(type);
       }
       // 直连模式：尝试所有镜像
-      for (let i = 0; i < API_MIRRORS.length; i++) {
+      for (let i = 0; i < MIRROR_HOSTS.length; i++) {
         try {
           mirrorIdx = i;
-          return await fetchJoke();
+          return await fetchJoke(type);
         } catch (e) {
           // 尝试下一个镜像
-          if (i === API_MIRRORS.length - 1) {
+          if (i === MIRROR_HOSTS.length - 1) {
             // 所有镜像都失败，切换到代理模式兜底
             useProxy = true;
-            return await fetchJoke();
+            return await fetchJoke(type);
           }
         }
       }
     }
 
-    async function fetchJokes(count = 5) {
-      const promises = Array.from({ length: count }, () => fetchJokeWithFallback());
+    async function fetchJokes(type, count = 5) {
+      const promises = Array.from({ length: count }, () => fetchJokeWithFallback(type));
       return Promise.all(promises);
     }
 
+    // 给缓存池取出的轻量条目补全 id/type（缓存按分类隔离，不含 type 字段）
+    function hydrate(type, item) {
+      return item ? { id: `${type}:${item.index}`, type, index: item.index, duanzi: item.duanzi } : null;
+    }
+
     // ===================== 首页信息流 =====================
-    // 加载策略：优先从本地缓存池随机取段子（毫秒级），缓存不足时才请求 API
+    // 加载策略：优先从当前分类的本地缓存池随机取（毫秒级），缓存不足时才请求 API
     async function loadMoreJokes() {
       if (isLoading || currentTab !== 'feed') return;
       isLoading = true;
       showFeedLoading();
 
+      const type = currentCategory;
       const BATCH_SIZE = 5;
       const CACHE_THRESHOLD = 20; // 缓存低于此值时触发后台补充
       let jokes = [];
 
       // 1) 优先从本地缓存池取数据（保持 API 返回的随机顺序）
-      const cacheCount = Store.getCacheCount();
-      if (cacheCount > 0) {
+      if (Store.getCacheCount(type) > 0) {
         for (let i = 0; i < BATCH_SIZE; i++) {
-          const joke = Store.popFromCache();
+          const joke = hydrate(type, Store.popFromCache(type));
           if (joke) jokes.push(joke);
         }
       }
@@ -1010,10 +1234,10 @@
       // 2) 缓存不够，从 API 补充后入缓存池再取
       if (jokes.length < BATCH_SIZE) {
         try {
-          const apiJokes = await fetchJokes(15);
-          Store.addToCache(apiJokes);
+          const apiJokes = await fetchJokes(type, 15);
+          Store.addToCache(type, apiJokes);
           while (jokes.length < BATCH_SIZE) {
-            const joke = Store.popFromCache();
+            const joke = hydrate(type, Store.popFromCache(type));
             if (!joke) break;
             jokes.push(joke);
           }
@@ -1031,9 +1255,9 @@
       // 3) 渲染卡片（跳过本次会话已展示过的，避免重复）
       const list = document.getElementById('feed-list');
       jokes.forEach(joke => {
-        if (!seenIndices.has(joke.index)) {
-          seenIndices.add(joke.index);
-          Store.addSeen(joke.index);
+        if (!seenIndices.has(joke.id)) {
+          seenIndices.add(joke.id);
+          Store.addSeen(type, joke.index);
           feedJokes.push(joke);
           const card = createCard(joke);
           list.appendChild(card);
@@ -1045,25 +1269,24 @@
       hideFeedLoading();
 
       // 4) 后台预加载：缓存不足时异步补充
-      if (Store.getCacheCount() < CACHE_THRESHOLD) {
-        backgroundPrefetch();
+      if (Store.getCacheCount(type) < CACHE_THRESHOLD) {
+        backgroundPrefetch(type);
       }
     }
 
-    // 后台预加载：不影响 UI 的异步缓存补充
-    let isPrefetching = false;
-    async function backgroundPrefetch() {
-      if (isPrefetching) return;
-      isPrefetching = true;
+    // 后台预加载：不影响 UI 的异步缓存补充（按分类）
+    const prefetching = new Set();
+    async function backgroundPrefetch(type) {
+      if (prefetching.has(type)) return;
+      prefetching.add(type);
       try {
-        // 每次补充 20 条随机段子到缓存池
-        const jokes = await fetchJokes(20);
-        Store.addToCache(jokes);
-        Store.saveCacheTime(Date.now());
+        // 每次补充 20 条随机内容到该分类缓存池
+        const jokes = await fetchJokes(type, 20);
+        Store.addToCache(type, jokes);
       } catch (e) {
         // 静默失败，不影响用户
       } finally {
-        isPrefetching = false;
+        prefetching.delete(type);
       }
     }
 
@@ -1132,15 +1355,18 @@
       const action = btn.dataset.action;
 
       if (action === 'like') {
+        const id = btn.dataset.id;
+        const type = btn.dataset.type;
         const index = parseInt(btn.dataset.index);
-        const wasLiked = Store.isLiked(index);
-        // 喜欢时保存完整段子快照，取消时移除
+        const wasLiked = Store.isLiked(id);
+        // 喜欢时保存完整内容快照，取消时移除
         const isNowLiked = wasLiked
-          ? Store.removeLike(index)
-          : Store.addLike({ index, duanzi: btn.dataset.text });
+          ? Store.removeLike(id)
+          : Store.addLike({ id, type, index, duanzi: btn.dataset.text });
         btn.classList.toggle('active', isNowLiked);
-        // 更新表情图标 + 同步页面上同一条段子的其他按钮
-        document.querySelectorAll(`.like-btn[data-index="${index}"]`).forEach(b => {
+        // 更新表情图标 + 同步页面上同一条内容的其他按钮
+        document.querySelectorAll('.like-btn').forEach(b => {
+          if (b.dataset.id !== id) return;
           b.classList.toggle('active', isNowLiked);
           const emoji = b.querySelector('.emoji');
           if (emoji) emoji.textContent = isNowLiked ? '🤣' : '🙂';
@@ -1275,18 +1501,19 @@
     }
 
     // ===================== 主题切换 =====================
-    // light / dark = 正经主题（SVG 图标 + 中性文案）
+    // light / dark / paper = 正经主题（SVG 图标 + 中性文案）
     // fun = 整活主题（emoji 图标 + 浮动表情 + 段子梗文案）
-    const THEMES = ['light', 'dark', 'fun'];
+    const THEMES = ['light', 'dark', 'fun', 'paper'];
 
     const THEME_ICONS = {
       light: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M6.34 17.66l-1.41 1.41"/><path d="M19.07 4.93l-1.41 1.41"/></svg>',
       dark: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>',
-      fun: '<span style="font-size:16px;line-height:1;">🎉</span>'
+      fun: '<span style="font-size:16px;line-height:1;">🎉</span>',
+      paper: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="8.5" y1="7.5" x2="16" y2="7.5"/><line x1="8.5" y1="11.5" x2="16" y2="11.5"/></svg>'
     };
 
-    const THEME_NAMES = { light: '纯白', dark: '纯黑', fun: '整活' };
-    const THEME_COLORS = { light: '#ffffff', dark: '#000000', fun: '#fff6e6' };
+    const THEME_NAMES = { light: '纯白', dark: '纯黑', fun: '整活', paper: '仿真阅读' };
+    const THEME_COLORS = { light: '#ffffff', dark: '#000000', fun: '#fff6e6', paper: '#f8f0da' };
 
     function applyTheme(theme) {
       document.documentElement.setAttribute('data-theme', theme);
@@ -1366,37 +1593,82 @@
 
     // ===================== 旧数据迁移（一次性） =====================
     function migrateData() {
-      if (localStorage.getItem('duanzi_migrate_v3')) return;
+      if (localStorage.getItem('duanzi_migrate_v4')) return;
       try {
-        // 旧版喜欢只存编号数组：从旧浏览历史/缓存里找回段子内容，升级为完整快照
+        // 喜欢列表升级为带复合 id 的快照
         const rawLikes = localStorage.getItem('duanzi_liked');
         if (rawLikes) {
           const old = JSON.parse(rawLikes);
-          if (Array.isArray(old) && old.length && typeof old[0] === 'number') {
-            const contentMap = {};
-            ['duanzi_history', 'duanzi_cache_v2', 'duanzi_cache'].forEach(key => {
-              try {
-                (JSON.parse(localStorage.getItem(key)) || []).forEach(j => {
-                  if (j && j.duanzi && !(j.index in contentMap)) contentMap[j.index] = j.duanzi;
-                });
-              } catch (e) {}
-            });
-            // 找不到内容的旧收藏直接丢弃，避免出现空白卡片
-            const records = old
-              .filter(i => contentMap[i])
-              .map(i => ({ index: i, duanzi: contentMap[i], ts: 0 }));
-            localStorage.setItem('duanzi_liked', JSON.stringify(records));
+          if (Array.isArray(old) && old.length && !('id' in old[0])) {
+            if (typeof old[0] === 'number') {
+              // 更老版本：纯编号数组，从历史/缓存里找回内容
+              const contentMap = {};
+              ['duanzi_history', 'duanzi_cache_v2', 'duanzi_cache', 'duanzi_cache_v3_duanzi'].forEach(key => {
+                try {
+                  (JSON.parse(localStorage.getItem(key)) || []).forEach(j => {
+                    if (j && j.duanzi && !(j.index in contentMap)) contentMap[j.index] = j.duanzi;
+                  });
+                } catch (e) {}
+              });
+              const records = old
+                .filter(i => contentMap[i])
+                .map(i => ({ id: `duanzi:${i}`, type: 'duanzi', index: i, duanzi: contentMap[i], ts: 0 }));
+              localStorage.setItem('duanzi_liked', JSON.stringify(records));
+            } else {
+              // 上一版：{ index, duanzi, ts }，补齐 id/type（旧内容均属搞笑段子）
+              const records = old
+                .filter(j => j && j.duanzi)
+                .map(j => ({ id: `duanzi:${j.index}`, type: 'duanzi', index: j.index, duanzi: j.duanzi, ts: j.ts || 0 }));
+              localStorage.setItem('duanzi_liked', JSON.stringify(records));
+            }
           }
         }
-        // 旧版浏览历史 → 轻量已看编号（保留看过的计数）
-        const seen = new Set(Store.getSeen());
+        // 旧版已看 / 浏览历史 → 按分类隔离的 v3 key（全部归入搞笑段子）
+        const seen = new Set(Store.getSeen('duanzi'));
+        try {
+          (JSON.parse(localStorage.getItem('duanzi_seen')) || []).forEach(i => seen.add(i));
+        } catch (e) {}
         try {
           (JSON.parse(localStorage.getItem('duanzi_history')) || []).forEach(h => seen.add(h.index));
         } catch (e) {}
-        Store.saveSeen([...seen]);
+        if (seen.size) Store.saveSeen('duanzi', [...seen]);
+        localStorage.removeItem('duanzi_seen');
         localStorage.removeItem('duanzi_history');
       } catch (e) {}
-      localStorage.setItem('duanzi_migrate_v3', '1');
+      localStorage.setItem('duanzi_migrate_v4', '1');
+    }
+
+    // ===================== 内容分类切换 =====================
+    function renderCategoryUI() {
+      const cat = CATEGORY_MAP[currentCategory];
+      document.getElementById('category-emoji').textContent = cat.emoji;
+      document.getElementById('category-label').textContent = cat.label;
+      document.querySelectorAll('.menu-item').forEach(mi => {
+        mi.classList.toggle('active', mi.dataset.category === currentCategory);
+      });
+    }
+
+    function setMenuOpen(open) {
+      document.getElementById('category-menu').classList.toggle('open', open);
+      document.getElementById('category-switch').setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+
+    function switchCategory(type) {
+      if (!CATEGORY_MAP[type] || type === currentCategory) return;
+      currentCategory = type;
+      Store.saveCategory(type);
+
+      // 重置信息流（各分类缓存/已看独立）
+      document.getElementById('feed-list').innerHTML = '';
+      feedJokes = [];
+      seenIndices = new Set(Store.getSeen(type).map(i => `${type}:${i}`));
+      isLoading = false;
+      hideFeedLoading();
+      updateSeenCount();
+      renderCategoryUI();
+      setMenuOpen(false);
+      window.scrollTo({ top: 0 });
+      loadMoreJokes();
     }
 
     // ===================== 初始化 =====================
@@ -1407,9 +1679,10 @@
       // 应用字号
       applyFontSize();
 
-      // 恢复已看记录（用于计数与会话去重）
-      Store.getSeen().forEach(i => seenIndices.add(i));
+      // 恢复当前分类的已看记录（用于计数与会话去重）
+      Store.getSeen(currentCategory).forEach(i => seenIndices.add(`${currentCategory}:${i}`));
       updateSeenCount();
+      renderCategoryUI();
 
       // 事件委托：操作按钮
       document.addEventListener('click', (e) => {
@@ -1421,6 +1694,25 @@
       // Tab 切换
       document.querySelectorAll('.tab').forEach(tab => {
         tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+      });
+
+      // 内容分类下拉
+      document.getElementById('category-switch').addEventListener('click', (e) => {
+        e.stopPropagation();
+        const menu = document.getElementById('category-menu');
+        setMenuOpen(!menu.classList.contains('open'));
+      });
+      document.querySelectorAll('.menu-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+          e.stopPropagation();
+          switchCategory(item.dataset.category);
+        });
+      });
+      // 点击菜单外部关闭
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('.category-menu') && !e.target.closest('#category-switch')) {
+          setMenuOpen(false);
+        }
       });
 
       // 字号调节
@@ -1455,23 +1747,8 @@
       // 无限滚动
       setupInfiniteScroll();
 
-      // 首次加载：优先秒显本地缓存，同时后台预热
-      initFeed();
-    }
-
-    // 初始化首页：本地缓存优先，秒开体验
-    async function initFeed() {
-      // 如果本地有缓存，先瞬间渲染 5 条（不等 API）
-      const cacheCount = Store.getCacheCount();
-      if (cacheCount > 0) {
-        loadMoreJokes(); // 缓存有数据，会瞬间完成
-        // 后台静默预热缓存
-        backgroundPrefetch();
-      } else {
-        // 首次使用（无缓存），只能等 API，同时后台预热
-        await loadMoreJokes();
-        backgroundPrefetch();
-      }
+      // 首次加载：优先秒显本地缓存，不足时自动请求并后台预热
+      loadMoreJokes();
     }
 
     // DOM 就绪后初始化

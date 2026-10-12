@@ -6,11 +6,17 @@ import os
 import json
 
 PORT = 8765
-# 60s API 多镜像域名，按速度排序
-API_MIRRORS = [
-    'https://60s.viki.moe/v2/duanzi',
-    'https://60s-api.viki.moe/v2/duanzi',
-    'https://60s.b23.run/v2/duanzi',
+# 支持的内容分类：代理路径后缀 → 上游 API 路径
+API_PATHS = {
+    'duanzi': 'duanzi',        # 搞笑段子
+    'dad-joke': 'dad-joke',    # 冷笑话
+    'hitokoto': 'hitokoto',    # 随机一言
+}
+# 60s API 多镜像域名
+MIRROR_HOSTS = [
+    'https://60s.viki.moe',
+    'https://60s-api.viki.moe',
+    'https://60s.b23.run',
 ]
 WEB_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -20,8 +26,13 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         super().__init__(*args, directory=WEB_DIR, **kwargs)
 
     def do_GET(self):
-        if self.path.startswith('/api/duanzi'):
-            self.proxy_api()
+        # /api/<category>[?...]
+        if self.path.startswith('/api/'):
+            category = self.path.split('?', 1)[0].rsplit('/', 1)[-1]
+            if category in API_PATHS:
+                self.proxy_api(API_PATHS[category])
+                return
+            self.send_error(404, 'Unknown category')
         else:
             super().do_GET()
 
@@ -33,7 +44,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             self.send_header('Expires', '0')
         super().end_headers()
 
-    def proxy_api(self):
+    def proxy_api(self, api_path):
         """代理 API 请求：多镜像容错 + 系统代理"""
         proxy_url = os.environ.get('HTTPS_PROXY') or os.environ.get('HTTP_PROXY')
         if proxy_url:
@@ -45,8 +56,10 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         else:
             opener = urllib.request.build_opener()
 
+        targets = [f'{host}/v2/{api_path}' for host in MIRROR_HOSTS]
+
         # 逐个尝试镜像直到成功
-        for i, target in enumerate(API_MIRRORS):
+        for target in targets:
             try:
                 req = urllib.request.Request(target)
                 req.add_header('User-Agent', 'Mozilla/5.0')
@@ -59,7 +72,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(data)
                 return
-            except Exception as e:
+            except Exception:
                 # 尝试下一个镜像
                 continue
 
