@@ -947,6 +947,31 @@
     }
     .ap-link svg { width: 14px; height: 14px; }
     .ap-link:active { color: var(--accent); }
+    .ap-like {
+      margin-left: auto;
+      display: inline-flex;
+      align-items: center;
+      color: var(--text-tertiary);
+      padding: 4px;
+      border-radius: 50%;
+      transition: color 0.15s, transform 0.12s;
+    }
+    .ap-like svg {
+      width: 17px;
+      height: 17px;
+      fill: none;
+      stroke: currentColor;
+      transition: fill 0.15s;
+    }
+    .ap-like:active { transform: scale(0.85); }
+    .ap-like:hover { color: var(--like-color); }
+    .ap-like.active {
+      color: var(--like-color);
+    }
+    .ap-like.active svg {
+      fill: var(--like-color);
+      stroke: var(--like-color);
+    }
 
     /* 纸张主题：音频卡横线对齐 + 歌词块更像贴在本子上的剪报 */
     :root[data-theme="paper"] .audio-card {
@@ -1209,6 +1234,23 @@
 
       clearLikes() { localStorage.removeItem('duanzi_liked'); },
 
+      // ====== 音频收藏（听听频道）：完整快照，独立存储 ======
+      // 注意：音频链接带时效签名，快照中的 audioUrl 过期后可通过 link 回原作品页
+      getAudioLikes() { return JSON.parse(localStorage.getItem('duanzi_liked_audio') || '[]'); },
+      saveAudioLikes(arr) { localStorage.setItem('duanzi_liked_audio', JSON.stringify(arr.slice(0, 300))); },
+      isAudioLiked(id) { return this.getAudioLikes().some(x => x.id === id); },
+      addAudioLike(item) {
+        const arr = this.getAudioLikes().filter(x => x.id !== item.id);
+        arr.unshift(Object.assign({}, item, { ts: Date.now() }));
+        this.saveAudioLikes(arr);
+        return true;
+      },
+      removeAudioLike(id) {
+        this.saveAudioLikes(this.getAudioLikes().filter(x => x.id !== id));
+        return false;
+      },
+      clearAudioLikes() { localStorage.removeItem('duanzi_liked_audio'); },
+
       // ====== 内容缓存池（按分类隔离，预加载的核心） ======
       cacheKey(type) { return `duanzi_cache_v3_${type}`; },
       getCache(type) { return JSON.parse(localStorage.getItem(this.cacheKey(type)) || '[]'); },
@@ -1309,7 +1351,9 @@
         clearOk: '喜欢列表已清空',
         loadFail: '加载失败，请重试', retry: '重新加载',
         audioFail: '这个片段打不开，下滑听个新的',
-        emptyTitle: '还没有喜欢的内容', emptyHint: '看到好笑的，点颗红心收起来'
+        audioFailLiked: '这个片段链接已过期，点"原作品"去听',
+        collectOk: '已收进喜欢',
+        emptyTitle: '还没有喜欢的内容', emptyHint: '看到好笑的、听到好听的，点颗红心收起来'
       },
       fun: {
         title: '笑料铺子', seenLabel: '笑过', seenSuffix: '条',
@@ -1320,6 +1364,9 @@
         fontUp: '字大了，看着不费眼了', fontDown: '字小了，更显文采',
         clearOk: '行吧，就当没笑过',
         loadFail: '服务器笑抽了，歇会儿再来', retry: '再试试',
+        audioFail: '这位唱一半跑路了，下滑换一个',
+        audioFailLiked: '这位的链接过期啦，点"原作品"串门去听',
+        collectOk: '收入囊中，好听就是好歌',
         emptyTitle: '名人堂还空着', emptyHint: '看到好笑的，点颗红心捧它入堂'
       }
     };
@@ -1561,13 +1608,16 @@
       }
     }
 
-    // ===================== 喜欢列表页 =====================
+    // ===================== 喜欢列表页（文字 + 音频混排，按收藏时间倒序） =====================
     function renderLikes() {
       const list = document.getElementById('likes-list');
       const subHeader = document.getElementById('likes-sub-header');
-      const likes = Store.getLikes();
 
-      if (likes.length === 0) {
+      const textLikes = Store.getLikes().map(x => ({ kind: 'text', ts: x.ts || 0, data: x }));
+      const audioLikes = Store.getAudioLikes().map(x => ({ kind: 'audio', ts: x.ts || 0, data: x }));
+      const all = textLikes.concat(audioLikes).sort((a, b) => b.ts - a.ts);
+
+      if (all.length === 0) {
         subHeader.style.display = 'none';
         list.innerHTML = `
           <div class="empty-state">
@@ -1581,9 +1631,13 @@
 
       subHeader.style.display = 'flex';
       list.innerHTML = '';
-      likes.forEach(item => {
-        // 迁移来的旧收藏没有喜欢时间，不显示时间
-        list.appendChild(createCard(item, item.ts ? { timestamp: item.ts } : {}));
+      all.forEach(entry => {
+        if (entry.kind === 'audio') {
+          list.appendChild(createAudioCard(entry.data, { noAnim: true }));
+        } else {
+          // 迁移来的旧收藏没有喜欢时间，不显示时间
+          list.appendChild(createCard(entry.data, entry.ts ? { timestamp: entry.ts } : {}));
+        }
       });
     }
 
@@ -1727,6 +1781,9 @@
           <div class="ap-foot">
             <span class="ap-stat">${SVG_ICONS.heartSmall}${fmtCount(item.likeCount)}</span>
             ${linkHtml}
+            <button class="ap-like ${Store.isAudioLiked(item.id) ? 'active' : ''}" aria-label="收藏这首歌" title="收藏">
+              ${SVG_ICONS.heartSmall}
+            </button>
           </div>
         </div>
       `;
@@ -1738,6 +1795,26 @@
       range.addEventListener('input', () => {
         if (Player.currentId !== item.id) return;
         Player.el.currentTime = parseFloat(range.value);
+      });
+
+      // 事件：收藏 / 取消收藏（同步该音频在信息流与喜欢页的所有卡片）
+      const likeBtn = card.querySelector('.ap-like');
+      likeBtn.addEventListener('click', () => {
+        const wasLiked = Store.isAudioLiked(item.id);
+        const nowLiked = wasLiked
+          ? Store.removeAudioLike(item.id)
+          : Store.addAudioLike(item);
+        document.querySelectorAll('.audio-card').forEach(c => {
+          if (c.dataset.id === item.id) {
+            c.querySelector('.ap-like')?.classList.toggle('active', nowLiked);
+          }
+        });
+        if (!wasLiked && nowLiked) {
+          burstParticles(likeBtn);
+          showToast(t('collectOk'));
+        }
+        // 在喜欢页取消收藏：立即从列表移除（播放器不受影响）
+        if (currentTab === 'likes' && !nowLiked) renderLikes();
       });
 
       // 若全局播放器正在播这条（主题切换重建场景），恢复 UI 态
@@ -1781,8 +1858,9 @@
         });
         el.addEventListener('ended', () => this.reset());
         el.addEventListener('error', () => {
+          const inLikes = this.currentCard && !!this.currentCard.closest('#likes-list');
           this.reset();
-          showToast(t('audioFail'));
+          showToast(inLikes ? t('audioFailLiked') : t('audioFail'));
         });
         this.el = el;
       },
@@ -2352,12 +2430,15 @@
       // 清空喜欢
       document.getElementById('clear-likes').addEventListener('click', () => {
         Store.clearLikes();
+        Store.clearAudioLikes();
         // 同步信息流中所有卡片的喜欢按钮状态（含整活主题的 emoji）
         document.querySelectorAll('.like-btn').forEach(b => {
           b.classList.remove('active');
           const em = b.querySelector('.emoji');
           if (em) em.textContent = '🙂';
         });
+        // 同步音频卡片收藏按钮
+        document.querySelectorAll('.ap-like').forEach(b => b.classList.remove('active'));
         renderLikes();
         showToast(t('clearOk'));
       });
