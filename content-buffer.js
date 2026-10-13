@@ -8,8 +8,8 @@
   function pump() { while(activeTasks<2&&pendingTasks.length) {const job=pendingTasks.shift();activeTasks++;Promise.resolve().then(job.task).then(job.resolve,job.reject).finally(()=>{activeTasks--;pump();});} }
 
   class ContentBuffer {
-    constructor({type,seeds,catalogue,blocked,fetchOne,version}) {
-      this.type=type;this.fetchOne=fetchOne;this.version=version;this.catalogue=catalogue||[];
+    constructor({type,seeds,catalogue,blocked,fetchOne,version,localOnly=false}) {
+      this.type=type;this.fetchOne=fetchOne;this.version=version;this.catalogue=catalogue||[];this.localOnly=localOnly;
       this.blocked=new Set((blocked||[]).map(id=>String(id).replace(/^cy:cont_/, 'cy:')));this.reserved=new Set();this.running=null;this.cooldown=0;this.waiters=[];
       this.historyKey=type==='audio'?'duanzi_seen_audio_v1':`duanzi_seen_v3_${type}`;
       this.cacheKey=type==='audio'?'duanzi_audio_cache_v1':`duanzi_cache_v3_${type}`;
@@ -20,7 +20,7 @@
       this.pool=[];
       let sameRelease=false;
       try { sameRelease=localStorage.getItem(this.cacheKey+'_release')===String(version); } catch {}
-      const cached=(sameRelease?read(this.cacheKey):[]).filter(item=>!item._starter||allowedStarter.has(item.id));
+      const cached=(sameRelease?read(this.cacheKey):[]).filter(item=>this.localOnly?allowedStarter.has(item.id):(!item._starter||allowedStarter.has(item.id)));
       try { localStorage.setItem(this.cacheKey+'_release',String(version)); } catch {}
       this.add(cached);
       // Shuffle a private copy; all users do not start with the same five lines.
@@ -71,6 +71,7 @@
     refill({force=false}={}) {
       if(this.running)return this.running;
       if(this.pool.length<16)this.add(this.seedBank);
+      if(this.localOnly)return Promise.resolve();
       if((!force&&this.pool.length>=16)||(!force&&Date.now()<this.cooldown))return Promise.resolve();
       let added=0;
       const tasks=Array.from({length:this.type==='audio'?4:8},()=>schedule(async()=>{

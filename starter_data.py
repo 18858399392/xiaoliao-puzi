@@ -16,8 +16,7 @@ def default_selection(data):
     result={}
     for kind in KINDS[:3]:
         values=data['text'][kind]
-        ranked=sorted(values,key=lambda item:hashlib.sha256(item['id'].encode()).hexdigest())
-        result[kind]=[item['id'] for item in ranked[:60]]
+        result[kind]=[item['id'] for item in values]
     result['audio']=[item['id'] for item in data['audio'] if item.get('localAudio')][:8]
     return {'selected':result,'blockedIds':[]}
 
@@ -39,8 +38,8 @@ def build(selection,data=None):
             raise ValueError('选择列表包含未知内容')
         chosen[kind]=list(dict.fromkeys(key for key in keys if key not in blocked))
     clean_selection={'selected':chosen,'blockedIds':sorted(blocked)}
-    version=hashlib.sha256(json.dumps(clean_selection,sort_keys=True).encode()).hexdigest()[:16]
-    bundle={'version':version,'text':{kind:[known[key] for key in chosen[kind]] for kind in KINDS[:3]},'audio':[],
+    version=hashlib.sha256((json.dumps(clean_selection,sort_keys=True)+'local-text-v1').encode()).hexdigest()[:16]
+    bundle={'version':version,'localTextOnly':True,'text':{kind:[known[key] for key in chosen[kind]] for kind in KINDS[:3]},'audio':[],
             'catalogue':{kind:[item['index'] for item in data['text'][kind]] for kind in KINDS[:3]},'blockedIds':sorted(blocked),'sourceCounts':data['counts'],'upstreamCommit':data['upstreamCommit']}
     for key in chosen['audio']:
         item=known[key]
@@ -68,7 +67,15 @@ def save(selection,backup=True):
     script='window.STARTER_CONTENT = '+json.dumps(bundle,ensure_ascii=False,separators=(',',':')).replace('<','\\u003c')+';\n'
     atomic_write(ROOT/'starter-content.js',script)
     atomic_write(ROOT/'starter-selection.json',json.dumps(selection,ensure_ascii=False,indent=2)+'\n')
+    build_offline_worker()
     return {'version':bundle['version'],'counts':{kind:len(selection['selected'][kind]) for kind in KINDS}}
+
+def build_offline_worker():
+    template=(ROOT/'offline-worker.template.js').read_text(encoding='utf-8')
+    digest=hashlib.sha256(template.encode())
+    for name in ['index.html','starter-content.js','content-buffer.js']:
+        digest.update((ROOT/name).read_bytes())
+    atomic_write(ROOT/'offline-worker.js',template.replace('__REVISION__',digest.hexdigest()[:20]))
 
 if __name__=='__main__':
     selection_file=ROOT/'starter-selection.json'

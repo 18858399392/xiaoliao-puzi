@@ -1757,6 +1757,7 @@
         contentBuffers[category.key] = new ContentBuffer({
           type: category.key, seeds: starter.text[category.key] || [], catalogue: starter.catalogue[category.key] || [],
           blocked: starter.blockedIds, version: starter.version,
+          localOnly: starter.localTextOnly === true,
           fetchOne: index => fetchJoke(category.key, index)
         });
       }
@@ -1808,7 +1809,8 @@
     function showFeedError() {
       const el = document.getElementById('feed-loading');
       if (el) {
-        el.innerHTML = `<p>暂时没取到新内容，稍后再试</p><button class="retry-btn" onclick="loadMoreJokes(true)">${t('retry')}</button>`;
+        const localOnly = contentBuffers[currentCategory].localOnly;
+        el.innerHTML = localOnly ? '<p>这个分类的本地内容已全部展示，可以换个分类继续看</p>' : `<p>暂时没取到新内容，稍后再试</p><button class="retry-btn" onclick="loadMoreJokes(true)">${t('retry')}</button>`;
         el.classList.add('error-state');
       }
     }
@@ -2675,12 +2677,14 @@
       // 无限滚动
       setupInfiniteScroll();
 
-      // 首次加载：优先秒显本地缓存，不足时自动请求并后台预热
+      // 文字直接读取完整本地库；歌曲保留后台补充。
       loadMoreJokes();
-      // 首屏已经同步显示，后台再请求新内容。
-      const warmup = () => contentBuffers[currentCategory].refill({force:true});
-      if ('requestIdleCallback' in window) requestIdleCallback(warmup, {timeout:1200});
-      else setTimeout(warmup, 250);
+      // 缓存阅读页与文字库；相对路径兼容 GitHub Pages 项目子目录。
+      if ('serviceWorker' in navigator && window.isSecureContext && /^https?:$/.test(location.protocol)) {
+        const cachePage = () => navigator.serviceWorker.register('./offline-worker.js', {updateViaCache:'none'}).catch(() => {});
+        if ('requestIdleCallback' in window) requestIdleCallback(cachePage, {timeout:1200});
+        else setTimeout(cachePage, 250);
+      }
     }
 
     // DOM 就绪后初始化
