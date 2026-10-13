@@ -4,6 +4,8 @@ import http.server
 import urllib.request
 import os
 import json
+import urllib.parse
+from starter_data import save as save_starter
 
 PORT = 8765
 # 支持的内容分类：代理路径后缀 → 上游 API 路径
@@ -37,9 +39,33 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         else:
             super().do_GET()
 
+    def do_POST(self):
+        if self.path!='/starter-selection':
+            self.send_error(404)
+            return
+        origin=self.headers.get('Origin','')
+        allowed={f'http://localhost:{self.server.server_port}',f'http://127.0.0.1:{self.server.server_port}'}
+        if self.client_address[0] not in {'127.0.0.1','::1'} or origin not in allowed:
+            self.send_error(403)
+            return
+        try:
+            length=int(self.headers.get('Content-Length','0'))
+            if not 0<length<=1_000_000 or 'application/json' not in self.headers.get('Content-Type',''):
+                raise ValueError('选择包格式或大小不正确')
+            result=save_starter(json.loads(self.rfile.read(length)))
+            self.send_response(200)
+            body=json.dumps(result,ensure_ascii=False).encode('utf-8')
+        except (ValueError,TypeError,json.JSONDecodeError) as error:
+            self.send_response(400)
+            body=json.dumps({'error':str(error)},ensure_ascii=False).encode('utf-8')
+        self.send_header('Content-Type','application/json; charset=utf-8')
+        self.send_header('Cache-Control','no-store')
+        self.end_headers()
+        self.wfile.write(body)
+
     def end_headers(self):
         # 禁止缓存 HTML，确保 CSS/JS 修改即时生效
-        if self.path.endswith('.html') or self.path == '/' or self.path.endswith('/'):
+        if self.path.split('?',1)[0].endswith(('.html','.js','.json')) or self.path == '/' or self.path.endswith('/'):
             self.send_header('Cache-Control', 'no-cache, no-store, must-revalidate')
             self.send_header('Pragma', 'no-cache')
             self.send_header('Expires', '0')
@@ -57,7 +83,10 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         else:
             opener = urllib.request.build_opener()
 
-        targets = [f'{host}/v2/{api_path}' for host in MIRROR_HOSTS]
+        params=urllib.parse.parse_qs(urllib.parse.urlsplit(self.path).query)
+        index=params.get('id',[''])[0]
+        suffix=('?id='+urllib.parse.quote(index)) if index.isdigit() else ''
+        targets = [f'{host}/v2/{api_path}{suffix}' for host in MIRROR_HOSTS]
 
         # 逐个尝试镜像直到成功
         for target in targets:
@@ -89,6 +118,6 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
 
 if __name__ == '__main__':
-    server = http.server.HTTPServer(('0.0.0.0', PORT), Handler)
+    server = http.server.ThreadingHTTPServer(('127.0.0.1', PORT), Handler)
     print(f'Server running at http://localhost:{PORT}')
     server.serve_forever()

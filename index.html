@@ -9,7 +9,7 @@
   <!-- 手写 / 萌趣字体（网络字体，加载失败自动回退到系统楷体/圆体） -->
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+KuaiLe&display=swap">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+KuaiLe&display=swap" onload="this.onload=null;this.rel='stylesheet'">
   <style>
     /* ===== 设计变量：纯白主题（亮色，X 风格） ===== */
     :root {
@@ -687,7 +687,6 @@
     #font-opts .font-opt { min-height: 52px; }
     #font-current { max-width: 108px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .font-preview .fp-char { font-family: var(--app-font); }
-    .me-stat-group .me-row { color: var(--text-secondary); font-size: 13px; }
 
     /* 主题选择：四枚色板直选 */
     .theme-opts {
@@ -808,25 +807,11 @@
       white-space: nowrap;
     }
 
-    .clear-btn {
-      margin-left: auto;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-secondary);
-      padding: 6px 14px;
-      border-radius: 16px;
-      transition: background 0.15s, color 0.15s;
-      flex: none;
-    }
 
-    .clear-btn:hover {
-      background: var(--like-soft);
-      color: var(--like-color);
-    }
 
-    .clear-btn:active {
-      transform: scale(0.95);
-    }
+
+
+
 
     /* 面板切换：我的菜单 ⇄ 喜欢列表 */
     .me-subview { display: none; }
@@ -1307,14 +1292,6 @@
           </div>
         </div>
 
-        <div class="me-group me-stat-group">
-          <div class="me-row">
-            <span class="me-label"><span id="seen-label">已看</span></span>
-            <span class="me-side">
-              <span class="me-badge"><span id="seen-count">0</span> <span id="seen-suffix"></span></span>
-            </span>
-          </div>
-        </div>
       </div>
 
       <!-- 喜欢列表面板 -->
@@ -1325,7 +1302,6 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
             </button>
             <span class="likes-top-title" id="likes-top-title">我的喜欢</span>
-            <button class="clear-btn" id="clear-likes" type="button">清空喜欢</button>
           </div>
           <div class="likes-filter" id="likes-filter" role="tablist" aria-label="喜欢内容分类"></div>
         </div>
@@ -1364,15 +1340,17 @@
   <!-- Toast -->
   <div class="toast" id="toast"></div>
 
+  <script src="starter-content.js"></script>
+  <script src="content-buffer.js"></script>
   <script>
     // ===================== 存储管理 =====================
     const Store = {
       // 喜欢列表：完整内容快照 { id, type, index, duanzi, ts }，按喜欢时间倒序
       getLikes() { return JSON.parse(localStorage.getItem('duanzi_liked') || '[]'); },
       saveLikes(arr) { localStorage.setItem('duanzi_liked', JSON.stringify(arr)); },
-      // 已看编号（按分类隔离，轻量，仅用于当前分类计数与会话去重）
+      // 浏览历史按分类隔离，在同一浏览器里用于过滤已展示内容。
       getSeen(type) { return JSON.parse(localStorage.getItem(`duanzi_seen_v3_${type}`) || '[]'); },
-      saveSeen(type, arr) { localStorage.setItem(`duanzi_seen_v3_${type}`, JSON.stringify(arr.slice(-2000))); },
+      saveSeen(type, arr) { localStorage.setItem(`duanzi_seen_v3_${type}`, JSON.stringify(arr.slice(-10000))); },
       getFontSize() { return parseInt(localStorage.getItem('duanzi_fontsize')) || 17; },
       saveFontSize(size) { localStorage.setItem('duanzi_fontsize', size); },
       // 字体：auto=跟随主题，其余为 FONTS 中的 key
@@ -1414,11 +1392,10 @@
         }
       },
 
-      clearLikes() { localStorage.removeItem('duanzi_liked'); },
 
       // ====== 音频收藏（听听频道）：完整快照，独立存储 ======
       // 注意：音频链接带时效签名，收藏快照仅近期可直接播放，过期需重新刷取
-      getAudioLikes() { return JSON.parse(localStorage.getItem('duanzi_liked_audio') || '[]'); },
+      getAudioLikes() { return JSON.parse(localStorage.getItem('duanzi_liked_audio') || '[]').map(item => ({...item,id:String(item.id).replace(/^cy:cont_/, 'cy:')})); },
       saveAudioLikes(arr) { localStorage.setItem('duanzi_liked_audio', JSON.stringify(arr.slice(0, 300))); },
       isAudioLiked(id) { return this.getAudioLikes().some(x => x.id === id); },
       addAudioLike(item) {
@@ -1431,7 +1408,6 @@
         this.saveAudioLikes(this.getAudioLikes().filter(x => x.id !== id));
         return false;
       },
-      clearAudioLikes() { localStorage.removeItem('duanzi_liked_audio'); },
 
       // ====== 内容缓存池（按分类隔离，预加载的核心） ======
       cacheKey(type) { return `duanzi_cache_v3_${type}`; },
@@ -1573,7 +1549,8 @@
     let currentTab = 'feed';
     let currentCategory = Store.getCategory();
     let isLoading = false;
-    let seenIndices = new Set();
+    let feedLoadVersion = 0;
+    let contentBuffers;
     let feedJokes = [];   // 记录信息流已渲染的内容，用于切换主题时重建
     let fontSize = Store.getFontSize();
 
@@ -1604,14 +1581,13 @@
     // ===================== 文案（正经 / 整活两套） =====================
     const COPY = {
       normal: {
-        title: '段子手', seenLabel: '已看', seenSuffix: '',
-        tabFeed: '首页', tabListen: '听听', tabMe: '我的', clear: '清空喜欢',
+        title: '段子手',
+        tabFeed: '首页', tabListen: '听听', tabMe: '我的',
         meLikes: '我的喜欢', meCategory: '内容分类', meDisplay: '显示设置',
         meFont: '字号', meFontFace: '字体', meColor: '主题色', meTheme: '主题', likesTitle: '我的喜欢',
         likeLabel: '喜欢', copyLabel: '复制',
         copyOk: '已复制到剪贴板', copyFail: '复制失败，请手动选择',
         fontUp: '字号已放大', fontDown: '字号已缩小',
-        clearOk: '喜欢列表已清空',
         loadFail: '加载失败，请重试', retry: '重新加载',
         audioFail: '这个片段打不开，下滑听个新的',
         audioFailLiked: '收藏的片段链接已过期，取消收藏再听首新的吧',
@@ -1620,14 +1596,13 @@
         emptyFilterTitle: '这个分类还没有收藏', emptyFilterHint: '分类下还没有内容，去发现喜欢的吧'
       },
       fun: {
-        title: '笑料铺子', seenLabel: '笑过', seenSuffix: '条',
-        tabFeed: '开刷', tabListen: '开听', tabMe: '俺的', clear: '都不爱了',
+        title: '笑料铺子',
+        tabFeed: '开刷', tabListen: '开听', tabMe: '俺的',
         meLikes: '笑话名人堂', meCategory: '整点啥乐子', meDisplay: '看着舒服',
         meFont: '字号大小', meFontFace: '换个笔体', meColor: '加点颜色', meTheme: '换个皮肤', likesTitle: '笑话名人堂',
         likeLabel: '笑哭了', copyLabel: '打包带走',
         copyOk: '打包带走，发朋友圈吧', copyFail: '手滑了，没复制成功',
         fontUp: '字大了，看着不费眼了', fontDown: '字小了，更显文采',
-        clearOk: '行吧，就当没笑过',
         loadFail: '服务器笑抽了，歇会儿再来', retry: '再试试',
         audioFail: '这位唱一半跑路了，下滑换一个',
         audioFailLiked: '这首老存货链接过期啦，换新的听吧',
@@ -1734,154 +1709,90 @@
       'https://60s-api.viki.moe',   // 子域名备份
       'https://60s.b23.run',        // 社区镜像（较慢但兜底）
     ];
-    // 本地开发环境自动使用代理（浏览器无法直连外部 API）
-    let useProxy = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-    let mirrorIdx = 0; // 当前使用的镜像索引
+    const useProxy = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+    let preferredMirror = 0;
+    try { preferredMirror = Math.max(0, MIRROR_HOSTS.indexOf(localStorage.getItem('duanzi_working_mirror'))); } catch {}
+    const mirrorCooldown = new Map();
 
-    // 接口字段归一化：搞笑段子返回 duanzi，冷笑话返回 content，统一成内部结构
-    function normalizeItem(type, data) {
-      const cat = CATEGORY_MAP[type];
-      return {
-        id: `${type}:${data.index}`,
-        type,
-        index: data.index,
-        duanzi: data[cat.contentField]
-      };
-    }
-
-    // 单条请求：从当前镜像获取，失败自动切换下一个镜像
-    async function fetchJoke(type) {
-      const cat = CATEGORY_MAP[type];
-      const url = useProxy ? `/api/${cat.path}` : `${MIRROR_HOSTS[mirrorIdx]}/v2/${cat.path}`;
-      const res = await fetch(url);
-      if (!res.ok) throw new Error('API请求失败');
-      const json = await res.json();
-      if (json.code !== 200 || !json.data) throw new Error('接口返回异常');
-      return normalizeItem(type, json.data);
-    }
-
-    // 容错获取：尝试所有镜像直到成功
-    async function fetchJokeWithFallback(type) {
-      // 代理模式直接请求（服务端已做多镜像容错）
-      if (useProxy) {
-        return await fetchJoke(type);
-      }
-      // 直连模式：尝试所有镜像
-      for (let i = 0; i < MIRROR_HOSTS.length; i++) {
+    async function requestContent(path, index) {
+      const query = index === undefined ? '' : `?id=${encodeURIComponent(index)}`;
+      const hosts = useProxy ? [null] : MIRROR_HOSTS.map((_, offset) => MIRROR_HOSTS[(preferredMirror + offset) % MIRROR_HOSTS.length]);
+      let error;
+      for (const host of hosts) {
+        if (host && (mirrorCooldown.get(host) || 0) > Date.now()) continue;
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 8000);
         try {
-          mirrorIdx = i;
-          return await fetchJoke(type);
-        } catch (e) {
-          // 尝试下一个镜像
-          if (i === MIRROR_HOSTS.length - 1) {
-            // 所有镜像都失败，切换到代理模式兜底
-            useProxy = true;
-            return await fetchJoke(type);
+          const response = await fetch(host ? `${host}/v2/${path}${query}` : `/api/${path}${query}`, {signal: controller.signal});
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          const json = await response.json();
+          if (json.code !== 200 || !json.data) throw new Error('接口返回异常');
+          if (host) {
+            preferredMirror = MIRROR_HOSTS.indexOf(host);
+            try { localStorage.setItem('duanzi_working_mirror', host); } catch {}
           }
-        }
+          return json.data;
+        } catch (cause) {
+          error = cause;
+          if (host) mirrorCooldown.set(host, Date.now() + 30000);
+        } finally { clearTimeout(timer); }
       }
+      throw error || new Error('接口暂时不可用');
     }
 
-    async function fetchJokes(type, count = 5) {
-      const promises = Array.from({ length: count }, () => fetchJokeWithFallback(type));
-      return Promise.all(promises);
+    function normalizeItem(type, data) {
+      const content = data[CATEGORY_MAP[type].contentField];
+      if (!Number.isInteger(Number(data.index)) || typeof content !== 'string' || !content.trim()) throw new Error('内容格式异常');
+      return {id: `${type}:${Number(data.index)}`, type, index: Number(data.index), duanzi: content};
     }
 
-    // 给缓存池取出的轻量条目补全 id/type（缓存按分类隔离，不含 type 字段）
-    function hydrate(type, item) {
-      return item ? { id: `${type}:${item.index}`, type, index: item.index, duanzi: item.duanzi } : null;
+    async function fetchJoke(type, index) {
+      return normalizeItem(type, await requestContent(CATEGORY_MAP[type].path, index));
     }
 
-    // ===================== 首页信息流 =====================
-    // 加载策略：优先从当前分类的本地缓存池随机取（毫秒级），缓存不足时才请求 API
-    async function loadMoreJokes() {
+    function initializeContentBuffers() {
+      const starter = window.STARTER_CONTENT || {text:{}, audio:[], catalogue:{}, blockedIds:[]};
+      contentBuffers = {};
+      for (const category of CATEGORIES) {
+        contentBuffers[category.key] = new ContentBuffer({
+          type: category.key, seeds: starter.text[category.key] || [], catalogue: starter.catalogue[category.key] || [],
+          blocked: starter.blockedIds, version: starter.version,
+          fetchOne: index => fetchJoke(category.key, index)
+        });
+      }
+      contentBuffers.audio = new ContentBuffer({type:'audio', seeds:starter.audio || [], blocked:starter.blockedIds, version:starter.version, fetchOne:fetchChangya});
+    }
+
+    // 有项目预置内容或浏览器缓存时，先显示，再后台补充。
+    async function loadMoreJokes(force = false) {
       if (isLoading || currentTab !== 'feed') return;
       isLoading = true;
-      showFeedLoading();
-
-      const type = currentCategory;
-      const BATCH_SIZE = 5;
-      const CACHE_THRESHOLD = 20; // 缓存低于此值时触发后台补充
-      let jokes = [];
-
-      // 1) 优先从本地缓存池取数据（保持 API 返回的随机顺序）
-      if (Store.getCacheCount(type) > 0) {
-        for (let i = 0; i < BATCH_SIZE; i++) {
-          const joke = hydrate(type, Store.popFromCache(type));
-          if (joke) jokes.push(joke);
-        }
-      }
-
-      // 2) 缓存不够，从 API 补充后入缓存池再取
-      if (jokes.length < BATCH_SIZE) {
-        try {
-          const apiJokes = await fetchJokes(type, 15);
-          Store.addToCache(type, apiJokes);
-          while (jokes.length < BATCH_SIZE) {
-            const joke = hydrate(type, Store.popFromCache(type));
-            if (!joke) break;
-            jokes.push(joke);
-          }
-        } catch (e) {
-          // API 失败但缓存有数据，继续用缓存数据
-          if (jokes.length === 0) {
-            showFeedError();
-            isLoading = false;
-            hideFeedLoading();
-            return;
-          }
-        }
-      }
-
-      // 3) 渲染卡片（跳过本次会话已展示过的，避免重复）
-      const list = document.getElementById('feed-list');
-      jokes.forEach(joke => {
-        if (!seenIndices.has(joke.id)) {
-          seenIndices.add(joke.id);
-          Store.addSeen(type, joke.index);
-          feedJokes.push(joke);
-          const card = createCard(joke);
-          list.appendChild(card);
-        }
-      });
-      updateSeenCount();
-
-      isLoading = false;
-      hideFeedLoading();
-
-      // 4) 后台预加载：缓存不足时异步补充
-      if (Store.getCacheCount(type) < CACHE_THRESHOLD) {
-        backgroundPrefetch(type);
-      }
-    }
-
-    // 后台预加载：不影响 UI 的异步缓存补充（按分类）
-    const prefetching = new Set();
-    async function backgroundPrefetch(type) {
-      if (prefetching.has(type)) return;
-      prefetching.add(type);
+      const type = currentCategory, version = feedLoadVersion;
+      const buffer = contentBuffers[type];
       try {
-        // 每次补充 20 条随机内容到该分类缓存池
-        const jokes = await fetchJokes(type, 20);
-        Store.addToCache(type, jokes);
-      } catch (e) {
-        // 静默失败，不影响用户
-      } finally {
-        prefetching.delete(type);
-      }
+        if (!buffer.available) {
+          showFeedLoading();
+          await buffer.waitForFirst({force});
+        }
+        if (version !== feedLoadVersion || type !== currentCategory) return;
+        const jokes = buffer.take(5);
+        if (!jokes.length) {
+          showFeedLoading();
+          showFeedError();
+          return;
+        }
+        const list = document.getElementById('feed-list');
+        jokes.forEach(joke => {feedJokes.push(joke);list.appendChild(createCard(joke));});
+        hideFeedLoading();
+        backgroundPrefetch(type);
+      } finally { if (version === feedLoadVersion) isLoading = false; }
     }
 
-    // 更新已浏览计数显示
-    function updateSeenCount() {
-      const el = document.getElementById('seen-count');
-      if (el) {
-        el.textContent = seenIndices.size;
-      }
-    }
+    function backgroundPrefetch(type) { return contentBuffers[type].refill(); }
 
     function showFeedLoading() {
       const existing = document.getElementById('feed-loading');
-      if (existing) return;
+      if (existing) { existing.classList.remove('error-state'); existing.innerHTML = '<div class="spinner"></div><p>加载中...</p>'; return; }
       const el = document.createElement('div');
       el.id = 'feed-loading';
       el.className = 'state-card';
@@ -1897,7 +1808,7 @@
     function showFeedError() {
       const el = document.getElementById('feed-loading');
       if (el) {
-        el.innerHTML = `<p>${t('loadFail')}</p><button class="retry-btn" onclick="loadMoreJokes()">${t('retry')}</button>`;
+        el.innerHTML = `<p>暂时没取到新内容，稍后再试</p><button class="retry-btn" onclick="loadMoreJokes(true)">${t('retry')}</button>`;
         el.classList.add('error-state');
       }
     }
@@ -1938,13 +1849,11 @@
 
     function renderLikes() {
       const list = document.getElementById('likes-list');
-      const clearBtn = document.getElementById('clear-likes');
 
       const all = collectLikes();
       renderLikesFilter(all);
 
       if (all.length === 0) {
-        clearBtn.style.display = 'none';
         list.innerHTML = `
           <div class="empty-state">
             <span>${SVG_ICONS.heart}</span>
@@ -1956,7 +1865,6 @@
         return;
       }
 
-      clearBtn.style.display = '';
       const picked = likesFilter === 'all' ? all : all.filter(e => matchLikeFilter(e, likesFilter));
 
       if (picked.length === 0) {
@@ -2009,7 +1917,7 @@
       // HTTPS 页面不允许 http 音频（混合内容拦截），CDN 已确认支持 HTTPS，仅做协议升级
       const toHttps = (u0) => String(u0 || '').trim().replace(/^http:\/\//i, 'https://');
       const link = String(a.link || '').trim();
-      const id = 'cy:' + (link.split('/').pop() || toHttps(a.url).slice(-32));
+      const id = 'cy:' + (link.split('/').pop() || toHttps(a.url).slice(-32)).replace(/^cont_/, '');
       return {
         id,
         nickname: String(u.nickname || '匿名唱作人'),
@@ -2027,49 +1935,12 @@
     }
 
     async function fetchChangya() {
-      const url = useProxy ? '/api/changya' : `${MIRROR_HOSTS[mirrorIdx]}/v2/changya`;
-      const res = await fetch(url);
-      if (!res.ok) throw new Error('API请求失败');
-      const json = await res.json();
-      if (json.code !== 200 || !json.data || !json.data.audio) throw new Error('接口返回异常');
-      return normalizeAudio(json.data);
+      const data = await requestContent('changya');
+      if (!data.audio || !data.audio.url) throw new Error('音频格式异常');
+      return {...normalizeAudio(data), cachedAt: Date.now()};
     }
 
-    async function fetchChangyaWithFallback() {
-      if (useProxy) return await fetchChangya();
-      for (let i = 0; i < MIRROR_HOSTS.length; i++) {
-        try {
-          mirrorIdx = i;
-          return await fetchChangya();
-        } catch (e) {
-          if (i === MIRROR_HOSTS.length - 1) {
-            useProxy = true;
-            return await fetchChangya();
-          }
-        }
-      }
-    }
-
-    async function fetchAudios(count) {
-      return Promise.all(Array.from({ length: count }, () => fetchChangyaWithFallback()));
-    }
-
-    // 入池统一去重：会话已展示的、池内已有的都不收（并发批次可能抽到同一首）
-    function pushAudioPool(items) {
-      let added = 0;
-      items.forEach(it => {
-        if (!audioSeen.has(it.id) && !audioPool.some(p => p.id === it.id)) {
-          audioPool.push(it);
-          added++;
-        }
-      });
-      return added;
-    }
-
-    // ---- 音频流状态（仅内存：音频链接带时效签名，不做持久化缓存） ----
-    let audioPool = [];
-    const audioSeen = new Set();
-    let audioItems = [];      // 已渲染条目，主题切换重建用
+    let audioItems = [];
     let listenLoading = false;
     let listenLoaded = false;
 
@@ -2300,72 +2171,29 @@
       audioItems.forEach(it => list.appendChild(createAudioCard(it, { noAnim: true })));
     }
 
-    async function loadMoreAudio() {
+    async function loadMoreAudio(force = false) {
       if (listenLoading || currentTab !== 'listen') return;
       listenLoading = true;
-      showListenLoading();
-
-      const BATCH = 4;
-      let picked = [];
-
-      // 1) 内存池取
-      while (audioPool.length && picked.length < BATCH) {
-        const it = audioPool.shift();
-        if (!audioSeen.has(it.id)) picked.push(it);
-      }
-
-      // 2) 不足则请求（最多补两轮，滤掉重复随机结果）
-      if (picked.length < BATCH) {
-        try {
-          for (let round = 0; round < 2 && picked.length < BATCH; round++) {
-            const batch = await fetchAudios(BATCH * 2);
-            pushAudioPool(batch);
-            while (audioPool.length && picked.length < BATCH) {
-              const it = audioPool.shift();
-              if (!audioSeen.has(it.id) && !picked.some(p => p.id === it.id)) picked.push(it);
-            }
-          }
-        } catch (e) {
-          if (picked.length === 0 && audioItems.length === 0) {
-            showListenError();
-            listenLoading = false;
-            hideListenLoading();
-            return;
-          }
-        }
-      }
-
-      // 3) 渲染（双保险：跳过任何重复 id）
-      const list = document.getElementById('listen-list');
-      picked.forEach(it => {
-        if (audioSeen.has(it.id)) return;
-        audioSeen.add(it.id);
-        audioItems.push(it);
-        list.appendChild(createAudioCard(it));
-      });
-
-      listenLoading = false;
-      hideListenLoading();
-      listenLoaded = true;
-
-      // 4) 池子见底时后台补一批
-      if (audioPool.length < 6) backgroundAudioPrefetch();
-    }
-
-    const audioPrefetching = { v: false };
-    async function backgroundAudioPrefetch() {
-      if (audioPrefetching.v) return;
-      audioPrefetching.v = true;
+      const buffer = contentBuffers.audio;
       try {
-        const batch = await fetchAudios(8);
-        pushAudioPool(batch);
-      } catch (e) { /* 静默 */ } finally {
-        audioPrefetching.v = false;
-      }
+        if (!buffer.available) {
+          showListenLoading();
+          await buffer.waitForFirst({force});
+        }
+        const items = buffer.take(4);
+        if (!items.length) {showListenLoading();showListenError();return;}
+        const list = document.getElementById('listen-list');
+        items.forEach(item => {audioItems.push(item);list.appendChild(createAudioCard(item));});
+        listenLoaded = true;
+        hideListenLoading();
+        backgroundAudioPrefetch();
+      } finally { listenLoading = false; }
     }
+    function backgroundAudioPrefetch() { return contentBuffers.audio.refill(); }
 
     function showListenLoading() {
-      if (document.getElementById('listen-loading')) return;
+      const existing = document.getElementById('listen-loading');
+      if (existing) { existing.classList.remove('error-state'); existing.innerHTML = '<div class="spinner"></div><p>寻找正在唱歌的人...</p>'; return; }
       const el = document.createElement('div');
       el.id = 'listen-loading';
       el.className = 'state-card';
@@ -2378,7 +2206,7 @@
     function showListenError() {
       const el = document.getElementById('listen-loading');
       if (el) {
-        el.innerHTML = `<p>${t('loadFail')}</p><button class="retry-btn" onclick="loadMoreAudio()">${t('retry')}</button>`;
+        el.innerHTML = `<p>暂时没有新的歌声，稍后再试</p><button class="retry-btn" onclick="loadMoreAudio(true)">${t('retry')}</button>`;
         el.classList.add('error-state');
       }
     }
@@ -2610,9 +2438,6 @@
     function applyThemeStyles() {
       const fun = isFun();
 
-      // 「我的」页已看计数文案
-      document.getElementById('seen-label').textContent = t('seenLabel');
-      document.getElementById('seen-suffix').textContent = t('seenSuffix');
 
       // 底部 Tab 图标与文字
       document.querySelector('.tab[data-tab="feed"] .tab-icon').innerHTML = fun ? EMOJI_ICONS.feed : SVG_ICONS.feed;
@@ -2641,8 +2466,6 @@
       // 回到顶部按钮
       document.querySelector('#scroll-top-btn .scroll-icon').innerHTML = fun ? EMOJI_ICONS.top : SVG_ICONS.top;
 
-      // 清空喜欢按钮
-      document.getElementById('clear-likes').textContent = t('clear');
 
       // 重建已渲染卡片，使图标/文案跟随主题
       rerenderCards();
@@ -2752,10 +2575,9 @@
       // 重置信息流（各分类缓存/已看独立）
       document.getElementById('feed-list').innerHTML = '';
       feedJokes = [];
-      seenIndices = new Set(Store.getSeen(type).map(i => `${type}:${i}`));
+      feedLoadVersion++;
       isLoading = false;
       hideFeedLoading();
-      updateSeenCount();
       renderCategoryUI();
       // 回到首页立刻看到新分类；仍停在「我的」也会在切回首页时补载
       switchTab('feed');
@@ -2773,9 +2595,7 @@
       // 应用字号
       applyFontSize();
 
-      // 恢复当前分类的已看记录（用于计数与会话去重）
-      Store.getSeen(currentCategory).forEach(i => seenIndices.add(`${currentCategory}:${i}`));
-      updateSeenCount();
+      initializeContentBuffers();
       renderCategoryUI();
 
       // 事件委托：操作按钮
@@ -2851,24 +2671,16 @@
       // 滚动监听
       window.addEventListener('scroll', updateScrollTopBtn, { passive: true });
 
-      // 清空喜欢
-      document.getElementById('clear-likes').addEventListener('click', () => {
-        likesFilter = 'all';
-        Store.clearLikes();
-        Store.clearAudioLikes();
-        // 同步信息流中所有卡片的喜欢按钮状态（含整活主题的 emoji）
-        document.querySelectorAll('.like-btn').forEach(b => syncLikeButton(b, false));
-        // 同步音频卡片收藏按钮
-        document.querySelectorAll('.ap-like').forEach(b => syncLikeButton(b, false));
-        renderLikes();
-        showToast(t('clearOk'));
-      });
 
       // 无限滚动
       setupInfiniteScroll();
 
       // 首次加载：优先秒显本地缓存，不足时自动请求并后台预热
       loadMoreJokes();
+      // 首屏已经同步显示，后台再请求新内容。
+      const warmup = () => contentBuffers[currentCategory].refill({force:true});
+      if ('requestIdleCallback' in window) requestIdleCallback(warmup, {timeout:1200});
+      else setTimeout(warmup, 250);
     }
 
     // DOM 就绪后初始化
