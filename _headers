@@ -1,0 +1,9 @@
+
+/manifest.webmanifest
+  Cache-Control: no-cache
+
+/sw.js
+  Cache-Control: no-cache
+
+/favicon.ico
+  Cache-Control: no-cache

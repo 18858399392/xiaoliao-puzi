@@ -1,0 +1,33 @@
+{
+  "id": "/",
+  "name": "精神零食",
+  "short_name": "精神零食",
+  "lang": "zh-CN",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#000000",
+  "prefer_related_applications": false,
+  "description": "刷段子 - 随机搞笑段子信息流",
+  "icons": [
+    {
+      "src": "/icons/site-8303749fd497-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/site-8303749fd497-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/site-8303749fd497-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
