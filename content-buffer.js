@@ -8,8 +8,8 @@
   function pump() { while(activeTasks<2&&pendingTasks.length) {const job=pendingTasks.shift();activeTasks++;Promise.resolve().then(job.task).then(job.resolve,job.reject).finally(()=>{activeTasks--;pump();});} }
 
   class ContentBuffer {
-    constructor({type,seeds,catalogue,blocked,fetchOne,version,localOnly=false}) {
-      this.type=type;this.fetchOne=fetchOne;this.version=version;this.catalogue=catalogue||[];this.localOnly=localOnly;
+    constructor({type,seeds,catalogue,blocked,fetchOne,fetchBatch,version,localOnly=false}) {
+      this.type=type;this.fetchOne=fetchOne;this.fetchBatch=fetchBatch;this.version=version;this.catalogue=catalogue||[];this.localOnly=localOnly;
       this.blocked=new Set((blocked||[]).map(id=>String(id).replace(/^cy:cont_/, 'cy:')));this.reserved=new Set();this.running=null;this.cooldown=0;this.waiters=[];
       this.historyKey=type==='audio'?'duanzi_seen_audio_v1':`duanzi_seen_v3_${type}`;
       this.cacheKey=type==='audio'?'duanzi_audio_cache_v1':`duanzi_cache_v3_${type}`;
@@ -25,12 +25,13 @@
       try { sameRelease=localStorage.getItem(this.cacheKey+'_release')===String(version); } catch {}
       const cached=(sameRelease?read(this.cacheKey):[]).filter(item=>this.localOnly?allowedStarter.has(item.id):(!item._starter||allowedStarter.has(item.id)));
       try { localStorage.setItem(this.cacheKey+'_release',String(version)); } catch {}
-      this.add(cached);
+      if(type!=='audio')this.add(cached);
       // Shuffle a private copy; all users do not start with the same five lines.
       const shuffled=seeds.map(item=>({...item,_starter:true}));
       for(let i=shuffled.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]];}
       this.seedBank=shuffled;
       this.add(shuffled);
+      if(type==='audio')this.add(cached);
       if(type==='audio')this.pool.sort((a,b)=>Number(!a.localAudio)-Number(!b.localAudio)||Number(this.seen.has(a.id))-Number(this.seen.has(b.id)));
     }
     normalize(item) {
@@ -50,6 +51,7 @@
         if(!item||this.sessionSeen.has(item.id)||(this.seen.has(item.id)&&!(this.type==='audio'&&item.localAudio))||this.blocked.has(item.id)||ids.has(item.id)||(item.duanzi&&texts.has(item.duanzi)))continue;
         this.pool.push(item);ids.add(item.id);if(item.duanzi)texts.add(item.duanzi);
       }
+      if(this.type==='audio')this.pool.sort((a,b)=>Number(!a.localAudio)-Number(!b.localAudio));
       this.pool=this.pool.slice(0,this.type==='audio'?80:240);
       write(this.cacheKey,this.pool);
       if(this.pool.length)this.waiters.splice(0).forEach(resolve=>resolve());
@@ -80,7 +82,11 @@
       if(typeof navigator!=='undefined'&&navigator.onLine===false)return Promise.resolve();
       if((!force&&this.pool.length>=16)||(!force&&Date.now()<this.cooldown))return Promise.resolve();
       let added=0;
-      const tasks=Array.from({length:this.type==='audio'?4:8},()=>schedule(async()=>{
+      const tasks=this.fetchBatch?[schedule(async()=>{
+        try {const previous=this.pool.length;const excluded=new Set([...this.seen,...this.sessionSeen,...this.blocked,...this.pool.map(item=>item.id)]);
+          this.add(await this.fetchBatch(excluded));added+=this.pool.length-previous;
+        }catch{/* Keep local recordings available when online sources fail. */}
+      })]:Array.from({length:this.type==='audio'?4:8},()=>schedule(async()=>{
         const index=this.type==='audio'?undefined:this.nextIndex();
         if(index===null)return;
         try {const item=await this.fetchOne(index);const previous=this.pool.length;this.add([item]);added+=this.pool.length-previous;}catch {/* Accept any successful item from the batch. */}

@@ -1352,6 +1352,7 @@
 
   <script src="starter-content.js"></script>
   <script src="content-buffer.js"></script>
+  <script src="music-sources.js"></script>
   <script>
     // ===================== 存储管理 =====================
     const Store = {
@@ -1771,7 +1772,7 @@
           fetchOne: index => fetchJoke(category.key, index)
         });
       }
-      contentBuffers.audio = new ContentBuffer({type:'audio', seeds:starter.audio || [], blocked:starter.blockedIds, version:starter.version, fetchOne:fetchChangya});
+      contentBuffers.audio = new ContentBuffer({type:'audio', seeds:starter.audio || [], blocked:starter.blockedIds, version:starter.version+'-music-v1', fetchBatch:excluded=>MusicSources.fetchBatch(excluded)});
     }
 
     // 有项目预置内容或浏览器缓存时，先显示，再后台补充。
@@ -1991,6 +1992,8 @@
         ? `<span class="singer">原唱：${escapeHtml(item.singer)}</span>` : '';
       const timeHtml = item.publishAt
         ? `<span class="au-dot">·</span><span class="au-time">${formatTime(item.publishAt)}</span>` : '';
+      const sourceHtml = item.sourceLabel
+        ? `<span class="au-dot">·</span><a class="au-time" href="${escapeAttr(item.link)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.sourceLabel)}</a>` : '';
 
       card.innerHTML = `
         ${avatarHtml}
@@ -1999,6 +2002,7 @@
             <span class="au-name">${escapeHtml(item.nickname)}</span>
             ${genderHtml(item.gender)}
             ${timeHtml}
+            ${sourceHtml}
           </div>
           <div class="au-song">《${escapeHtml(item.songName)}》 ${singerHtml}</div>
           ${lyricsHtml}
@@ -2164,7 +2168,7 @@
         this.currentId = item.id;
         this.currentItem = item;
         this.currentCard = card;
-        this.el.src = item.audioUrl;
+        this.el.src = MusicSources.playbackUrl(item);
         card.classList.add('playing', 'buffering');
         try {
           await this.el.play();
@@ -2218,7 +2222,7 @@
     function showListenError() {
       const el = document.getElementById('listen-loading');
       if (el) {
-        const hint = audioItems.some(item => item.localAudio) ? '本地片段已载入上方列表，可以继续听；暂时没有新的歌声' : '暂时没有新的歌声，稍后再试';
+        const hint = navigator.onLine === false ? '当前离线，上方本地片段可以继续听' : '暂时没取到更多歌曲，上方歌曲可以继续听';
         el.innerHTML = `<p>${hint}</p><button class="retry-btn" onclick="loadMoreAudio(true)">${t('retry')}</button>`;
         el.classList.add('error-state');
       }
