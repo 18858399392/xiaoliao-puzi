@@ -72,6 +72,7 @@
       if(this.running)return this.running;
       if(this.pool.length<16)this.add(this.seedBank);
       if(this.localOnly)return Promise.resolve();
+      if(typeof navigator!=='undefined'&&navigator.onLine===false)return Promise.resolve();
       if((!force&&this.pool.length>=16)||(!force&&Date.now()<this.cooldown))return Promise.resolve();
       let added=0;
       const tasks=Array.from({length:this.type==='audio'?4:8},()=>schedule(async()=>{

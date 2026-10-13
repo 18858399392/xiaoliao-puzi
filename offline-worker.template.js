@@ -3,7 +3,29 @@ const REVISION = '__REVISION__';
 const SCOPE = self.registration.scope;
 const PREFIX = 'xiaoliao-reader:' + SCOPE + ':';
 const CACHE = PREFIX + REVISION;
+const AUDIO_CACHE = PREFIX + 'audio-v1';
 const SHELL = ['index.html', 'starter-content.js', 'content-buffer.js'].map(file => new URL(file, SCOPE).href);
+const AUDIO = __AUDIO_FILES__.map(file => new URL(file, SCOPE).href);
+
+let warming = null;
+function warmAudio(cache) {
+  if (!warming) warming = downloadAudio(cache).finally(() => { warming = null; });
+  return warming;
+}
+async function downloadAudio(cache) {
+  const pending = AUDIO.slice();
+  async function download() {
+    while (pending.length) {
+      const url = pending.shift();
+      if (await cache.match(url)) continue;
+      try {
+        const response = await fetch(url);
+        if (response.ok && response.status === 200) await cache.put(url, response);
+      } catch { /* Cache remaining files even if one download fails. */ }
+    }
+  }
+  await Promise.all([download(), download()]);
+}
 
 self.addEventListener('install', event => {
   event.waitUntil((async () => {
@@ -15,10 +37,14 @@ self.addEventListener('install', event => {
 });
 self.addEventListener('activate', event => {
   event.waitUntil((async () => {
+    const cache = await caches.open(CACHE);
     for (const key of await caches.keys()) {
-      if (key.startsWith(PREFIX) && key !== CACHE) await caches.delete(key);
+      if (key.startsWith(PREFIX) && key !== CACHE && key !== AUDIO_CACHE) {
+        await caches.delete(key);
+      }
     }
     await self.clients.claim();
+    // The page starts audio warming by message after activation is complete.
   })());
 });
 self.addEventListener('fetch', event => {
@@ -26,10 +52,25 @@ self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
   url.search = ''; url.hash = '';
   const key = event.request.mode === 'navigate' && url.href === SCOPE ? SHELL[0] : url.href;
-  if (!SHELL.includes(key)) return;
+  if (!SHELL.includes(key) && !AUDIO.includes(key)) return;
   event.respondWith((async () => {
-    const cache = await caches.open(CACHE);
+    const cache = await caches.open(AUDIO.includes(key) ? AUDIO_CACHE : CACHE);
     const saved = await cache.match(key);
+    if (saved && AUDIO.includes(key) && event.request.headers.has('Range')) {
+      const bytes = await saved.arrayBuffer();
+      const range = /^bytes=(\d*)-(\d*)$/.exec(event.request.headers.get('Range'));
+      if (!range || (!range[1] && !range[2])) return saved;
+      const start = range[1] ? Number(range[1]) : Math.max(0, bytes.byteLength - Number(range[2]));
+      const end = range[1] && range[2] ? Math.min(Number(range[2]), bytes.byteLength - 1) : bytes.byteLength - 1;
+      if (start > end || start >= bytes.byteLength) return new Response(null, {status:416, headers:{'Content-Range':`bytes */${bytes.byteLength}`}});
+      return new Response(bytes.slice(start, end + 1), {status:206, headers:{
+        'Content-Type':saved.headers.get('Content-Type') || 'audio/mpeg',
+        'Accept-Ranges':'bytes', 'Content-Range':`bytes ${start}-${end}/${bytes.byteLength}`, 'Content-Length':String(end-start+1)
+      }});
+    }
     return saved || fetch(event.request);
   })());
+});
+self.addEventListener('message', event => {
+  if (event.data === 'warm-audio') event.waitUntil(caches.open(AUDIO_CACHE).then(warmAudio));
 });

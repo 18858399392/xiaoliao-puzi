@@ -17,7 +17,7 @@ def default_selection(data):
     for kind in KINDS[:3]:
         values=data['text'][kind]
         result[kind]=[item['id'] for item in values]
-    result['audio']=[item['id'] for item in data['audio'] if item.get('localAudio')][:8]
+    result['audio']=[item['id'] for item in data['audio'] if item.get('localAudio')]
     return {'selected':result,'blockedIds':[]}
 
 def build(selection,data=None):
@@ -67,11 +67,13 @@ def save(selection,backup=True):
     script='window.STARTER_CONTENT = '+json.dumps(bundle,ensure_ascii=False,separators=(',',':')).replace('<','\\u003c')+';\n'
     atomic_write(ROOT/'starter-content.js',script)
     atomic_write(ROOT/'starter-selection.json',json.dumps(selection,ensure_ascii=False,indent=2)+'\n')
-    build_offline_worker()
+    build_offline_worker(bundle)
     return {'version':bundle['version'],'counts':{kind:len(selection['selected'][kind]) for kind in KINDS}}
 
-def build_offline_worker():
+def build_offline_worker(bundle):
     template=(ROOT/'offline-worker.template.js').read_text(encoding='utf-8')
+    audio_files=[item['audioUrl'] for item in bundle['audio']]
+    template=template.replace('__AUDIO_FILES__',json.dumps(audio_files,separators=(',',':')))
     digest=hashlib.sha256(template.encode())
     for name in ['index.html','starter-content.js','content-buffer.js']:
         digest.update((ROOT/name).read_bytes())
