@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <meta name="theme-color" content="#000000">
+  <meta name="theme-color" content="#080a0c">
   <meta name="description" content="刷段子 - 随机搞笑段子信息流">
   <title>笑料铺子 · 刷段子</title>
   <!-- 手写 / 萌趣字体（网络字体，加载失败自动回退到系统楷体/圆体） -->
@@ -41,32 +41,37 @@
       --tab-h: 56px;
       --max-width: 620px;
       --card-px: 18px;
+      --ui-font: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      --settings-bg: #f7f9fa;
+      --heart-top: #ff91b4;
+      --heart-bottom: #f91880;
     }
 
-    /* ===== 纯黑主题（默认，Dark，X 的 Light Out） ===== */
+    /* ===== 深黑主题：低亮度底色、克制的分层与细边线 ===== */
     :root[data-theme="dark"] {
-      --bg: #000000;
-      --bg-elevated: #000000;
-      --card-bg: #000000;
+      --bg: #080a0c;
+      --bg-elevated: #11151a;
+      --card-bg: #080a0c;
       --text: #e7e9ea;
       --text-secondary: #8b98a5;
-      --text-tertiary: #566a76;
+      --text-tertiary: #788690;
       --accent: #1d9bf0;
       --accent-soft: rgba(29, 155, 240, 0.1);
       --like-color: #f91880;
       --like-soft: rgba(249, 24, 128, 0.1);
       --copy-color: #1d9bf0;
       --copy-soft: rgba(29, 155, 240, 0.1);
-      --border: #2f3336;
-      --border-light: #19202a;
-      --hairline: #16181c;
-      --header-bg: rgba(0, 0, 0, 0.85);
-      --tab-bg: rgba(0, 0, 0, 0.92);
+      --border: #252c33;
+      --border-light: #1b2229;
+      --hairline: #1c2228;
+      --header-bg: rgba(8, 10, 12, 0.90);
+      --tab-bg: rgba(8, 10, 12, 0.96);
       --toast-bg: rgba(231, 233, 234, 0.92);
       --toast-text: #000000;
-      --scroll-btn-bg: #000000;
+      --scroll-btn-bg: #11151a;
       --scroll-btn-shadow: rgba(0, 0, 0, 0.5);
       --meta-bar-bg: #1d9bf0;
+      --settings-bg: #11151a;
       color-scheme: dark;
     }
 
@@ -94,35 +99,49 @@
       --scroll-btn-bg: #fffdf7;
       --scroll-btn-shadow: rgba(150, 100, 40, 0.16);
       --meta-bar-bg: #ff8a3d;
+      --settings-bg: #fffdf7;
     }
 
     /* ===== 仿真阅读主题（复古黄本子：横线纸 + 红色装订线 + 衬线正文） ===== */
     :root[data-theme="paper"] {
-      --bg: #e3d5ad;            /* 桌面（纸外）偏深的旧木色 */
-      --bg-elevated: #f8f0da;   /* 纸张 */
+      --bg: #dad5ca;
+      --bg-elevated: #f8f4e9;
       --card-bg: transparent;   /* 卡片透明，露出横线纸底 */
-      --text: #3a3326;          /* 墨色正文 */
-      --text-secondary: #6f6449;
-      --text-tertiary: #a79b7c;
+      --text: #39372f;
+      --text-secondary: #716b5e;
+      --text-tertiary: #8d8473;
       --accent: #355874;        /* 蓝黑墨水 */
       --accent-soft: rgba(53, 88, 116, 0.12);
       --like-color: #b03a2e;    /* 老师红笔 */
       --like-soft: rgba(176, 58, 46, 0.12);
       --copy-color: #355874;
       --copy-soft: rgba(53, 88, 116, 0.12);
-      --border: #ddcb9f;
-      --border-light: #e7d9b4;
-      --hairline: rgba(140, 110, 55, 0.20);  /* 纸边淡线；卡片分割线单独去掉，由横线承担 */
-      --header-bg: rgba(248, 240, 218, 0.88);
-      --tab-bg: rgba(248, 240, 218, 0.94);
+      --border: #ddd5c3;
+      --border-light: #e9e2d3;
+      --hairline: rgba(139, 125, 98, 0.18);
+      --header-bg: rgba(248, 244, 233, 0.94);
+      --tab-bg: rgba(248, 244, 233, 0.97);
       --toast-bg: rgba(58, 51, 38, 0.94);
-      --toast-text: #f8f0da;
-      --scroll-btn-bg: #f8f0da;
+      --toast-text: #f8f4e9;
+      --scroll-btn-bg: #f8f4e9;
       --scroll-btn-shadow: rgba(120, 90, 40, 0.22);
       --meta-bar-bg: #b03a2e;
-      --paper-line: rgba(70, 100, 140, 0.28);   /* 横线颜色（作业本蓝） */
-      --paper-margin: rgba(176, 58, 46, 0.38);   /* 红色装订线 */
-      --paper-edge: #d9c79b;
+      --paper-line: rgba(100, 136, 153, 0.19);
+      --paper-margin: rgba(175, 99, 91, 0.27);
+      --paper-edge: #d9d0bd;
+      --paper-rule-height: max(32px, calc(var(--joke-font-size) * 1.85));
+      --paper-rule-offset: calc(var(--joke-font-size) * 0.33);
+      --paper-spine: linear-gradient(to right, transparent 30px, var(--paper-margin) 30px, var(--paper-margin) 31px, transparent 31px, transparent 34px, var(--paper-margin) 34px, var(--paper-margin) 35px, transparent 35px);
+      --paper-rules: repeating-linear-gradient(to bottom, transparent 0,
+        transparent calc(var(--paper-rule-height) - var(--paper-rule-offset)),
+        var(--paper-line) calc(var(--paper-rule-height) - var(--paper-rule-offset)),
+        var(--paper-line) calc(var(--paper-rule-height) - var(--paper-rule-offset) + 1px),
+        transparent calc(var(--paper-rule-height) - var(--paper-rule-offset) + 1px),
+        transparent var(--paper-rule-height));
+      --paper-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 150 150'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' opacity='.035' filter='url(%23grain)'/%3E%3C/svg%3E");
+      --settings-bg: #fcf9f1;
+      --heart-top: #d37e6c;
+      --heart-bottom: #a63c39;
     }
 
     /* 纸外：旧木桌面 */
@@ -130,26 +149,23 @@
       background: var(--bg);
     }
 
-    /* 中间栏目即一张竖格作业本：横线 + 左侧红色装订线 */
+    /* 一张连续的纸：细横线、淡红双边线与轻微折页，纹理不干扰正文 */
     :root[data-theme="paper"] main {
       background-color: var(--bg-elevated);
       background-image:
-        linear-gradient(to right,
-          transparent 0, transparent 25px,
-          var(--paper-margin) 25px, var(--paper-margin) 26px,
-          transparent 26px),
-        repeating-linear-gradient(to bottom,
-          transparent 0, transparent 33px,
-          var(--paper-line) 33px, var(--paper-line) 34px);
+        linear-gradient(to right, rgba(128, 111, 79, 0.045), transparent 18px, transparent calc(100% - 8px), rgba(255, 255, 255, 0.26)),
+        var(--paper-spine),
+        var(--paper-grain),
+        var(--paper-rules);
+      background-position: 0 0, 0 0, 0 0, 0 env(safe-area-inset-top);
       border-left: 1px solid var(--paper-edge);
       border-right: 1px solid var(--paper-edge);
-      box-shadow: inset 0 0 70px rgba(140, 105, 45, 0.10);
+      box-shadow: -3px 0 10px rgba(64, 55, 36, 0.08), 3px 0 12px rgba(64, 55, 36, 0.07), inset 10px 0 16px -13px rgba(105, 91, 64, 0.28);
     }
 
     /* 正文写在装订线右侧，卡片不再画分割线 */
     :root[data-theme="paper"] .card {
-      padding-left: 42px;
-      padding-right: 22px;
+      padding: var(--paper-rule-height) 22px 0 48px;
       border-bottom: none;
     }
     :root[data-theme="paper"] .card:active {
@@ -158,8 +174,27 @@
 
     /* 纸张主题：行距对齐横线（字体由 --app-font 统一控制，可选手写体） */
     :root[data-theme="paper"] .joke-text {
-      line-height: 34px;        /* 与横线行距对齐，文字落在横线上方 */
-      letter-spacing: 0.02em;
+      line-height: var(--paper-rule-height);
+      letter-spacing: 0.025em;
+      margin-bottom: 0;
+    }
+    :root[data-theme="paper"] .card-footer {
+      min-height: calc(var(--paper-rule-height) * 2);
+    }
+    :root[data-theme="paper"] #me-panel {
+      background-color: var(--bg-elevated);
+      background-image: var(--paper-grain);
+    }
+    :root[data-theme="paper"] #likes-list {
+      background-color: var(--bg-elevated);
+      background-image: var(--paper-spine), var(--paper-grain), var(--paper-rules);
+    }
+    :root[data-theme="dark"] .card {
+      padding-top: 20px;
+      padding-bottom: 14px;
+    }
+    :root[data-theme="dark"] .joke-text {
+      line-height: 1.75;
     }
 
     /* ===== Reset ===== */
@@ -187,6 +222,10 @@
       background: none;
       color: inherit;
     }
+    button:focus-visible, summary:focus-visible, input:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
 
     ::selection {
       background: var(--accent-soft);
@@ -198,13 +237,17 @@
     .font-controls {
       display: flex;
       align-items: center;
-      gap: 2px;
+      gap: 3px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 3px;
     }
 
     .font-btn {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      border-radius: 7px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -224,6 +267,8 @@
 
     .font-btn.small { font-size: 12px; }
     .font-btn.large { font-size: 16px; }
+    .font-btn:disabled { opacity: 0.32; cursor: default; transform: none; background: none; }
+    .font-btn.small, .font-btn.large { font-family: var(--ui-font); font-size: 18px; font-weight: 400; }
 
     .font-value {
       min-width: 26px;
@@ -439,12 +484,6 @@
     .action-btn.like-btn.active {
       color: var(--like-color);
     }
-    .action-btn.like-btn.active svg {
-      fill: var(--like-color);
-      stroke: var(--like-color);
-      animation: likeBounce 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
     /* 整活主题：emoji 图标 */
     .action-btn .emoji {
       font-size: 16px;
@@ -454,7 +493,7 @@
       justify-content: center;
     }
     .like-btn .emoji { filter: grayscale(1) opacity(0.5); transition: filter 0.2s, transform 0.2s; }
-    .like-btn.active .emoji { filter: grayscale(0); transform: scale(1.15); animation: likeBounce 0.45s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    .like-btn.active .emoji { filter: grayscale(0); }
     .like-btn:active .emoji { transform: scale(0.8); }
     .copy-btn .emoji { filter: grayscale(1) opacity(0.5); transition: filter 0.2s, transform 0.2s; }
     .copy-btn:hover .emoji { filter: grayscale(0) opacity(0.8); }
@@ -463,77 +502,22 @@
     /* 主题切换时重建的卡片不重放入场动画 */
     .card.no-anim { animation: none !important; }
 
-    @keyframes likeBounce {
-      0% { transform: scale(1); }
-      30% { transform: scale(0.5); }
-      55% { transform: scale(1.45); }
-      80% { transform: scale(0.92); }
-      100% { transform: scale(1); }
+    /* 只在主动点赞时回弹，恢复喜欢或换肤不会重播。 */
+    .like-btn, .ap-like { position: relative; isolation: isolate; overflow: visible; }
+    .heart-icon { overflow: visible; transform-origin: center; }
+    .like-btn .heart-icon, .ap-like .heart-icon { fill: none; stroke: none; }
+    .heart-outline { fill: none; stroke: currentColor; stroke-width: 1.75; transition: opacity 180ms; }
+    .heart-fill-window { transform: translateY(24px); transition: transform 260ms cubic-bezier(.22, 1, .36, 1); }
+    .like-btn.active .heart-fill-window, .ap-like.active .heart-fill-window {
+      transform: translateY(0); transition-duration: 320ms; transition-delay: 65ms;
     }
-
-    /* ===== X 风格粒子光晕特效 ===== */
-    .particle-ring {
-      position: fixed;
-      width: 40px;
-      height: 40px;
-      border: 2.5px solid var(--like-color);
-      border-radius: 50%;
-      opacity: 0;
-      pointer-events: none;
-      z-index: 9999;
-      will-change: transform, opacity;
-      transform: translate(-50%, -50%) scale(0.2);
-    }
-
-    .particle-ring.expand {
-      animation: ringExpand 0.8s ease-out forwards;
-    }
-
-    @keyframes ringExpand {
-      0% {
-        opacity: 0.8;
-        transform: translate(-50%, -50%) scale(0.2);
-      }
-      100% {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(3);
-      }
-    }
-
-    .particle {
-      position: fixed;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--like-color);
-      box-shadow: 0 0 8px rgba(249, 73, 107, 0.7);
-      opacity: 0;
-      pointer-events: none;
-      z-index: 9999;
-      will-change: transform, opacity;
-      transform: translate(-50%, -50%) scale(1);
-    }
-
-    .particle.burst {
-      animation: particleFly 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    @keyframes particleFly {
-      0% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1.3);
-      }
-      50% {
-        opacity: 0.9;
-      }
-      100% {
-        opacity: 0;
-        transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(0.2);
-      }
-    }
-
+    .like-btn.active .heart-outline, .ap-like.active .heart-outline { opacity: 0; transition-delay: 260ms; }
+    .like-burst { position: absolute; width: 58px; height: 58px; left: 50%; top: 50%; transform: translate(-50%, -50%); pointer-events: none; z-index: -1; }
+    .like-ring { position: absolute; width: 22px; height: 22px; left: 18px; top: 18px; border: 1px solid var(--like-color); border-radius: 50%; opacity: 0; }
+    .like-speck { position: absolute; left: 29px; top: 29px; border-radius: 50%; opacity: 0; }
     @media (prefers-reduced-motion: reduce) {
-      .particle, .particle-ring { display: none; }
+      .like-burst { display: none; }
+      .heart-fill-window, .heart-outline, .like-btn .emoji { transition: none !important; }
     }
 
     /* ===== 加载与错误状态 ===== */
@@ -603,15 +587,22 @@
     }
 
     /* ===== 「我的」页 ===== */
+    #me-panel { font-family: var(--ui-font); padding: 0 0 12px; }
+    .me-heading { padding: 24px 18px 3px; font-size: 24px; font-weight: 700; letter-spacing: -.02em; }
+    .me-caption { padding: 2px 18px 8px; font-size: 12px; color: var(--text-secondary); }
     .me-group {
-      border-bottom: 1px solid var(--hairline);
+      margin: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--settings-bg);
+      overflow: hidden;
     }
 
     .me-group-title {
-      padding: 15px var(--card-px) 2px;
-      font-size: 12.5px;
-      font-weight: 500;
-      color: var(--text-tertiary);
+      padding: 16px 16px 8px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
       letter-spacing: 0.03em;
     }
 
@@ -620,17 +611,17 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 13px var(--card-px);
-      min-height: 52px;
+      padding: 13px 16px;
+      min-height: 56px;
       text-align: left;
       font-size: 15px;
       color: var(--text);
       transition: background 0.15s;
     }
 
-    .me-row:active {
-      background: var(--bg);
-    }
+    .me-row + .me-row { border-top: 1px solid var(--hairline); }
+    .me-row.active { background: var(--accent-soft); }
+    .me-row.tap:hover { background: var(--accent-soft); }
 
     .me-row.tap:active {
       background: var(--accent-soft);
@@ -684,12 +675,26 @@
       visibility: hidden;
     }
     .me-row.active .me-check { visibility: visible; }
+    .me-row .me-check { font-size: 0; width: 18px; height: 18px; flex: none; border: 1.5px solid var(--text-tertiary); border-radius: 50%; visibility: visible; position: relative; }
+    .me-row.active .me-check { background: var(--accent); border-color: var(--accent); }
+    .me-row.active .me-check::after { content: ''; position: absolute; left: 4px; top: 3px; width: 5px; height: 8px; border: solid #fff; border-width: 0 1.5px 1.5px 0; transform: rotate(45deg); }
+    .me-details { border-top: 1px solid var(--hairline); }
+    .me-details summary { list-style: none; cursor: pointer; }
+    .me-details summary::-webkit-details-marker { display: none; }
+    .me-details[open] summary { border-bottom: 1px solid var(--hairline); }
+    .me-details[open] .me-chevron { transform: rotate(90deg); }
+    .me-details .me-chevron { transition: transform 180ms; }
+    #font-opts .font-opt { min-height: 52px; }
+    #font-current { max-width: 108px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .font-preview .fp-char { font-family: var(--app-font); }
+    .me-stat-group .me-row { color: var(--text-secondary); font-size: 13px; }
 
     /* 主题选择：四枚色板直选 */
     .theme-opts {
-      display: flex;
-      gap: 18px;
-      padding: 10px var(--card-px) 16px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      padding: 6px 12px 14px;
     }
     .theme-opt {
       display: flex;
@@ -697,23 +702,33 @@
       align-items: center;
       gap: 6px;
       font-size: 12px;
-      color: var(--text-tertiary);
-      transition: color 0.15s;
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 7px 5px;
+      transition: color 0.15s, border-color 0.15s, background 0.15s;
     }
     .theme-opt .theme-dot {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
+      width: 100%;
+      height: 34px;
+      border-radius: 4px;
       background: var(--dot-bg, #fff);
       border: 1px solid var(--border);
-      box-shadow: 0 0 0 0 var(--accent);
+      position: relative;
+      overflow: hidden;
       transition: box-shadow 0.15s, transform 0.12s;
     }
     .theme-opt:active .theme-dot { transform: scale(0.9); }
-    .theme-opt.active { color: var(--text); font-weight: 600; }
-    .theme-opt.active .theme-dot {
-      box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent);
-    }
+    .theme-opt.active { color: var(--accent); font-weight: 600; border-color: var(--accent); background: var(--accent-soft); }
+    .theme-dot::after { content: ''; position: absolute; left: 8px; right: 8px; top: 10px; height: 1px; background: #93a2ac; box-shadow: 0 6px #93a2ac, 0 12px #93a2ac; opacity: .55; }
+    .theme-opt[data-theme="paper"] .theme-dot { background: repeating-linear-gradient(to bottom, #f8f4e9 0 8px, #cbd6d8 8px 9px); }
+    .theme-opt[data-theme="paper"] .theme-dot::before { content: ''; position: absolute; inset: 0 auto 0 7px; border-left: 1px solid #c69a96; }
+    .accent-opts { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; padding: 12px 14px 18px; }
+    .accent-opt { width: 28px; height: 28px; justify-self: center; }
+    .accent-opt::before { content: ''; position: absolute; inset: -7px; border-radius: 50%; }
+    .accent-opt.active::after { inset: -4px; border-width: 1.5px; }
+    .accent-custom { width: 28px; height: 28px; justify-self: center; overflow: visible; }
+    .accent-custom input[type="color"] { inset: -7px; width: 42px; height: 42px; border-radius: 50%; }
 
     /* 喜欢子页面：吸顶头部（返回 + 标题 + 清空 + 分类筛选） */
     .likes-head {
@@ -1074,10 +1089,7 @@
     .ap-like.active {
       color: var(--like-color);
     }
-    .ap-like.active svg {
-      fill: var(--like-color);
-      stroke: var(--like-color);
-    }
+    .ap-like .heart-icon { width: 18.5px; height: 18.5px; }
 
     /* 纸张主题：音频卡横线对齐 + 歌词块更像贴在本子上的剪报 */
     :root[data-theme="paper"] .audio-card {
@@ -1211,6 +1223,8 @@
     <section id="me-view" class="view">
       <!-- 菜单面板 -->
       <div id="me-panel">
+        <h1 class="me-heading">我的</h1>
+        <p class="me-caption">喜欢的内容，舒服地读。</p>
         <div class="me-group">
           <button class="me-row tap" id="me-open-likes" type="button">
             <span class="me-ico" id="me-likes-icon"></span>
@@ -1247,16 +1261,38 @@
             <span class="me-label" id="me-font-title">字号</span>
             <span class="me-side">
               <span class="font-controls">
-                <button class="font-btn small" id="font-decrease" type="button" title="缩小字体" aria-label="缩小字体">A</button>
+                <button class="font-btn small" id="font-decrease" type="button" title="缩小字体" aria-label="缩小字体">−</button>
                 <span class="font-preview" id="font-preview"><span class="fp-char" id="fp-char" style="font-size:17px;">笑</span><span class="font-value" id="font-value">17</span></span>
-                <button class="font-btn large" id="font-increase" type="button" title="放大字体" aria-label="放大字体">A</button>
+                <button class="font-btn large" id="font-increase" type="button" title="放大字体" aria-label="放大字体">+</button>
               </span>
             </span>
           </div>
 
-          <div class="me-group-title" id="me-fontface-title">字体</div>
-          <div id="font-opts"></div>
+          <details class="me-details">
+            <summary class="me-row">
+              <span class="me-label" id="me-fontface-title">字体</span>
+              <span class="me-side"><span id="font-current">跟随主题</span><span class="me-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span></span>
+            </summary>
+            <div id="font-opts"></div>
+          </details>
+          <div class="me-group-title" id="me-theme-title">主题</div>
+          <div class="theme-opts" id="theme-opts">
+            <button class="theme-opt" type="button" data-theme="light">
+              <span class="theme-dot" style="--dot-bg:#ffffff"></span><span>纯白</span>
+            </button>
+            <button class="theme-opt" type="button" data-theme="dark">
+              <span class="theme-dot" style="--dot-bg:#080a0c"></span><span>深黑</span>
+            </button>
+            <button class="theme-opt" type="button" data-theme="fun">
+              <span class="theme-dot" style="--dot-bg:#ffd9a0"></span><span>整活</span>
+            </button>
+            <button class="theme-opt" type="button" data-theme="paper">
+              <span class="theme-dot" style="--dot-bg:#f8f4e9"></span><span>笔记本</span>
+            </button>
+          </div>
+        </div>
 
+        <div class="me-group">
           <div class="me-group-title" id="me-color-title">主题色</div>
           <div class="accent-opts" id="accent-opts">
             <button class="accent-opt auto-opt" type="button" data-accent="" title="跟随主题" aria-label="跟随主题"></button>
@@ -1269,25 +1305,9 @@
               <input type="color" id="accent-picker" value="#1d9bf0" aria-label="自定义主题色">
             </label>
           </div>
-
-          <div class="me-group-title" id="me-theme-title" style="padding-top:6px;">主题</div>
-          <div class="theme-opts" id="theme-opts">
-            <button class="theme-opt" type="button" data-theme="light">
-              <span class="theme-dot" style="--dot-bg:#ffffff"></span><span>纯白</span>
-            </button>
-            <button class="theme-opt" type="button" data-theme="dark">
-              <span class="theme-dot" style="--dot-bg:#000000"></span><span>纯黑</span>
-            </button>
-            <button class="theme-opt" type="button" data-theme="fun">
-              <span class="theme-dot" style="--dot-bg:#ffd9a0"></span><span>整活</span>
-            </button>
-            <button class="theme-opt" type="button" data-theme="paper">
-              <span class="theme-dot" style="--dot-bg:#f8f0da"></span><span>阅读</span>
-            </button>
-          </div>
         </div>
 
-        <div class="me-group">
+        <div class="me-group me-stat-group">
           <div class="me-row">
             <span class="me-label"><span id="seen-label">已看</span></span>
             <span class="me-side">
@@ -1472,8 +1492,12 @@
 
     function applyFontPref() {
       document.documentElement.style.setProperty('--app-font', resolvedFontStack());
+      const current = document.getElementById('font-current');
+      if (current) current.textContent = Store.getFontPref() === 'auto' ? '跟随主题' : (FONT_MAP[Store.getFontPref()] || FONT_MAP.heiti).name;
       document.querySelectorAll('.font-opt').forEach(row => {
-        row.classList.toggle('active', row.dataset.font === Store.getFontPref());
+        const selected = row.dataset.font === Store.getFontPref();
+        row.classList.toggle('active', selected);
+        row.setAttribute('aria-pressed', String(selected));
       });
     }
 
@@ -1484,13 +1508,13 @@
       const rows = [
         `<button class="me-row tap font-opt" type="button" data-font="auto">
           <span class="me-label">跟随主题</span>
-          <span class="fo-sample" style="font-family:${SANS_STACK}">${sample}</span>
+          <span class="fo-sample" style="font-family:${escapeAttr(SANS_STACK)}">${sample}</span>
           <span class="me-check">✓</span>
         </button>`
       ].concat(FONTS.map(f =>
         `<button class="me-row tap font-opt" type="button" data-font="${f.key}">
           <span class="me-label">${f.name}</span>
-          <span class="fo-sample" style="font-family:${f.stack}">${sample}</span>
+          <span class="fo-sample" style="font-family:${escapeAttr(f.stack)}">${sample}</span>
           <span class="me-check">✓</span>
         </button>`
       ));
@@ -1529,7 +1553,9 @@
       // 色板选中态
       const cur = (hex || '').toLowerCase();
       document.querySelectorAll('.accent-opt').forEach(btn => {
-        btn.classList.toggle('active', (btn.dataset.accent || '').toLowerCase() === cur);
+        const selected = (btn.dataset.accent || '').toLowerCase() === cur;
+        btn.classList.toggle('active', selected);
+        btn.setAttribute('aria-pressed', String(selected));
       });
       const custom = document.getElementById('accent-custom');
       const picker = document.getElementById('accent-picker');
@@ -1614,6 +1640,34 @@
     function isFun() { return Store.getTheme() === 'fun'; }
     function t(key) { return (isFun() ? COPY.fun : COPY.normal)[key]; }
 
+    // SVG 的渐变与裁切 ID 按实例唯一，收藏页/信息流可同时出现同一条内容。
+    let heartIconSequence = 0;
+    function createHeartIcon() {
+      const key = `like-heart-${++heartIconSequence}`;
+      const path = 'M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z';
+      return `<svg class="heart-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <defs>
+          <linearGradient id="${key}-gradient" x1="0" y1="0" x2="0.65" y2="1">
+            <stop offset="0" style="stop-color:var(--heart-top)"/><stop offset="1" style="stop-color:var(--heart-bottom)"/>
+          </linearGradient>
+          <clipPath id="${key}-clip"><rect class="heart-fill-window" x="0" y="0" width="24" height="24"/></clipPath>
+        </defs>
+        <path class="heart-outline" d="${path}"/>
+        <path d="${path}" fill="url(#${key}-gradient)" clip-path="url(#${key}-clip)"/>
+      </svg>`;
+    }
+
+    function syncLikeButton(btn, liked) {
+      btn.classList.toggle('active', liked);
+      btn.setAttribute('aria-pressed', String(liked));
+      const label = btn.classList.contains('ap-like') ? (liked ? '取消收藏' : '收藏这首歌') : (liked ? '取消喜欢' : t('likeLabel'));
+      btn.setAttribute('aria-label', label);
+      btn.title = label;
+      const emoji = btn.querySelector('.emoji');
+      if (emoji) emoji.textContent = liked ? '🤣' : '🙂';
+      if (!liked) stopLikeAnimation(btn);
+    }
+
     // ===================== 卡片渲染 =====================
     function createCard(joke, options = {}) {
       const card = document.createElement('div');
@@ -1631,7 +1685,7 @@
 
       const likeIcon = fun
         ? (liked ? EMOJI_ICONS.heartOn : EMOJI_ICONS.heartOff)
-        : SVG_ICONS.heart;
+        : createHeartIcon();
       const copyIcon = fun ? EMOJI_ICONS.copy : SVG_ICONS.copy;
 
       card.innerHTML = `
@@ -1648,7 +1702,7 @@
           </div>
         </div>
       `;
-
+      syncLikeButton(card.querySelector('.like-btn'), liked);
       return card;
     }
 
@@ -2081,7 +2135,7 @@
           <div class="ap-foot">
             <span class="ap-stat">${SVG_ICONS.heartSmall}${fmtCount(item.likeCount)}</span>
             <button class="ap-like ${Store.isAudioLiked(item.id) ? 'active' : ''}" aria-label="收藏这首歌" title="收藏">
-              ${SVG_ICONS.heartSmall}
+              ${createHeartIcon()}
             </button>
           </div>
         </div>
@@ -2098,6 +2152,7 @@
 
       // 事件：收藏 / 取消收藏（同步该音频在信息流与喜欢页的所有卡片）
       const likeBtn = card.querySelector('.ap-like');
+      syncLikeButton(likeBtn, Store.isAudioLiked(item.id));
       likeBtn.addEventListener('click', () => {
         const wasLiked = Store.isAudioLiked(item.id);
         const nowLiked = wasLiked
@@ -2105,7 +2160,8 @@
           : Store.addAudioLike(item);
         document.querySelectorAll('.audio-card').forEach(c => {
           if (c.dataset.id === item.id) {
-            c.querySelector('.ap-like')?.classList.toggle('active', nowLiked);
+            const button = c.querySelector('.ap-like');
+            if (button) syncLikeButton(button, nowLiked);
           }
         });
         if (!wasLiked && nowLiked) {
@@ -2343,13 +2399,10 @@
         const isNowLiked = wasLiked
           ? Store.removeLike(id)
           : Store.addLike({ id, type, index, duanzi: btn.dataset.text });
-        btn.classList.toggle('active', isNowLiked);
         // 更新表情图标 + 同步页面上同一条内容的其他按钮
         document.querySelectorAll('.like-btn').forEach(b => {
           if (b.dataset.id !== id) return;
-          b.classList.toggle('active', isNowLiked);
-          const emoji = b.querySelector('.emoji');
-          if (emoji) emoji.textContent = isNowLiked ? '🤣' : '🙂';
+          syncLikeButton(b, isNowLiked);
         });
         // 仅在「变为喜欢」时触发粒子特效
         if (!wasLiked && isNowLiked) {
@@ -2367,57 +2420,69 @@
       }
     }
 
-    // ===================== X 风格粒子光晕特效（Web Animations API） =====================
+    // ===================== 小范围点赞回弹与细粒子 =====================
+    const likeAnimations = new WeakMap();
+    function stopLikeAnimation(btn) {
+      const state = likeAnimations.get(btn);
+      if (!state) return;
+      clearTimeout(state.timer);
+      state.animations.forEach(animation => animation.cancel());
+      state.overlay.remove();
+      likeAnimations.delete(btn);
+    }
+
     function burstParticles(btn) {
-      const target = btn.querySelector('.emoji') || btn.querySelector('svg');
-      if (!target) return;
+      stopLikeAnimation(btn);
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const target = btn.querySelector('.emoji') || btn.querySelector('.heart-icon');
+      if (!target || typeof target.animate !== 'function') return;
 
-      const rect = target.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
+      // 特效跟随按钮本身，不在整个屏幕上散布粒子。
+      const overlay = document.createElement('span');
+      overlay.className = 'like-burst';
+      overlay.setAttribute('aria-hidden', 'true');
+      btn.appendChild(overlay);
+      const animations = [];
+      animations.push(target.animate([
+        { transform: 'scale(1)', offset: 0 },
+        { transform: 'scale(.76)', offset: .16 },
+        { transform: 'scale(1.22)', offset: .43 },
+        { transform: 'scale(.96)', offset: .65 },
+        { transform: 'scale(1.05)', offset: .81 },
+        { transform: 'scale(1)', offset: 1 }
+      ], { duration: 520, easing: 'cubic-bezier(.25,.46,.45,.94)' }));
 
-      const elements = [];
+      const ring = document.createElement('span');
+      ring.className = 'like-ring';
+      overlay.appendChild(ring);
+      animations.push(ring.animate([
+        { opacity: 0, transform: 'scale(.65)', offset: 0 },
+        { opacity: .6, transform: 'scale(1.05)', offset: .25 },
+        { opacity: 0, transform: 'scale(1.9)', offset: 1 }
+      ], { duration: 350, easing: 'ease-out' }));
 
-      // 扩散光环
-      const ring = document.createElement('div');
-      ring.className = 'particle-ring';
-      ring.style.left = cx + 'px';
-      ring.style.top = cy + 'px';
-      document.body.appendChild(ring);
-      elements.push(ring);
-
-      ring.animate([
-        { opacity: 0.8, transform: 'translate(-50%, -50%) scale(0.3)' },
-        { opacity: 0, transform: 'translate(-50%, -50%) scale(3)' }
-      ], { duration: 800, easing: 'ease-out', fill: 'forwards' });
-
-      // 生成 8 颗粒子，均匀放射
-      const PARTICLE_COUNT = 8;
-      for (let i = 0; i < PARTICLE_COUNT; i++) {
-        const angle = (Math.PI * 2 * i) / PARTICLE_COUNT + (Math.random() * 0.3 - 0.15);
-        const dist = 32 + Math.random() * 16;
-        const tx = Math.cos(angle) * dist;
-        const ty = Math.sin(angle) * dist;
-        const size = 9 + Math.random() * 5;
-
-        const p = document.createElement('div');
-        p.className = 'particle';
-        p.style.left = cx + 'px';
-        p.style.top = cy + 'px';
-        p.style.width = size + 'px';
-        p.style.height = size + 'px';
-        document.body.appendChild(p);
-        elements.push(p);
-
-        p.animate([
-          { opacity: 1, transform: 'translate(-50%, -50%) scale(1.4)' },
-          { opacity: 0.9, transform: `translate(calc(-50% + ${tx * 0.5}px), calc(-50% + ${ty * 0.5}px)) scale(1)`, offset: 0.5 },
-          { opacity: 0, transform: `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(0.3)` }
-        ], { duration: 900, easing: 'cubic-bezier(0.16, 1, 0.3, 1)', fill: 'forwards' });
+      const colors = ['#ee6596', '#b88bd9', '#ec83a7', '#e9a083', '#a8a5e0', '#85b9cc', '#e67ca3'];
+      for (let ray = 0; ray < 7; ray++) {
+        for (let pair = 0; pair < 2; pair++) {
+          const angle = Math.PI * 2 * ray / 7 - Math.PI / 2 + pair * .15;
+          const distance = pair ? 21 : 27;
+          const x = Math.cos(angle), y = Math.sin(angle);
+          const dot = document.createElement('span');
+          dot.className = 'like-speck';
+          dot.style.width = dot.style.height = `${pair ? 2 : 3}px`;
+          dot.style.background = colors[ray];
+          overlay.appendChild(dot);
+          const position = radius => `translate(calc(-50% + ${x * radius}px), calc(-50% + ${y * radius}px))`;
+          animations.push(dot.animate([
+            { opacity: 0, transform: `${position(12)} scale(.4)`, offset: 0 },
+            { opacity: .9, transform: `${position(16)} scale(1)`, offset: .18 },
+            { opacity: .6, transform: `${position(distance - 3)} scale(.8)`, offset: .65 },
+            { opacity: 0, transform: `${position(distance)} scale(.15)`, offset: 1 }
+          ], { duration: 400, delay: 100 + pair * 25, easing: 'ease-out' }));
+        }
       }
-
-      // 动画结束后清理 DOM
-      setTimeout(() => elements.forEach(el => el.remove()), 1000);
+      const timer = setTimeout(() => stopLikeAnimation(btn), 580);
+      likeAnimations.set(btn, { overlay, animations, timer });
     }
 
     async function copyText(text) {
@@ -2500,6 +2565,8 @@
       // 样字按当前真实字号实时渲染
       const c = document.getElementById('fp-char');
       if (c) c.style.fontSize = fontSize + 'px';
+      document.getElementById('font-decrease').disabled = fontSize <= 14;
+      document.getElementById('font-increase').disabled = fontSize >= 24;
     }
 
     function changeFontSize(delta) {
@@ -2514,7 +2581,7 @@
     // fun = 整活主题（emoji 图标 + 浮动表情 + 段子梗文案）
     const THEMES = ['light', 'dark', 'fun', 'paper'];
 
-    const THEME_COLORS = { light: '#ffffff', dark: '#000000', fun: '#fff6e6', paper: '#f8f0da' };
+    const THEME_COLORS = { light: '#ffffff', dark: '#080a0c', fun: '#fff6e6', paper: '#f8f4e9' };
 
     function applyTheme(theme) {
       document.documentElement.setAttribute('data-theme', theme);
@@ -2527,7 +2594,9 @@
     // 更新主题色板选中态
     function updateThemeOptions(theme) {
       document.querySelectorAll('.theme-opt').forEach(opt => {
-        opt.classList.toggle('active', opt.dataset.theme === theme);
+        const selected = opt.dataset.theme === theme;
+        opt.classList.toggle('active', selected);
+        opt.setAttribute('aria-pressed', String(selected));
       });
     }
 
@@ -2669,7 +2738,9 @@
     // ===================== 内容分类切换（在「我的」页选择） =====================
     function renderCategoryUI() {
       document.querySelectorAll('.me-cat').forEach(mi => {
-        mi.classList.toggle('active', mi.dataset.category === currentCategory);
+        const selected = mi.dataset.category === currentCategory;
+        mi.classList.toggle('active', selected);
+        mi.setAttribute('aria-pressed', String(selected));
       });
     }
 
@@ -2786,13 +2857,9 @@
         Store.clearLikes();
         Store.clearAudioLikes();
         // 同步信息流中所有卡片的喜欢按钮状态（含整活主题的 emoji）
-        document.querySelectorAll('.like-btn').forEach(b => {
-          b.classList.remove('active');
-          const em = b.querySelector('.emoji');
-          if (em) em.textContent = '🙂';
-        });
+        document.querySelectorAll('.like-btn').forEach(b => syncLikeButton(b, false));
         // 同步音频卡片收藏按钮
-        document.querySelectorAll('.ap-like').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.ap-like').forEach(b => syncLikeButton(b, false));
         renderLikes();
         showToast(t('clearOk'));
       });
