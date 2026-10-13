@@ -74,10 +74,16 @@ def build_offline_worker(bundle):
     template=(ROOT/'offline-worker.template.js').read_text(encoding='utf-8')
     audio_files=[item['audioUrl'] for item in bundle['audio']]
     template=template.replace('__AUDIO_FILES__',json.dumps(audio_files,separators=(',',':')))
+    shell=['index.html','starter-content.js','content-buffer.js']
+    shell+=[name for name in ['pwa-register.js','manifest.webmanifest','favicon.png','favicon.ico'] if (ROOT/name).is_file()]
+    shell+=[file.relative_to(ROOT).as_posix() for file in sorted((ROOT/'icons').glob('*.png'))]
+    template=template.replace('__SHELL_FILES__',json.dumps(shell,separators=(',',':')))
     digest=hashlib.sha256(template.encode())
-    for name in ['index.html','starter-content.js','content-buffer.js']:
+    for name in shell:
         digest.update((ROOT/name).read_bytes())
-    atomic_write(ROOT/'offline-worker.js',template.replace('__REVISION__',digest.hexdigest()[:20]))
+    worker=template.replace('__REVISION__',digest.hexdigest()[:20])
+    atomic_write(ROOT/'offline-worker.js',worker)
+    atomic_write(ROOT/'sw.js',worker)
 
 if __name__=='__main__':
     selection_file=ROOT/'starter-selection.json'

@@ -4,7 +4,7 @@ const SCOPE = self.registration.scope;
 const PREFIX = 'xiaoliao-reader:' + SCOPE + ':';
 const CACHE = PREFIX + REVISION;
 const AUDIO_CACHE = PREFIX + 'audio-v1';
-const SHELL = ['index.html', 'starter-content.js', 'content-buffer.js'].map(file => new URL(file, SCOPE).href);
+const SHELL = __SHELL_FILES__.map(file => new URL(file, SCOPE).href);
 const AUDIO = __AUDIO_FILES__.map(file => new URL(file, SCOPE).href);
 
 let warming = null;

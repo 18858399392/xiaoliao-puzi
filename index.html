@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <meta name="theme-color" content="#080a0c">
   <meta name="description" content="刷段子 - 随机搞笑段子信息流">
-  <title>笑料铺子 · 刷段子</title>
+  <title>精神零食</title>
   <!-- 手写 / 萌趣字体（网络字体，加载失败自动回退到系统楷体/圆体） -->
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1193,6 +1193,16 @@
       }
     }
   </style>
+    <link rel="canonical" href="https://yule.kanglimin.com/" />
+
+    <link rel="icon" type="image/png" sizes="32x32" href="./icons/site-8303749fd497-32.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="./icons/site-8303749fd497-192.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="./icons/site-8303749fd497-180.png" />
+    <link rel="manifest" href="./manifest.webmanifest?v=8303749fd497" />
+    <meta name="application-name" content="精神零食" />
+    <meta name="apple-mobile-web-app-title" content="精神零食" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
 </head>
 <body>
 
@@ -1596,7 +1606,7 @@
         emptyFilterTitle: '这个分类还没有收藏', emptyFilterHint: '分类下还没有内容，去发现喜欢的吧'
       },
       fun: {
-        title: '笑料铺子',
+        title: '精神零食',
         tabFeed: '开刷', tabListen: '开听', tabMe: '俺的',
         meLikes: '笑话名人堂', meCategory: '整点啥乐子', meDisplay: '看着舒服',
         meFont: '字号大小', meFontFace: '换个笔体', meColor: '加点颜色', meTheme: '换个皮肤', likesTitle: '笑话名人堂',
@@ -2679,19 +2689,7 @@
 
       // 文字直接读取完整本地库；歌曲保留后台补充。
       loadMoreJokes();
-      // 缓存阅读页与文字库；相对路径兼容 GitHub Pages 项目子目录。
-      if ('serviceWorker' in navigator && window.isSecureContext && /^https?:$/.test(location.protocol)) {
-        const cachePage = async () => {
-          try {
-            await navigator.serviceWorker.register('./offline-worker.js', {updateViaCache:'none'});
-            navigator.serviceWorker.addEventListener('controllerchange', () => navigator.serviceWorker.controller?.postMessage('warm-audio'));
-            const ready = await navigator.serviceWorker.ready;
-            ready.active?.postMessage('warm-audio');
-          } catch {}
-        };
-        if ('requestIdleCallback' in window) requestIdleCallback(cachePage, {timeout:1200});
-        else setTimeout(cachePage, 250);
-      }
+
     }
 
     // DOM 就绪后初始化
@@ -2701,5 +2699,6 @@
       init();
     }
   </script>
+  <script defer src="./pwa-register.js?v=8303749fd497"></script>
 </body>
 </html>
