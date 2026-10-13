@@ -16,6 +16,9 @@
       this.history=read(this.historyKey);
       if(type==='audio')this.history=[...new Set(this.history.map(id=>String(id).replace(/^cy:cont_/, 'cy:')))];
       this.seen=new Set(this.history.map(id=>type==='audio'?String(id):`${type}:${id}`));
+      // Local recordings are replayable. History only prioritizes new pieces;
+      // the current page still renders each recording at most once.
+      this.sessionSeen=new Set();
       const allowedStarter=new Set(seeds.map(item=>item.id));
       this.pool=[];
       let sameRelease=false;
@@ -28,6 +31,7 @@
       for(let i=shuffled.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]];}
       this.seedBank=shuffled;
       this.add(shuffled);
+      if(type==='audio')this.pool.sort((a,b)=>Number(!a.localAudio)-Number(!b.localAudio)||Number(this.seen.has(a.id))-Number(this.seen.has(b.id)));
     }
     normalize(item) {
       if(!item||typeof item!=='object')return null;
@@ -43,7 +47,7 @@
       const ids=new Set(this.pool.map(item=>item.id));const texts=new Set(this.pool.map(item=>item.duanzi).filter(Boolean));
       for(const raw of items) {
         const item=this.normalize(raw);
-        if(!item||this.seen.has(item.id)||this.blocked.has(item.id)||ids.has(item.id)||(item.duanzi&&texts.has(item.duanzi)))continue;
+        if(!item||this.sessionSeen.has(item.id)||(this.seen.has(item.id)&&!(this.type==='audio'&&item.localAudio))||this.blocked.has(item.id)||ids.has(item.id)||(item.duanzi&&texts.has(item.duanzi)))continue;
         this.pool.push(item);ids.add(item.id);if(item.duanzi)texts.add(item.duanzi);
       }
       this.pool=this.pool.slice(0,this.type==='audio'?80:240);
@@ -54,8 +58,9 @@
       const result=[];
       while(this.pool.length&&result.length<count) {
         const item=this.pool.shift();
-        if(this.seen.has(item.id)||this.blocked.has(item.id))continue;
-        this.seen.add(item.id);this.history.push(this.type==='audio'?item.id:item.index);result.push(item);
+        if(this.sessionSeen.has(item.id)||(this.seen.has(item.id)&&!(this.type==='audio'&&item.localAudio))||this.blocked.has(item.id))continue;
+        if(!this.seen.has(item.id))this.history.push(this.type==='audio'?item.id:item.index);
+        this.seen.add(item.id);this.sessionSeen.add(item.id);result.push(item);
       }
       this.history=this.history.slice(-10000);
       write(this.historyKey,this.history);write(this.cacheKey,this.pool);

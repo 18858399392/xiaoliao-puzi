@@ -2218,7 +2218,8 @@
     function showListenError() {
       const el = document.getElementById('listen-loading');
       if (el) {
-        el.innerHTML = `<p>暂时没有新的歌声，稍后再试</p><button class="retry-btn" onclick="loadMoreAudio(true)">${t('retry')}</button>`;
+        const hint = audioItems.some(item => item.localAudio) ? '本地片段已载入上方列表，可以继续听；暂时没有新的歌声' : '暂时没有新的歌声，稍后再试';
+        el.innerHTML = `<p>${hint}</p><button class="retry-btn" onclick="loadMoreAudio(true)">${t('retry')}</button>`;
         el.classList.add('error-state');
       }
     }
