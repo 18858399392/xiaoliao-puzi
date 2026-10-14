@@ -123,7 +123,7 @@
     const content=node('div','resource-scroll');form=node('form','discovery-form');
     input=node('input','discovery-input');input.type='search';input.maxLength=100;input.enterKeyHint='search';input.placeholder='书名、片名、歌曲或作者';input.setAttribute('aria-label','资源搜索关键词');
     submit=node('button','discovery-submit','搜索');submit.type='submit';
-    external=link('resource-open resource-external','到 PanSearch 搜索 ↗','https://www.pansearch.me/');
+    external=link('resource-open resource-external','到 PanSearch 继续搜索 ↗','https://www.pansearch.me/');
     external.addEventListener('click',event=>{if(input.value.trim().length<2){event.preventDefault();status.textContent='请输入至少两个字，再打开搜索结果。';input.focus();}});
     input.addEventListener('input',updateExternal);form.append(input,submit);
     form.addEventListener('submit',event=>search(event));
@@ -134,7 +134,7 @@
   }
   function open(kind,button){
     init();token++;controller?.abort();provider=kind;opener=button;input.value='';results.replaceChildren();retry.hidden=true;setBusy(false);
-    const local=provider==='pansou';title.textContent=local?'PanSou 盘搜':'PanSearch 网盘搜索';external.hidden=local;
+    const local=provider==='pansou';title.textContent=local?'PanSou 盘搜':'PanSearch 网盘搜索';
     status.textContent=local?'输入关键词查找网盘分享。结果可在站外打开。':'输入关键词搜索网盘分享，也可以到 PanSearch 搜索。';
     updateExternal();document.body.classList.add('resource-opened');dialog.showModal();input.focus();
   }

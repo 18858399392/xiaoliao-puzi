@@ -52,7 +52,7 @@ HTTPS 网站或 localhost 首次联网访问并完成后台页面缓存后，可
 
 用户随后授权在资源搜索中重新开放站外跳转。“我的→资源搜索”有 PanSou 盘搜和 PanSearch 网盘搜索两个独立入口，现有文章、书目和歌曲卡片继续只在站内使用。
 
-`resource-search.js` 管理面板、查询取消、缓存、结果校验和复制。PanSou 请求固定 `src=plugin`，不发送 Telegram 频道参数；只接受 `plugin:` 来源及支持的 HTTPS 网盘分享，去重并排除 Telegram、未知域名、推广和明确的玄幻/修仙/漫画结果。PanSearch 入口使用单独的公开页面搜索适配器，并提供带关键词的站外搜索按钮；站外网站自己的来源与推广不受本站控制。
+`resource-search.js` 管理面板、查询取消、缓存、结果校验和复制。PanSou 请求固定 `src=plugin`，不发送 Telegram 频道参数；只接受 `plugin:` 来源及支持的 HTTPS 网盘分享，去重并排除 Telegram、未知域名、推广和明确的玄幻/修仙/漫画结果。PanSearch 入口使用单独的公开页面搜索适配器。两个面板都提供带关键词到 PanSearch 站外继续搜索的按钮，站外网站自己的来源与推广不受本站控制。实际验证发现公开来源在不同时间/请求环境下可能返回空列表，不能把本地有结果当作线上稳定性的保证。
 
 `functions/api/resource-search.js` 和 `lib/resource-proxy.mjs` 在现有 Cloudflare Pages 上提供轻量查询接口。PanSou 先调用公开演示 API；没有结果或服务失败时，使用 PanSearch 搜索适配器补充。PanSearch 适配器读取公开搜索结果页里的数据，提取网盘链接，不抓取 Telegram，不下载资源文件，也不把远程 HTML 直接插入本站。页面结构变化时会明确报错，不绕过登录、验证码或访问限制。公开服务会限流，不能保证每本书或每部影片都有有效分享。
 

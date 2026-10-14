@@ -4,7 +4,7 @@
 
 在“我的”增加“资源搜索”分组，分别为 PanSou 盘搜、PanSearch 网盘搜索。PanSou 经现有 Cloudflare Pages 的查询接口使用公开演示实例，固定 src=plugin；只展示明确标记 plugin: 且属于受支持网盘域名的 HTTPS 分享链接，排除 Telegram、推广及脚本地址。正文和现有歌曲保持无站外导航。
 
-PanSou 在现有 Pages Function 固定 src=plugin，空结果或失败后通过 PanSearch 公开页面插件补充。PanSearch 使用独立的公开页面搜索插件，仅输出 plugin:pansearch 的结果；另提供其自身搜索页 /search?keyword=，输入关键词后显式点击打开站外。不能声称控制其站外内部来源，也不嵌入其推广。PanSou 入口不添加未经验证的站外后备链接。
+PanSou 在现有 Pages Function 固定 src=plugin，空结果或失败后通过 PanSearch 公开页面插件补充。PanSearch 使用独立的公开页面搜索插件，仅输出 plugin:pansearch 的结果。两个面板均提供已验证的 PanSearch 搜索页 /search?keyword=，输入关键词后显式点击打开站外。不能声称控制其站外内部来源，也不嵌入其推广。不添加未经验证的 PanSou 站外深链（其前端不支持所试验的关键词 URL）。
 
 搜索面板沿用黑色/纸张主题，支持返回、Esc、键盘提交、移动端宽度。结果显示标题、网盘、提取码、复制和打开。初次返回空列表时，等待 1.8 秒再读取一次插件异步结果；超时总计二十秒，不无限重试。缓存最近十组查询元数据二十分钟，不下载文件。超时与断网显示可重试状态，关闭或新查询取消旧请求，不能覆盖新结果。
 
