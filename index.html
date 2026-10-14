@@ -1205,6 +1205,7 @@
     <meta name="mobile-web-app-capable" content="yes" />
   <link rel="stylesheet" href="reading-cards.css">
   <link rel="stylesheet" href="discovery.css">
+  <link rel="stylesheet" href="resource-search.css">
 </head>
 <body>
 
@@ -1265,6 +1266,18 @@
           <button class="me-row tap" id="me-find-book" type="button" aria-label="找一本书">
             <span class="me-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10" cy="10" r="6"/><path d="m15 15 6 6"/></svg></span>
             <span class="me-label">找一本书</span><span class="me-chevron" aria-hidden="true">›</span>
+          </button>
+        </div>
+
+        <div class="me-group">
+          <div class="me-group-title">资源搜索</div>
+          <button class="me-row tap" id="me-pansou" type="button" aria-label="PanSou 盘搜">
+            <span class="me-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10" cy="10" r="6"/><path d="m15 15 6 6"/></svg></span>
+            <span class="me-label">PanSou 盘搜</span><span class="me-chevron" aria-hidden="true">›</span>
+          </button>
+          <button class="me-row tap" id="me-pansearch" type="button" aria-label="PanSearch 网盘搜索">
+            <span class="me-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 5H5v14h14v-8M14 3h7v7M10 14 21 3"/></svg></span>
+            <span class="me-label">PanSearch 网盘搜索</span><span class="me-chevron" aria-hidden="true">↗</span>
           </button>
         </div>
 
@@ -1375,6 +1388,7 @@
   <script src="extra-content.js"></script>
   <script src="reading-cards.js"></script>
   <script src="discovery.js"></script>
+  <script src="resource-search.js"></script>
   <script>
     // ===================== 存储管理 =====================
     const Store = {
@@ -2689,6 +2703,8 @@
       document.getElementById('me-open-likes').addEventListener('click', openLikesPanel);
       document.getElementById('me-find-book').addEventListener('click', event => Discovery.open('book',event.currentTarget));
       document.getElementById('listen-find-song').addEventListener('click', event => Discovery.open('music',event.currentTarget));
+      document.getElementById('me-pansou').addEventListener('click', event => ResourceSearch.open('pansou',event.currentTarget));
+      document.getElementById('me-pansearch').addEventListener('click', event => ResourceSearch.open('pansearch',event.currentTarget));
       document.getElementById('me-likes-back').addEventListener('click', closeLikesPanel);
 
       // 喜欢列表分类筛选（胶囊会随 renderLikes 重建，用事件委托）

@@ -1,0 +1,19 @@
+.resource-opened { overflow:hidden; }
+.resource-dialog { width:min(760px,100%); max-width:100%; height:100dvh; max-height:100dvh; padding:0; margin:auto; border:1px solid var(--border); background:var(--bg); color:var(--text); font:inherit; }
+.resource-dialog[open] { display:flex; flex-direction:column; }
+.resource-dialog::backdrop { background:rgba(0,0,0,.72); }
+.resource-scroll { overflow-y:auto; flex:1; min-height:0; overscroll-behavior:contain; padding-bottom:max(35px,env(safe-area-inset-bottom)); }
+.resource-card { padding:20px 18px; border-top:1px solid var(--border); }
+.resource-title { margin:0 0 9px; font-size:var(--joke-font-size); line-height:1.7; font-weight:600; overflow-wrap:anywhere; }
+.resource-meta { margin:5px 0; color:var(--text-secondary); font-size:12px; line-height:1.8; }
+.resource-actions { display:flex; flex-wrap:wrap; align-items:center; gap:12px; margin-top:12px; }
+.resource-open,.resource-copy,.resource-retry { color:var(--accent); font:inherit; font-size:13px; border:1px solid var(--border); border-radius:999px; padding:9px 15px; min-height:40px; background:transparent; text-decoration:none; cursor:pointer; }
+.resource-retry { margin:18px; }
+.resource-copy:disabled,.resource-retry:disabled { opacity:.5; cursor:wait; }
+.resource-external { display:block; width:fit-content; margin:0 18px 18px; text-decoration:none; font-size:13px; }
+.resource-external[aria-disabled="true"] { opacity:.55; }
+.resource-dialog [hidden] { display:none !important; }
+.resource-dialog :is(button,a,input):focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+.resource-manual-copy { width:100%; min-height:70px; font:inherit; font-size:13px; background:var(--bg-elevated); color:var(--text); border:1px solid var(--border); border-radius:8px; padding:10px; }
+:root[data-theme="paper"] .resource-dialog { background:var(--bg-elevated); background-image:var(--paper-grain); }
+@media(max-width:480px) { .resource-dialog { border-width:0; } .resource-dialog .discovery-form { flex-wrap:wrap; } .resource-dialog .discovery-input { flex-basis:55%; } }

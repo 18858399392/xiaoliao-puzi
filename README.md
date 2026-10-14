@@ -47,3 +47,17 @@ HTTPS 网站或 localhost 首次联网访问并完成后台页面缓存后，可
 ## 多来源查找
 
 `discovery.js` 处理用户主动发起的书目查询和歌曲搜索。Open Library 书目缓存七天，最近歌曲搜索元数据缓存二十分钟，最多保存二十组查询。2026-10-14 按用户要求移除全部站外导航、原站下载按钮和相关筛选项。书目只展示元数据，歌曲在站内播放；文章作者、出处、版本和转录许可保留为不可点击的文字。旧收藏即使带有来源地址，也不会渲染为外链。后台 API 与音频资源请求继续工作。
+
+## 两个资源搜索入口
+
+用户随后授权在资源搜索中重新开放站外跳转。“我的→资源搜索”有 PanSou 盘搜和 PanSearch 网盘搜索两个独立入口，现有文章、书目和歌曲卡片继续只在站内使用。
+
+`resource-search.js` 管理面板、查询取消、缓存、结果校验和复制。PanSou 请求固定 `src=plugin`，不发送 Telegram 频道参数；只接受 `plugin:` 来源及支持的 HTTPS 网盘分享，去重并排除 Telegram、未知域名、推广和明确的玄幻/修仙/漫画结果。PanSearch 入口使用单独的公开页面搜索适配器，并提供带关键词的站外搜索按钮；站外网站自己的来源与推广不受本站控制。
+
+`functions/api/resource-search.js` 和 `lib/resource-proxy.mjs` 在现有 Cloudflare Pages 上提供轻量查询接口。PanSou 先调用公开演示 API；没有结果或服务失败时，使用 PanSearch 搜索适配器补充。PanSearch 适配器读取公开搜索结果页里的数据，提取网盘链接，不抓取 Telegram，不下载资源文件，也不把远程 HTML 直接插入本站。页面结构变化时会明确报错，不绕过登录、验证码或访问限制。公开服务会限流，不能保证每本书或每部影片都有有效分享。
+
+浏览器只缓存最近十组查询的元数据二十分钟；服务端只对非空结果缓存五分钟。没有文件资源库。首次空结果可再读取一次异步结果，总等待不超过二十秒；之后由用户点击更新。新接口固定上游，不支持自定义 URL。仅 GET，关键词 2–100 字。
+
+资源搜索需要联网。Cloudflare 部署时从项目根目录运行 Wrangler，确保 `functions/` 一起编译。完整本地开发使用 `wrangler pages dev`；仅启动静态 HTTP 服务不能运行该接口。离线单文件通过正式域名的公开查询接口搜索，其原有文字和十六段音频仍可离线使用。GitHub Pages 镜像也使用正式域名的查询接口。
+
+验证：`node --test tests/resource-search.test.cjs tests/resource-proxy.test.cjs`，以及工作区的 `work/verify-resource-search.cjs`。新入口不清理收藏、历史或设置。
