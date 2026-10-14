@@ -9,7 +9,7 @@
   function element(tag,className,text){const node=document.createElement(tag);node.className=className;if(text!==undefined)node.textContent=text;return node;}
   function minutes(item){return Math.max(1,Math.ceil((item.wordCount||item.paragraphs.join('').length)/300));}
   function copyText(item){
-    if(item.type==='reading')return item.title+'\n'+item.author+'\n\n'+item.paragraphs.join('\n\n')+'\n\n来源：'+item.sourceUrl+'\n转录许可：CC BY-SA 4.0\n'+item.licenseUrl;
+    if(item.type==='reading')return item.title+'\n'+item.author+'\n\n'+item.paragraphs.join('\n\n')+'\n\n来源：'+item.sourceName+(item.sourceRevision?'，版本 '+item.sourceRevision:'')+'\n转录许可：CC BY-SA 4.0';
     return item.duanzi+(revealed.has(item.id)?'\n\n参考答案：'+item.answer+'\n'+item.explanation:'');
   }
   function remember(){
@@ -28,9 +28,8 @@
     title.textContent=item.title;meta.textContent=item.author+' · '+item.topic+' · 约'+minutes(item)+'分钟';
     body.replaceChildren(...item.paragraphs.map(text=>element('p','',text)));
     source.replaceChildren();
-    const attribution=element('a','reader-source-link','原文与版本：'+item.sourceName);
-    attribution.href=item.sourceUrl+(item.sourceRevision?'?oldid='+item.sourceRevision:'');attribution.target='_blank';attribution.rel='noopener noreferrer';
-    const license=element('a','reader-source-link','转录许可：CC BY-SA 4.0');license.href=item.licenseUrl;license.target='_blank';license.rel='noopener noreferrer';
+    const attribution=element('p','reader-source-label','原文出处：'+item.sourceName+(item.sourceRevision?' · 版本 '+item.sourceRevision:''));
+    const license=element('p','reader-source-label','转录许可：CC BY-SA 4.0');
     source.append(attribution,element('p','reader-license','原作属公有领域，作者与出处保留。'),license,element('p','reader-license',item.editorNote));
     const actions=dialog.querySelector('.reader-actions');actions.replaceChildren();
     const card=button.closest('.card'),like=card?.querySelector('.like-btn');

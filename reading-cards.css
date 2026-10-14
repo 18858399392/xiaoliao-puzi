@@ -24,7 +24,7 @@ body.reader-open { overflow:hidden; }
 .reader-body { font:inherit; font-weight:400; line-height:2.05; overflow-wrap:anywhere; }
 .reader-body p { margin:0 0 1.3em; white-space:pre-line; }
 .reader-source { border-top:1px solid var(--border); margin-top:36px; padding-top:20px; font-size:12px; line-height:1.9; overflow-wrap:anywhere; }
-.reader-source-link { color:var(--accent); display:block; width:fit-content; text-underline-offset:3px; }
+.reader-source-label { color:var(--text-secondary); overflow-wrap:anywhere; }
 .reader-license { margin:7px 0; color:var(--text-secondary); }
 :root[data-theme="paper"] .reading-dialog { background:var(--bg-elevated); background-image:var(--paper-grain); }
 @media(max-width:480px) { .reading-dialog { border-width:0; } .reader-article { padding:24px 21px max(46px,env(safe-area-inset-bottom)); } .reader-head { padding-left:16px; padding-right:16px; } }

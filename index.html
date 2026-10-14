@@ -2021,8 +2021,7 @@
       const timeHtml = item.publishAt
         ? `<span class="au-dot">·</span><span class="au-time">${formatTime(item.publishAt)}</span>` : '';
       const sourceHtml = item.sourceLabel
-        ? `<span class="au-dot">·</span><a class="au-time" href="${escapeAttr(item.link)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.sourceLabel)}</a>` : '';
-      const downloadHtml = item.downloadAllowed ? `<a class="ap-download" href="${escapeAttr(item.link)}" target="_blank" rel="noopener noreferrer" aria-label="到来源下载" title="来源允许下载，打开原站"><svg viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M5 17v4h14v-4"/></svg></a>` : '';
+        ? `<span class="au-dot">·</span><span class="au-time">${escapeHtml(item.sourceLabel)}</span>` : '';
 
       card.innerHTML = `
         ${avatarHtml}
@@ -2052,7 +2051,6 @@
             <span class="ap-stat">${SVG_ICONS.heartSmall}${fmtCount(item.likeCount)}</span>
             <div class="ap-actions">
             <button class="ap-next" aria-label="下一首" title="下一首"><svg viewBox="0 0 24 24"><path d="m5 4 12 8-12 8V4Zm14 0v16"/></svg></button>
-            ${downloadHtml}
             <button class="ap-like ${Store.isAudioLiked(item.id) ? 'active' : ''}" aria-label="收藏这首歌" title="收藏">
               ${createHeartIcon()}
             </button>
