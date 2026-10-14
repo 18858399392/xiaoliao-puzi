@@ -1203,6 +1203,7 @@
     <meta name="apple-mobile-web-app-title" content="精神零食" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
+  <link rel="stylesheet" href="reading-cards.css">
 </head>
 <body>
 
@@ -1247,6 +1248,18 @@
             <span class="me-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></span>
             <span class="me-label">一言</span>
             <span class="me-check">✓</span>
+          </button>
+        </div>
+
+        <div class="me-group">
+          <div class="me-group-title">阅读与思考</div>
+          <button class="me-row tap me-cat" type="button" data-category="riddle">
+            <span class="me-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 4 2c-1 .6-1.5 1-1.5 2"/><path d="M12 17h.01"/></svg></span>
+            <span class="me-label">猜一猜</span><span class="me-check">✓</span>
+          </button>
+          <button class="me-row tap me-cat" type="button" data-category="reading">
+            <span class="me-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v15M3 4c3-1 6-1 9 1 3-2 6-2 9-1v15c-3-1-6-1-9 1-3-2-6-2-9-1z"/></svg></span>
+            <span class="me-label">精选短读</span><span class="me-check">✓</span>
           </button>
         </div>
 
@@ -1353,6 +1366,8 @@
   <script src="starter-content.js"></script>
   <script src="content-buffer.js"></script>
   <script src="music-sources.js"></script>
+  <script src="extra-content.js"></script>
+  <script src="reading-cards.js"></script>
   <script>
     // ===================== 存储管理 =====================
     const Store = {
@@ -1385,7 +1400,7 @@
       // 喜欢：写入完整快照并置顶；取消：移除
       addLike(joke) {
         let likes = this.getLikes().filter(item => item.id !== joke.id);
-        likes.unshift({ id: joke.id, type: joke.type, index: joke.index, duanzi: joke.duanzi, ts: Date.now() });
+        likes.unshift({ ...joke, ts: Date.now() });
         if (likes.length > 500) likes = likes.slice(0, 500);
         this.saveLikes(likes);
         return true;
@@ -1454,7 +1469,9 @@
     const CATEGORIES = [
       { key: 'duanzi', path: 'duanzi', label: '搞笑段子', contentField: 'duanzi' },
       { key: 'dad-joke', path: 'dad-joke', label: '冷笑话', contentField: 'content' },
-      { key: 'hitokoto', path: 'hitokoto', label: '一言', contentField: 'hitokoto' }
+      { key: 'hitokoto', path: 'hitokoto', label: '一言', contentField: 'hitokoto' },
+      { key: 'riddle', label: '猜一猜', local: true },
+      { key: 'reading', label: '精选短读', local: true }
     ];
     const CATEGORY_MAP = Object.fromEntries(CATEGORIES.map(c => [c.key, c]));
 
@@ -1558,7 +1575,7 @@
 
     // ===================== 状态 =====================
     let currentTab = 'feed';
-    let currentCategory = Store.getCategory();
+    let currentCategory = CATEGORY_MAP[Store.getCategory()] ? Store.getCategory() : 'duanzi';
     let isLoading = false;
     let feedLoadVersion = 0;
     let contentBuffers;
@@ -1689,6 +1706,7 @@
         </div>
       `;
       syncLikeButton(card.querySelector('.like-btn'), liked);
+      ReadingCards.decorate(card, joke);
       return card;
     }
 
@@ -1765,11 +1783,12 @@
       const starter = window.STARTER_CONTENT || {text:{}, audio:[], catalogue:{}, blockedIds:[]};
       contentBuffers = {};
       for (const category of CATEGORIES) {
+        const extra = category.local ? window.EXTRA_CONTENT : null;
         contentBuffers[category.key] = new ContentBuffer({
-          type: category.key, seeds: starter.text[category.key] || [], catalogue: starter.catalogue[category.key] || [],
-          blocked: starter.blockedIds, version: starter.version,
-          localOnly: starter.localTextOnly === true,
-          fetchOne: index => fetchJoke(category.key, index)
+          type: category.key, seeds: (extra || starter).text[category.key] || [], catalogue: starter.catalogue[category.key] || [],
+          blocked: starter.blockedIds, version: (extra || starter).version,
+          localOnly: category.local || starter.localTextOnly === true,
+          fetchOne: category.local ? undefined : index => fetchJoke(category.key, index)
         });
       }
       contentBuffers.audio = new ContentBuffer({type:'audio', seeds:starter.audio || [], blocked:starter.blockedIds, version:starter.version+'-music-v1', fetchBatch:excluded=>MusicSources.fetchBatch(excluded)});
@@ -1833,7 +1852,9 @@
       { key: 'audio', label: '音乐' },
       { key: 'duanzi', label: '段子' },
       { key: 'dad-joke', label: '冷笑话' },
-      { key: 'hitokoto', label: '一言' }
+      { key: 'hitokoto', label: '一言' },
+      { key: 'riddle', label: '猜一猜' },
+      { key: 'reading', label: '短读' }
     ];
     let likesFilter = 'all';
 
@@ -2241,9 +2262,13 @@
         const index = parseInt(btn.dataset.index);
         const wasLiked = Store.isLiked(id);
         // 喜欢时保存完整内容快照，取消时移除
+        const snapshot = feedJokes.find(item => item.id === id)
+          || window.EXTRA_CONTENT?.text[type]?.find(item => item.id === id)
+          || Store.getLikes().find(item => item.id === id)
+          || { id, type, index, duanzi: btn.dataset.text };
         const isNowLiked = wasLiked
           ? Store.removeLike(id)
-          : Store.addLike({ id, type, index, duanzi: btn.dataset.text });
+          : Store.addLike(snapshot);
         // 更新表情图标 + 同步页面上同一条内容的其他按钮
         document.querySelectorAll('.like-btn').forEach(b => {
           if (b.dataset.id !== id) return;

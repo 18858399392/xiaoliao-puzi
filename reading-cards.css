@@ -1,0 +1,30 @@
+.extra-content { font-size:var(--joke-font-size); }
+.extra-meta { margin:0 0 12px; color:var(--text-secondary); font-size:12px; line-height:1.6; }
+.reveal-answer,.read-open,.reader-back { appearance:none; font:inherit; font-size:14px; font-weight:600; cursor:pointer; border:1px solid var(--border); background:transparent; color:var(--accent); border-radius:999px; padding:9px 17px; min-height:42px; }
+.reveal-answer { margin-top:18px; }
+.reveal-answer:hover,.read-open:hover,.reader-back:hover { background:var(--accent-soft); }
+.reveal-answer:focus-visible,.read-open:focus-visible,.reader-back:focus-visible,.reader-scroll:focus-visible { outline:2px solid var(--accent); outline-offset:4px; }
+.riddle-answer { margin-top:16px; padding:16px 0 0; border-top:1px solid var(--border); }
+.riddle-answer[hidden] { display:none; }
+.answer-label { margin:0 0 6px; font-size:12px; color:var(--text-secondary); }
+.answer-value { margin:0 0 9px; color:var(--text); font-size:1.1em; font-weight:650; line-height:1.65; overflow-wrap:anywhere; }
+.answer-explanation { margin:0; font-size:.9em; color:var(--text-secondary); line-height:1.85; }
+.reading-title { font:inherit; font-size:1.25em; font-weight:700; line-height:1.5; margin:0 0 12px; letter-spacing:.015em; overflow-wrap:anywhere; }
+.reading-intro { margin:0 0 18px; line-height:1.9; color:var(--text-secondary); }
+body.reader-open { overflow:hidden; }
+.reading-dialog { color:var(--text); background:var(--bg); border:1px solid var(--border); padding:0; width:min(760px,100%); max-width:100%; height:100dvh; max-height:100dvh; margin:auto; box-sizing:border-box; }
+.reading-dialog[open] { display:flex; flex-direction:column; }
+.reading-dialog::backdrop { background:rgba(0,0,0,.72); }
+.reader-head { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-shrink:0; padding:12px 18px; padding-top:max(12px,env(safe-area-inset-top)); border-bottom:1px solid var(--border); }
+.reader-actions { display:flex; align-items:center; }
+.reader-scroll { flex:1; min-height:0; overflow-y:auto; overscroll-behavior:contain; scrollbar-gutter:stable; }
+.reader-article { padding:28px 28px max(50px,env(safe-area-inset-bottom)); max-width:690px; margin:auto; font-size:var(--joke-font-size); }
+.reader-meta { font-size:12px; color:var(--text-secondary); line-height:1.8; margin:0 0 14px; }
+.reader-title { font-family:inherit; font-size:1.65em; line-height:1.5; margin:0 0 30px; overflow-wrap:anywhere; }
+.reader-body { font:inherit; font-weight:400; line-height:2.05; overflow-wrap:anywhere; }
+.reader-body p { margin:0 0 1.3em; white-space:pre-line; }
+.reader-source { border-top:1px solid var(--border); margin-top:36px; padding-top:20px; font-size:12px; line-height:1.9; overflow-wrap:anywhere; }
+.reader-source-link { color:var(--accent); display:block; width:fit-content; text-underline-offset:3px; }
+.reader-license { margin:7px 0; color:var(--text-secondary); }
+:root[data-theme="paper"] .reading-dialog { background:var(--bg-elevated); background-image:var(--paper-grain); }
+@media(max-width:480px) { .reading-dialog { border-width:0; } .reader-article { padding:24px 21px max(46px,env(safe-area-inset-bottom)); } .reader-head { padding-left:16px; padding-right:16px; } }

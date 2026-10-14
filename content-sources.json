@@ -1,0 +1,519 @@
+{
+  "riddles": {
+    "source": "Project-written descriptions and explanations of common riddle and reasoning ideas; AI-assisted editing",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+  },
+  "readings": [
+    {
+      "id": "reading:732824583592",
+      "title": "背影",
+      "author": "朱自清",
+      "url": "https://zh.wikisource.org/wiki/%E8%83%8C%E5%BD%B1",
+      "revision": 2570094,
+      "rightsNote": "这部作品在1931年1月1日以前出版，其作者1948年逝世，在 美国 以及版权期限是 作者终身加75年 以下的国家以及地区，属于 公有领域 。 这部作品也可能在本国本地版权期限更长，但对外国外地作品应用较短期限规则的国家以及地区，属于 公有领域 。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:339273492526",
+      "title": "匆匆",
+      "author": "朱自清",
+      "url": "https://zh.wikisource.org/wiki/%E5%8C%86%E5%8C%86",
+      "revision": 2570968,
+      "rightsNote": "这部作品在1931年1月1日以前出版，其作者1948年逝世，在 美国 以及版权期限是 作者终身加75年 以下的国家以及地区，属于 公有领域 。 这部作品也可能在本国本地版权期限更长，但对外国外地作品应用较短期限规则的国家以及地区，属于 公有领域 。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:815587647151",
+      "title": "荷塘月色",
+      "author": "朱自清",
+      "url": "https://zh.wikisource.org/wiki/%E8%8D%B7%E5%A1%98%E6%9C%88%E8%89%B2",
+      "revision": 2570152,
+      "rightsNote": "这部作品在1931年1月1日以前出版，其作者1948年逝世，在 美国 以及版权期限是 作者终身加75年 以下的国家以及地区，属于 公有领域 。 这部作品也可能在本国本地版权期限更长，但对外国外地作品应用较短期限规则的国家以及地区，属于 公有领域 。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:996342257788",
+      "title": "桨声灯影里的秦淮河",
+      "author": "朱自清",
+      "url": "https://zh.wikisource.org/wiki/%E6%A7%B3%E8%81%B2%E7%87%88%E5%BD%B1%E8%A3%8F%E7%9A%84%E7%A7%A6%E6%B7%AE%E6%B2%B3",
+      "revision": 2371866,
+      "rightsNote": "这部作品在1931年1月1日以前出版，其作者1948年逝世，在 美国 以及版权期限是 作者终身加75年 以下的国家以及地区，属于 公有领域 。 这部作品也可能在本国本地版权期限更长，但对外国外地作品应用较短期限规则的国家以及地区，属于 公有领域 。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:472486050151",
+      "title": "喝茶",
+      "author": "周作人",
+      "url": "https://zh.wikisource.org/wiki/%E5%96%9D%E8%8C%B6",
+      "revision": 1491348,
+      "rightsNote": "1996年1月1日，这部作品在原著作国家或地区属于 公有领域 ，之前在美国从未出版，其作者1936年逝世，在 美国 以及版权期限是 作者终身加80年 以下的国家以及地区，属于 公有领域 。 这部作品也可能在本国本地版权期限更长，但对外国外地作品应用较短期限规则的国家以及地区，属于 公有领域 。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:519087717061",
+      "title": "敬业与乐业",
+      "author": "梁启超",
+      "url": "https://zh.wikisource.org/wiki/%E6%95%AC%E6%A5%AD%E8%88%87%E6%A8%82%E6%A5%AD",
+      "revision": 2027137,
+      "rightsNote": "1996年1月1日，这部作品在原著作国家或地区属于 公有领域 ，之前在美国从未出版，其作者1929年逝世，在 美国 以及版权期限是 作者终身加80年 以下的国家以及地区，属于 公有领域 。 这部作品也可能在本国本地版权期限更长，但对外国外地作品应用较短期限规则的国家以及地区，属于 公有领域 。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:937424259777",
+      "title": "最苦与最乐",
+      "author": "梁启超",
+      "url": "https://zh.wikisource.org/wiki/%E6%9C%80%E8%8B%A6%E8%88%87%E6%9C%80%E6%A8%82",
+      "revision": 2624882,
+      "rightsNote": "1996年1月1日，这部作品在原著作国家或地区属于 公有领域 ，之前在美国从未出版，其作者1929年逝世，在 美国 以及版权期限是 作者终身加80年 以下的国家以及地区，属于 公有领域 。 这部作品也可能在本国本地版权期限更长，但对外国外地作品应用较短期限规则的国家以及地区，属于 公有领域 。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:733133556633",
+      "title": "少年中国说",
+      "author": "梁启超",
+      "url": "https://zh.wikisource.org/wiki/%E5%B0%91%E5%B9%B4%E4%B8%AD%E5%9C%8B%E8%AA%AA",
+      "revision": 10294249,
+      "rightsNote": "1996年1月1日，这部作品在原著作国家或地区属于 公有领域 ，之前在美国从未出版，其作者1929年逝世，在 美国 以及版权期限是 作者终身加80年 以下的国家以及地区，属于 公有领域 。 这部作品也可能在本国本地版权期限更长，但对外国外地作品应用较短期限规则的国家以及地区，属于 公有领域 。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:743254769045",
+      "title": "就任北京大学校長之演说",
+      "author": "蔡元培",
+      "url": "https://zh.wikisource.org/wiki/%E5%B0%B1%E4%BB%BB%E5%8C%97%E4%BA%AC%E5%A4%A7%E5%AD%B8%E6%A0%A1%E9%95%B7%E4%B9%8B%E6%BC%94%E8%AA%AA",
+      "revision": 2556102,
+      "rightsNote": "这部作品在1931年1月1日以前出版，其作者1940年逝世，在 美国 以及版权期限是 作者终身加80年 以下的国家以及地区，属于 公有领域 。 这部作品也可能在本国本地版权期限更长，但对外国外地作品应用较短期限规则的国家以及地区，属于 公有领域 。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:808164765075",
+      "title": "风筝",
+      "author": "鲁迅",
+      "url": "https://zh.wikisource.org/wiki/%E9%A2%A8%E7%AE%8F",
+      "revision": 2629511,
+      "rightsNote": "1996年1月1日，这部作品在原著作国家或地区属于 公有领域 ，之前在美国从未出版，其作者1936年逝世，在 美国 以及版权期限是 作者终身加80年 以下的国家以及地区，属于 公有领域 。 这部作品也可能在本国本地版权期限更长，但对外国外地作品应用较短期限规则的国家以及地区，属于 公有领域 。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:399134198784",
+      "title": "腊叶",
+      "author": "鲁迅",
+      "url": "https://zh.wikisource.org/wiki/%E8%87%98%E8%91%89",
+      "revision": 2673306,
+      "rightsNote": "1996年1月1日，这部作品在原著作国家或地区属于 公有领域 ，之前在美国从未出版，其作者1936年逝世，在 美国 以及版权期限是 作者终身加80年 以下的国家以及地区，属于 公有领域 。 这部作品也可能在本国本地版权期限更长，但对外国外地作品应用较短期限规则的国家以及地区，属于 公有领域 。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:598787927259",
+      "title": "陋室铭",
+      "author": "刘禹锡",
+      "url": "https://zh.wikisource.org/wiki/%E9%99%8B%E5%AE%A4%E9%8A%98",
+      "revision": 11122639,
+      "rightsNote": "此唐朝作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:380388924422",
+      "title": "爱莲说",
+      "author": "周敦颐",
+      "url": "https://zh.wikisource.org/wiki/%E6%84%9B%E8%93%AE%E8%AA%AA",
+      "revision": 2676605,
+      "rightsNote": "此北宋作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:279215859402",
+      "title": "兰亭集序",
+      "author": "王羲之",
+      "url": "https://zh.wikisource.org/wiki/%E8%98%AD%E4%BA%AD%E9%9B%86%E5%BA%8F",
+      "revision": 11124686,
+      "rightsNote": "此东晋作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:614060638561",
+      "title": "五柳先生传",
+      "author": "陶渊明",
+      "url": "https://zh.wikisource.org/wiki/%E4%BA%94%E6%9F%B3%E5%85%88%E7%94%9F%E5%82%B3",
+      "revision": 11076647,
+      "rightsNote": "此东晋作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:969156178237",
+      "title": "与朱元思书",
+      "author": "吴均",
+      "url": "https://zh.wikisource.org/wiki/%E8%88%87%E5%AE%8B%E5%85%83%E6%80%9D%E6%9B%B8",
+      "revision": 2639101,
+      "rightsNote": "此南北朝作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:677166911111",
+      "title": "答谢中书书",
+      "author": "陶弘景",
+      "url": "https://zh.wikisource.org/wiki/%E7%AD%94%E8%AC%9D%E4%B8%AD%E6%9B%B8%E6%9B%B8",
+      "revision": 2577516,
+      "rightsNote": "此南梁作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:912434054697",
+      "title": "谏太宗十思疏",
+      "author": "魏徵",
+      "url": "https://zh.wikisource.org/wiki/%E8%AB%AB%E5%A4%AA%E5%AE%97%E5%8D%81%E6%80%9D%E7%96%8F",
+      "revision": 9884512,
+      "rightsNote": "此作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:1056962992911",
+      "title": "滕王阁序",
+      "author": "王勃",
+      "url": "https://zh.wikisource.org/wiki/%E6%BB%95%E7%8E%8B%E9%96%A3%E5%BA%8F",
+      "revision": 11125829,
+      "rightsNote": "此唐朝作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:270105743590",
+      "title": "春夜宴桃李園序",
+      "author": "李白",
+      "url": "https://zh.wikisource.org/wiki/%E6%98%A5%E5%A4%9C%E5%AE%B4%E6%A1%83%E6%9D%8E%E5%9C%92%E5%BA%8F",
+      "revision": 7904990,
+      "rightsNote": "此唐朝作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:143857728535",
+      "title": "师说",
+      "author": "韩愈",
+      "url": "https://zh.wikisource.org/wiki/%E5%B8%AB%E8%AA%AA",
+      "revision": 10034570,
+      "rightsNote": "此唐朝作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:29621047820",
+      "title": "马说",
+      "author": "韩愈",
+      "url": "https://zh.wikisource.org/wiki/%E9%9B%9C%E8%AA%AA%E5%9B%9B",
+      "revision": 2016113,
+      "rightsNote": "此唐朝作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:935261986231",
+      "title": "进学解",
+      "author": "韩愈",
+      "url": "https://zh.wikisource.org/wiki/%E9%80%B2%E5%AD%B8%E8%A7%A3",
+      "revision": 2559805,
+      "rightsNote": "此唐朝作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:790807162530",
+      "title": "原毁",
+      "author": "韩愈",
+      "url": "https://zh.wikisource.org/wiki/%E5%8E%9F%E6%AF%80",
+      "revision": 2258271,
+      "rightsNote": "此唐朝作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:171795550608",
+      "title": "小石潭记",
+      "author": "柳宗元",
+      "url": "https://zh.wikisource.org/wiki/%E8%87%B3%E5%B0%8F%E4%B8%98%E8%A5%BF%E5%B0%8F%E7%9F%B3%E6%BD%AD%E8%A8%98",
+      "revision": 2510274,
+      "rightsNote": "此唐朝作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:139378209316",
+      "title": "始得西山宴游记",
+      "author": "柳宗元",
+      "url": "https://zh.wikisource.org/wiki/%E5%A7%8B%E5%BE%97%E8%A5%BF%E5%B1%B1%E5%AE%B4%E9%81%8A%E8%A8%98",
+      "revision": 2509167,
+      "rightsNote": "此唐朝作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:816343446265",
+      "title": "钴𬭁潭西小丘记",
+      "author": "柳宗元",
+      "url": "https://zh.wikisource.org/wiki/%E9%88%B7%E9%89%A7%E6%BD%AD%E8%A5%BF%E5%B0%8F%E4%B8%98%E8%A8%98",
+      "revision": 2520737,
+      "rightsNote": "此唐朝作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:17024596741",
+      "title": "种树郭橐驼传",
+      "author": "柳宗元",
+      "url": "https://zh.wikisource.org/wiki/%E7%A8%AE%E6%A8%B9%E9%83%AD%E6%A9%90%E9%A7%9D%E5%82%B3",
+      "revision": 10595011,
+      "rightsNote": "此唐朝作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:465306126833",
+      "title": "岳阳楼记",
+      "author": "范仲淹",
+      "url": "https://zh.wikisource.org/wiki/%E5%B2%B3%E9%99%BD%E6%A8%93%E8%A8%98",
+      "revision": 9467826,
+      "rightsNote": "此北宋作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:126288856366",
+      "title": "醉翁亭记",
+      "author": "欧阳修",
+      "url": "https://zh.wikisource.org/wiki/%E9%86%89%E7%BF%81%E4%BA%AD%E8%A8%98",
+      "revision": 2667322,
+      "rightsNote": "此北宋作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:551502473347",
+      "title": "卖油翁",
+      "author": "欧阳修",
+      "url": "https://zh.wikisource.org/wiki/%E8%B3%A3%E6%B2%B9%E7%BF%81",
+      "revision": 5978987,
+      "rightsNote": "此北宋作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:559206738985",
+      "title": "丰乐亭记",
+      "author": "欧阳修",
+      "url": "https://zh.wikisource.org/wiki/%E8%B1%90%E6%A8%82%E4%BA%AD%E8%A8%98",
+      "revision": 1649130,
+      "rightsNote": "此北宋作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:579123106528",
+      "title": "前赤壁赋",
+      "author": "苏轼",
+      "url": "https://zh.wikisource.org/wiki/%E5%89%8D%E8%B5%A4%E5%A3%81%E8%B3%A6",
+      "revision": 10247882,
+      "rightsNote": "此北宋作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:899054146625",
+      "title": "後赤壁赋",
+      "author": "苏轼",
+      "url": "https://zh.wikisource.org/wiki/%E5%BE%8C%E8%B5%A4%E5%A3%81%E8%B3%A6",
+      "revision": 1964892,
+      "rightsNote": "此北宋作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:952712834892",
+      "title": "记承天寺夜游",
+      "author": "苏轼",
+      "url": "https://zh.wikisource.org/wiki/%E8%A8%98%E6%89%BF%E5%A4%A9%E5%AF%BA%E5%A4%9C%E9%81%8A",
+      "revision": 8732064,
+      "rightsNote": "此北宋作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:346786596636",
+      "title": "石钟山记",
+      "author": "苏轼",
+      "url": "https://zh.wikisource.org/wiki/%E7%9F%B3%E9%90%98%E5%B1%B1%E8%A8%98",
+      "revision": 10667391,
+      "rightsNote": "此北宋作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:281738675744",
+      "title": "喜雨亭记",
+      "author": "苏轼",
+      "url": "https://zh.wikisource.org/wiki/%E5%96%9C%E9%9B%A8%E4%BA%AD%E8%A8%98",
+      "revision": 2356160,
+      "rightsNote": "此北宋作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:1069769437692",
+      "title": "超然台记",
+      "author": "苏轼",
+      "url": "https://zh.wikisource.org/wiki/%E8%B6%85%E7%84%B6%E8%87%BA%E8%A8%98",
+      "revision": 852501,
+      "rightsNote": "此北宋作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:967582289041",
+      "title": "游褒禪山记",
+      "author": "王安石",
+      "url": "https://zh.wikisource.org/wiki/%E9%81%8A%E8%A4%92%E7%A6%AA%E5%B1%B1%E8%A8%98",
+      "revision": 2438100,
+      "rightsNote": "此北宋作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:927559006492",
+      "title": "伤仲永",
+      "author": "王安石",
+      "url": "https://zh.wikisource.org/wiki/%E5%82%B7%E4%BB%B2%E6%B0%B8",
+      "revision": 11120670,
+      "rightsNote": "此北宋作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:966621726120",
+      "title": "答司马谏議书",
+      "author": "王安石",
+      "url": "https://zh.wikisource.org/wiki/%E7%AD%94%E5%8F%B8%E9%A6%AC%E8%AB%AB%E8%AD%B0%E6%9B%B8",
+      "revision": 10241441,
+      "rightsNote": "此北宋作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:215469020891",
+      "title": "墨池记",
+      "author": "曾巩",
+      "url": "https://zh.wikisource.org/wiki/%E5%A2%A8%E6%B1%A0%E8%A8%98",
+      "revision": 7911098,
+      "rightsNote": "此北宋作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:807962727048",
+      "title": "送东阳马生序",
+      "author": "宋濂",
+      "url": "https://zh.wikisource.org/wiki/%E9%80%81%E6%9D%B1%E9%99%BD%E9%A6%AC%E7%94%9F%E5%BA%8F",
+      "revision": 2391410,
+      "rightsNote": "此作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:916828090896",
+      "title": "项脊轩志",
+      "author": "归有光",
+      "url": "https://zh.wikisource.org/wiki/%E9%A0%85%E8%84%8A%E8%BB%92%E5%BF%97",
+      "revision": 7906684,
+      "rightsNote": "此明朝作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:382492624555",
+      "title": "登泰山记",
+      "author": "姚鼐",
+      "url": "https://zh.wikisource.org/wiki/%E7%99%BB%E6%B3%B0%E5%B1%B1%E8%A8%98",
+      "revision": 10668521,
+      "rightsNote": "此清朝作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:400079024274",
+      "title": "病梅館记",
+      "author": "龚自珍",
+      "url": "https://zh.wikisource.org/wiki/%E7%97%85%E6%A2%85%E9%A4%A8%E8%A8%98",
+      "revision": 2190365,
+      "rightsNote": "此作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:738555888114",
+      "title": "祭妹文",
+      "author": "袁枚",
+      "url": "https://zh.wikisource.org/wiki/%E7%A5%AD%E5%A6%B9%E6%96%87",
+      "revision": 2609874,
+      "rightsNote": "此作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:525808220092",
+      "title": "与妻书",
+      "author": "林觉民",
+      "url": "https://zh.wikisource.org/wiki/%E8%88%87%E5%A6%BB%E6%9B%B8",
+      "revision": 2506754,
+      "rightsNote": "本作品原文没有句读（标点）。今人为方便阅读而添加标点，其著作权问题可能涉及以下几种情况： 维基文库用户自行为原文添加标点符号，其贡献依据 知识共享 署名-相同方式共享 4.0协议（CC BY-SA 4.0） 及GNU自由文档许可证（GFDL）的条款释出。 1999年7月12日，中华人民共和国国家版权局版权管理司关于古籍标点等著作权问题的答复《 权司1999第45号 》，认为仅加标点不足以有创作性，但按照《 中华人民共和国民法通则 》（现由《 中华人民共和国民法典 》取代其地位）的公平和等价有偿原则，利用他人的智力劳动，至少应当支付相应的对价。此处民法通则的公平和等价有偿原则与著作权是分别的话题。 中华民国94年（2005年）4月15日，中华民国经济部智慧财产局 智慧财产局解释令函 （ 存档 ）也认为仅对古文加标点不足以取得新著作权。另请参见：章忠信《著作权笔记· 句读的著作权保护 》。 由人工智慧（AI）自动添加的标点符号，若仅属机械性处理，且不包含足以构成原创性创作的人类智力成果，依照美国著作权法的原创性及人类作者原则，通常无法因此独立取得著作权。其他国家或地区的法律规定可能有所不同，应依其适用法律判断。参见：《 Copyright Registration Guidance: Works Containing Material Generated by Artificial Intelligence 》 与 《 Copyright and Artificial Intelligence, Part 2: Copyrightability 》。 Public domain Public domain false false 此作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:535491351378",
+      "title": "報任安书",
+      "author": "司马迁",
+      "url": "https://zh.wikisource.org/wiki/%E5%A0%B1%E4%BB%BB%E5%B0%91%E5%8D%BF%E6%9B%B8",
+      "revision": 10359419,
+      "rightsNote": "此西汉作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:171322878315",
+      "title": "谏逐客书",
+      "author": "李斯",
+      "url": "https://zh.wikisource.org/wiki/%E8%AB%AB%E9%80%90%E5%AE%A2%E6%9B%B8",
+      "revision": 11123464,
+      "rightsNote": "此作品在全世界都属于 公有领域 ，因为作者逝世已经超过100年，且作品于1931年1月1日之前出版。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "reading:488972682423",
+      "title": "落花生",
+      "author": "许地山",
+      "url": "https://zh.wikisource.org/wiki/%E8%90%BD%E8%8A%B1%E7%94%9F",
+      "revision": 2110741,
+      "rightsNote": "这部作品在1931年1月1日以前出版，其作者1941年逝世，在 美国 以及版权期限是 作者终身加80年 以下的国家以及地区，属于 公有领域 。 这部作品也可能在本国本地版权期限更长，但对外国外地作品应用较短期限规则的国家以及地区，属于 公有领域 。 Public domain Public domain false false",
+      "license": "Public domain; Wikisource transcription CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    }
+  ]
+}
