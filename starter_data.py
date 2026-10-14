@@ -74,7 +74,7 @@ def build_offline_worker(bundle):
     template=(ROOT/'offline-worker.template.js').read_text(encoding='utf-8')
     audio_files=[item['audioUrl'] for item in bundle['audio']]
     template=template.replace('__AUDIO_FILES__',json.dumps(audio_files,separators=(',',':')))
-    shell=['index.html','starter-content.js','content-buffer.js','music-sources.js','extra-content.js','reading-cards.js','reading-cards.css']
+    shell=['index.html','starter-content.js','content-buffer.js','music-sources.js','extra-content.js','reading-cards.js','reading-cards.css','discovery.js','discovery.css']
     shell+=[name for name in ['pwa-register.js','manifest.webmanifest','favicon.png','favicon.ico'] if (ROOT/name).is_file()]
     shell+=[file.relative_to(ROOT).as_posix() for file in sorted((ROOT/'icons').glob('*.png'))]
     template=template.replace('__SHELL_FILES__',json.dumps(shell,separators=(',',':')))

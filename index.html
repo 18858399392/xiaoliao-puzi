@@ -1204,6 +1204,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
   <link rel="stylesheet" href="reading-cards.css">
+  <link rel="stylesheet" href="discovery.css">
 </head>
 <body>
 
@@ -1260,6 +1261,10 @@
           <button class="me-row tap me-cat" type="button" data-category="reading">
             <span class="me-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v15M3 4c3-1 6-1 9 1 3-2 6-2 9-1v15c-3-1-6-1-9 1-3-2-6-2-9-1z"/></svg></span>
             <span class="me-label">精选短读</span><span class="me-check">✓</span>
+          </button>
+          <button class="me-row tap" id="me-find-book" type="button" aria-label="找一本书">
+            <span class="me-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10" cy="10" r="6"/><path d="m15 15 6 6"/></svg></span>
+            <span class="me-label">找一本书</span><span class="me-chevron" aria-hidden="true">›</span>
           </button>
         </div>
 
@@ -1334,6 +1339,7 @@
 
     <!-- 听听：随机弹唱音频流 -->
     <section id="listen-view" class="view">
+      <div class="listen-tools"><button type="button" id="listen-find-song">找一首歌</button></div>
       <div id="listen-list"></div>
       <div id="listen-sentinel" style="height:1px;"></div>
     </section>
@@ -1368,6 +1374,7 @@
   <script src="music-sources.js"></script>
   <script src="extra-content.js"></script>
   <script src="reading-cards.js"></script>
+  <script src="discovery.js"></script>
   <script>
     // ===================== 存储管理 =====================
     const Store = {
@@ -2015,6 +2022,7 @@
         ? `<span class="au-dot">·</span><span class="au-time">${formatTime(item.publishAt)}</span>` : '';
       const sourceHtml = item.sourceLabel
         ? `<span class="au-dot">·</span><a class="au-time" href="${escapeAttr(item.link)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.sourceLabel)}</a>` : '';
+      const downloadHtml = item.downloadAllowed ? `<a class="ap-download" href="${escapeAttr(item.link)}" target="_blank" rel="noopener noreferrer" aria-label="到来源下载" title="来源允许下载，打开原站"><svg viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M5 17v4h14v-4"/></svg></a>` : '';
 
       card.innerHTML = `
         ${avatarHtml}
@@ -2033,18 +2041,22 @@
               <span class="ic-pause">${SVG_ICONS.pause}</span>
             </button>
             <div class="ap-mid">
-              <input class="ap-range" type="range" min="0" max="${item.durationSec}" value="0" step="1" aria-label="播放进度">
+              <input class="ap-range" type="range" min="0" max="${item.durationSec || 1}" value="0" step="1" aria-label="播放进度">
               <div class="ap-times">
                 <span class="t-cur">0:00</span>
-                <span class="t-dur">${fmtDuration(item.durationSec)}</span>
+                <span class="t-dur">${item.durationSec ? fmtDuration(item.durationSec) : '待播放'}</span>
               </div>
             </div>
           </div>
           <div class="ap-foot">
             <span class="ap-stat">${SVG_ICONS.heartSmall}${fmtCount(item.likeCount)}</span>
+            <div class="ap-actions">
+            <button class="ap-next" aria-label="下一首" title="下一首"><svg viewBox="0 0 24 24"><path d="m5 4 12 8-12 8V4Zm14 0v16"/></svg></button>
+            ${downloadHtml}
             <button class="ap-like ${Store.isAudioLiked(item.id) ? 'active' : ''}" aria-label="收藏这首歌" title="收藏">
               ${createHeartIcon()}
             </button>
+            </div>
           </div>
         </div>
       `;
@@ -2053,6 +2065,7 @@
       const playBtn = card.querySelector('.ap-play');
       const range = card.querySelector('.ap-range');
       playBtn.addEventListener('click', () => Player.toggle(item, card));
+      card.querySelector('.ap-next').addEventListener('click', () => Player.next(item, card));
       range.addEventListener('input', () => {
         if (Player.currentId !== item.id) return;
         Player.el.currentTime = parseFloat(range.value);
@@ -2119,7 +2132,7 @@
         el.addEventListener('waiting', () => {
           this.currentCard?.classList.add('buffering');
         });
-        el.addEventListener('ended', () => this.reset());
+        el.addEventListener('ended', () => { if(this.currentItem)this.next(this.currentItem,this.currentCard);else this.reset(); });
         el.addEventListener('error', () => {
           const inLikes = this.currentCard && !!this.currentCard.closest('#likes-list');
           this.reset();
@@ -2162,6 +2175,21 @@
         this.currentId = null;
         this.currentItem = null;
         this.currentCard = null;
+      },
+
+      async next(item, card) {
+        if(!item||!card){this.reset();return;}
+        let container=card.parentElement;
+        const pool=container.id==='discovery-results'?Discovery.audioItems:container.id==='likes-list'?Store.getAudioLikes():audioItems;
+        let cards=[...container.querySelectorAll('.audio-card')],at=cards.findIndex(node=>node.dataset.id===item.id);
+        if(at===cards.length-1&&container.id==='listen-list'&&currentTab==='listen'){
+          if(listenLoading&&contentBuffers.audio.running)await contentBuffers.audio.running;
+          await loadMoreAudio();cards=[...container.querySelectorAll('.audio-card')];
+        }
+        const target=at>=0?cards[at+1]:null,nextItem=target&&pool.find(value=>value.id===target.dataset.id);
+        if(!nextItem){this.reset();showToast('这一组暂时没有更多歌曲，可以搜索一首或重新加载');return;}
+        if(this.currentId===nextItem.id&&this.el&&!this.el.paused)return;
+        await this.toggle(nextItem,target);
       },
 
       async toggle(item, card) {
@@ -2661,6 +2689,8 @@
 
       // 「我的」：进入 / 返回喜欢列表
       document.getElementById('me-open-likes').addEventListener('click', openLikesPanel);
+      document.getElementById('me-find-book').addEventListener('click', event => Discovery.open('book',event.currentTarget));
+      document.getElementById('listen-find-song').addEventListener('click', event => Discovery.open('music',event.currentTarget));
       document.getElementById('me-likes-back').addEventListener('click', closeLikesPanel);
 
       // 喜欢列表分类筛选（胶囊会随 renderLikes 重建，用事件委托）

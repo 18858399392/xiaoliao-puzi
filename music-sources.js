@@ -24,12 +24,14 @@
       link:trackId?'https://music.163.com/#/song?id='+trackId:'https://music.163.com/#/discover/toplist?id=3778678',publishAt:0,cachedAt:Date.now()};
   }
   function audius(track) {
-    if(!track.id||track.is_stream_gated||track.is_streamable===false)return null;
+    if(!track.id||track.is_stream_gated||track.is_streamable===false||track.is_available===false||track.is_delete)return null;
     const trackId=String(track.id),artist=String(track.user?.name||'Audius 音乐人');
+    const permalink=track.permalink||(track.user?.handle&&track.slug?'/'+encodeURIComponent(track.user.handle)+'/'+encodeURIComponent(track.slug):'');
     return {id:'audius:'+trackId,source:'audius',sourceLabel:'Audius',trackId,nickname:artist,songName:String(track.title||'未命名歌曲'),
       singer:'',gender:'',avatar:https(track.artwork?.['150x150']||track.user?.profile_picture?.['150x150']),lyrics:[],
       audioUrl:AUDIUS+'/tracks/'+encodeURIComponent(trackId)+'/stream?app_name='+APP,durationSec:Number(track.duration)||0,
-      likeCount:Number(track.favorite_count)||0,link:https(track.permalink?new URL(track.permalink,'https://audius.co').href:'https://audius.co'),publishAt:0,cachedAt:Date.now()};
+      likeCount:Number(track.favorite_count)||0,link:https(permalink?new URL(permalink,'https://audius.co').href:'https://audius.co'),
+      downloadAllowed:!!permalink&&track.is_downloadable===true&&!track.is_download_gated&&!track.download_conditions,publishAt:0,cachedAt:Date.now()};
   }
   async function load(source) {
     if(source.nextTry>Date.now())return;
@@ -69,5 +71,14 @@
     if(item.source==='netease'&&item.trackId)return METING+'?server=netease&type=url&id='+encodeURIComponent(item.trackId);
     return item.audioUrl;
   }
-  window.MusicSources={fetchBatch,playbackUrl};
+  async function search(query) {
+    const word=String(query).trim().slice(0,100);if(!word)return {items:[],unavailable:[]};
+    const requests=[{label:'中文歌源',load:()=>json(METING+'?server=netease&type=search&id='+encodeURIComponent(word)),convert:netease},
+      {label:'Audius',load:()=>json(AUDIUS+'/tracks/search?query='+encodeURIComponent(word)+'&limit=12&app_name='+APP),convert:audius}];
+    const results=await Promise.allSettled(requests.map(async source=>{const data=await source.load();const rows=Array.isArray(data)?data:data.data;if(!Array.isArray(rows))throw Error('Invalid songs');return rows.map(source.convert).filter(Boolean);}));
+    const items=[],ids=new Set(),unavailable=[];
+    results.forEach((result,n)=>{if(result.status!=='fulfilled'){unavailable.push(requests[n].label);return;}for(const item of result.value){if(!ids.has(item.id)){ids.add(item.id);items.push(item);}}});
+    return {items,unavailable};
+  }
+  window.MusicSources={fetchBatch,playbackUrl,search};
 })();
