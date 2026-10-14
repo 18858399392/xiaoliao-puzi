@@ -103,7 +103,7 @@
         rows=await fetchRows();if(active!==token)return;
       }
       render(rows);if(rows.length)put(cacheQuery,rows);
-      status.textContent=rows.length?'找到 '+rows.length+' 条网盘资源，点击后在新页面打开。':searchProvider==='pansearch'?'插件暂未找到匹配资源，可以更新结果，或到 PanSearch 搜索。':'暂未找到匹配的网盘资源，可以换个关键词或稍后更新结果。';
+      status.textContent=rows.length?'找到 '+rows.length+' 条网盘资源，点击后在新页面打开。':searchProvider==='pansearch'?'暂未找到匹配资源，可以更新结果，或到 PanSearch 搜索。':'暂未找到匹配的网盘资源，可以换个关键词或稍后更新结果。';
       retry.hidden=false;
     }catch(error){
       if(active!==token)return;
